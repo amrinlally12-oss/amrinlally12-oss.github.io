@@ -1,30 +1,1174 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Streamline AI</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Streamline AI — AI That Works For Your Business</title>
+<meta name="description" content="Streamline AI builds custom AI systems for NorCal small businesses — NEMT, real estate, retail. Starting at $500/month."/>
+<meta property="og:title" content="Streamline AI — AI That Works For Your Business"/>
+<meta property="og:description" content="Custom AI tools built for your business. Real estate analysis, NEMT operations, retail intelligence."/>
+<meta property="og:url" content="https://streamlinedai.net"/>
+<link rel="canonical" href="https://streamlinedai.net"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Figtree:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:"Inter",sans-serif;background:#F8F8FA;color:#1d1d1f;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;}
-.logo{font-size:28px;font-weight:700;letter-spacing:-0.5px;margin-bottom:4px;}
-.logo span{color:#C9973A;}
-.sub{font-size:12px;color:#86868b;letter-spacing:2px;text-transform:uppercase;margin-bottom:40px;}
-.card{background:rgba(255,255,255,0.8);border:1px solid rgba(0,0,0,0.06);border-radius:16px;padding:24px 28px;width:100%;max-width:400px;text-decoration:none;color:#1d1d1f;transition:all 0.2s;display:block;margin-bottom:12px;}
-.card:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,0.08);}
-.card-title{font-size:16px;font-weight:600;margin-bottom:4px;}
-.card-desc{font-size:13px;color:#86868b;}
-.footer{margin-top:48px;font-size:11px;color:#aeaeb2;}
+/* ── RESET & VARS ─────────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#04070f;
+  --glass-bg:rgba(255,255,255,0.04);
+  --glass-border:rgba(255,255,255,0.10);
+  --glass-highlight:rgba(255,255,255,0.08);
+  --gold:#C9973A;--gold-l:#E8C97A;--gold-d:#8a6522;
+  --white:#ffffff;--dim:rgba(255,255,255,0.55);--faint:rgba(255,255,255,0.22);
+  --orb1:#1a3a6e;--orb2:#6e1a4a;--orb3:#1a6e5a;--orb4:#4a1a6e;
+  --green:#8fda3a;--green-bg:rgba(99,153,34,0.15);--green-b:rgba(99,153,34,0.3);
+  --blue:#5ab4f0;
+  --r:16px;
+}
+html{scroll-behavior:smooth;overflow-x:hidden;}
+body{
+  font-family:'Figtree',sans-serif;
+  background:var(--bg);
+  color:var(--white);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+::selection{background:rgba(201,151,58,0.3);}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--gold-d);border-radius:2px;}
+
+/* ── ANIMATED BACKGROUND ─────────────────────────────────────── */
+.bg-canvas{
+  position:fixed;inset:0;z-index:0;
+  overflow:hidden;pointer-events:none;
+}
+.orb{
+  position:absolute;border-radius:50%;
+  filter:blur(80px);opacity:0.35;
+  animation:float 20s infinite ease-in-out;
+}
+.orb1{width:600px;height:600px;background:var(--orb1);top:-100px;left:-150px;animation-delay:0s;}
+.orb2{width:500px;height:500px;background:var(--orb2);top:30%;right:-100px;animation-delay:-7s;}
+.orb3{width:400px;height:400px;background:var(--orb3);bottom:-50px;left:20%;animation-delay:-13s;}
+.orb4{width:350px;height:350px;background:var(--orb4);top:60%;left:55%;animation-delay:-4s;}
+@keyframes float{
+  0%,100%{transform:translate(0,0) scale(1);}
+  25%{transform:translate(40px,-60px) scale(1.08);}
+  50%{transform:translate(-30px,40px) scale(0.95);}
+  75%{transform:translate(60px,20px) scale(1.05);}
+}
+.noise{
+  position:fixed;inset:0;z-index:1;
+  opacity:0.03;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:200px 200px;
+}
+
+/* ── GLASS MIXIN ─────────────────────────────────────────────── */
+.glass{
+  background:var(--glass-bg);
+  backdrop-filter:blur(24px) saturate(180%);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);
+  border:1px solid var(--glass-border);
+  border-radius:var(--r);
+}
+.glass-strong{
+  background:rgba(255,255,255,0.07);
+  backdrop-filter:blur(40px) saturate(200%);
+  -webkit-backdrop-filter:blur(40px) saturate(200%);
+  border:1px solid rgba(255,255,255,0.14);
+  border-radius:var(--r);
+}
+
+/* ── NAV ────────────────────────────────────────────────────── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:0 40px;height:58px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(4,7,15,0.4);
+  backdrop-filter:blur(30px);
+  -webkit-backdrop-filter:blur(30px);
+  border-bottom:1px solid rgba(255,255,255,0.06);
+  transition:all 0.3s;
+}
+.nav-logo{
+  display:flex;align-items:center;gap:10px;
+  font-family:'Syne',sans-serif;font-weight:800;font-size:17px;
+  text-decoration:none;color:var(--white);letter-spacing:-0.3px;cursor:pointer;
+}
+.nav-logo span{color:var(--gold);}
+.nav-logo-mark{
+  width:34px;height:34px;border-radius:8px;
+  background:linear-gradient(135deg,rgba(201,151,58,0.2),rgba(201,151,58,0.05));
+  border:1px solid rgba(201,151,58,0.3);
+  display:flex;align-items:center;justify-content:center;
+}
+.nav-links{display:flex;align-items:center;gap:8px;}
+.nav-link{
+  font-size:13px;font-weight:500;color:var(--dim);
+  text-decoration:none;padding:7px 14px;border-radius:8px;
+  transition:all 0.2s;
+}
+.nav-link:hover{color:var(--white);background:var(--glass-highlight);}
+.nav-cta{
+  font-family:'Syne',sans-serif;font-size:13px;font-weight:700;
+  color:var(--bg);background:var(--gold);
+  padding:8px 20px;border-radius:8px;border:none;cursor:pointer;
+  transition:all 0.2s;text-decoration:none;
+}
+.nav-cta:hover{background:var(--gold-l);transform:translateY(-1px);}
+
+/* ── HERO ──────────────────────────────────────────────────── */
+.hero{
+  position:relative;z-index:2;
+  min-height:100vh;display:flex;align-items:center;
+  padding:120px 40px 80px;
+  max-width:960px;margin:0 auto;
+}
+.hero-content{max-width:560px;}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;
+  color:var(--gold);padding:6px 14px;border-radius:20px;
+  border:1px solid rgba(201,151,58,0.25);
+  background:rgba(201,151,58,0.08);
+  margin-bottom:24px;
+  animation:fadeUp 0.8s ease both;
+}
+.eyebrow-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0.3;};}
+.hero-h1{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(44px,6vw,78px);
+  font-weight:800;line-height:1.0;letter-spacing:-2px;
+  margin-bottom:24px;
+  animation:fadeUp 0.8s 0.1s ease both;
+}
+.hero-h1 em{
+  font-style:normal;
+  background:linear-gradient(135deg,var(--gold),var(--gold-l),var(--gold));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.hero-sub{
+  font-size:17px;line-height:1.7;color:var(--dim);
+  max-width:440px;margin-bottom:40px;font-weight:400;
+  animation:fadeUp 0.8s 0.2s ease both;
+}
+.hero-actions{
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  animation:fadeUp 0.8s 0.3s ease both;
+}
+.btn-primary{
+  font-family:'Syne',sans-serif;font-size:14px;font-weight:700;
+  color:var(--bg);background:linear-gradient(135deg,var(--gold),var(--gold-l));
+  padding:14px 30px;border-radius:10px;border:none;cursor:pointer;
+  transition:all 0.25s;text-decoration:none;display:inline-flex;align-items:center;gap:8px;
+  box-shadow:0 8px 32px rgba(201,151,58,0.25);
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 14px 40px rgba(201,151,58,0.35);}
+.btn-ghost{
+  font-family:'Syne',sans-serif;font-size:14px;font-weight:600;
+  color:var(--white);background:var(--glass-bg);
+  padding:14px 30px;border-radius:10px;cursor:pointer;
+  border:1px solid var(--glass-border);backdrop-filter:blur(12px);
+  transition:all 0.25s;text-decoration:none;display:inline-flex;align-items:center;gap:8px;
+}
+.btn-ghost:hover{background:var(--glass-highlight);border-color:rgba(255,255,255,0.2);}
+.hero-stats{
+  display:flex;gap:32px;margin-top:52px;
+  animation:fadeUp 0.8s 0.4s ease both;
+  flex-wrap:wrap;
+}
+.stat-item{border-left:2px solid rgba(201,151,58,0.3);padding-left:16px;}
+.stat-n{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:var(--white);}
+.stat-l{font-size:12px;color:var(--faint);margin-top:2px;}
+
+/* Hero floating card */
+.hero-visual{
+  position:absolute;right:40px;top:50%;transform:translateY(-50%);
+  width:340px;
+  animation:fadeUp 0.8s 0.3s ease both;
+}
+@media(max-width:1000px){.hero-visual{display:none;}}
+.hero-card{padding:22px;margin-bottom:12px;}
+.hc-label{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:14px;}
+.hc-deal{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--glass-border);}
+.hc-deal:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+.hc-addr{font-size:12px;font-weight:500;color:var(--dim);}
+.hc-grade{font-size:11px;font-weight:700;padding:3px 9px;border-radius:5px;}
+.grade-a{background:rgba(99,153,34,0.2);color:#8fda3a;border:1px solid rgba(99,153,34,0.3);}
+.grade-b{background:rgba(201,151,58,0.2);color:var(--gold-l);border:1px solid rgba(201,151,58,0.3);}
+.grade-c{background:rgba(200,80,50,0.2);color:#f07a5a;border:1px solid rgba(200,80,50,0.3);}
+.wave-mini{display:flex;gap:4px;align-items:center;margin-top:14px;}
+.wm-dot{width:8px;height:8px;border-radius:50%;}
+.wm-dot.active{background:var(--gold);animation:pulse2 1.5s infinite;}
+.wm-dot.done{background:#8fda3a;}
+.wm-dot.wait{background:rgba(255,255,255,0.15);}
+@keyframes pulse2{0%,100%{opacity:1;}50%{opacity:0.3;};}
+.wm-text{font-size:11px;color:var(--dim);margin-left:6px;}
+
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(28px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+/* ── MARQUEE ─────────────────────────────────────────────────── */
+.marquee-wrap{
+  position:relative;z-index:2;
+  border-top:1px solid var(--glass-border);
+  border-bottom:1px solid var(--glass-border);
+  overflow:hidden;padding:14px 0;
+  background:rgba(255,255,255,0.02);
+}
+.marquee-track{
+  display:flex;gap:0;white-space:nowrap;
+  animation:marquee 30s linear infinite;
+}
+.marquee-item{
+  display:inline-flex;align-items:center;gap:10px;
+  font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;
+  color:var(--faint);padding:0 32px;
+}
+.marquee-sep{color:var(--gold);opacity:0.5;}
+@keyframes marquee{from{transform:translateX(0);}to{transform:translateX(-50%);};}
+
+/* ── SECTIONS ────────────────────────────────────────────────── */
+section{position:relative;z-index:2;padding:100px 40px;max-width:960px;margin:0 auto;}
+.section-eyebrow{
+  font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;
+  color:var(--gold);margin-bottom:14px;
+}
+.section-h2{
+  font-family:'Syne',sans-serif;font-size:clamp(32px,4vw,50px);
+  font-weight:800;letter-spacing:-1.5px;line-height:1.1;
+  margin-bottom:16px;
+}
+.section-sub{font-size:16px;color:var(--dim);line-height:1.7;max-width:460px;}
+
+/* ── SERVICES GRID ───────────────────────────────────────────── */
+.services-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:16px;margin-top:56px;
+}
+@media(max-width:900px){.services-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:580px){.services-grid{grid-template-columns:1fr;}}
+.service-card{
+  padding:28px;cursor:default;
+  transition:all 0.3s;position:relative;overflow:hidden;
+}
+.service-card::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 50% 0%,rgba(201,151,58,0.08),transparent 70%);
+  opacity:0;transition:opacity 0.3s;border-radius:var(--r);
+}
+.service-card:hover{transform:translateY(-4px);border-color:rgba(201,151,58,0.2);}
+.service-card:hover::before{opacity:1;}
+.service-icon{
+  width:44px;height:44px;border-radius:10px;
+  background:rgba(201,151,58,0.12);border:1px solid rgba(201,151,58,0.2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;margin-bottom:18px;
+}
+.service-name{
+  font-family:'Syne',sans-serif;font-size:16px;font-weight:700;
+  margin-bottom:8px;
+}
+.service-desc{font-size:13px;color:var(--dim);line-height:1.65;}
+.service-price{
+  margin-top:16px;padding-top:14px;border-top:1px solid var(--glass-border);
+  font-size:12px;color:var(--faint);
+}
+.service-price strong{color:var(--gold);font-size:15px;font-weight:700;}
+
+/* ── HOW IT WORKS ────────────────────────────────────────────── */
+.how-wrap{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;margin-top:0;}
+@media(max-width:800px){.how-wrap{grid-template-columns:1fr;}}
+.steps{display:flex;flex-direction:column;gap:0;}
+.step{
+  display:flex;gap:20px;padding:24px 0;
+  border-bottom:1px solid var(--glass-border);
+  cursor:pointer;transition:all 0.2s;
+}
+.step:last-child{border-bottom:none;}
+.step:hover .step-num{background:rgba(201,151,58,0.2);color:var(--gold);}
+.step-num{
+  width:36px;height:36px;border-radius:50%;flex-shrink:0;
+  background:var(--glass-bg);border:1px solid var(--glass-border);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;font-size:13px;font-weight:700;
+  color:var(--faint);transition:all 0.2s;margin-top:2px;
+}
+.step-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:5px;}
+.step-text{font-size:13px;color:var(--dim);line-height:1.6;}
+
+.how-visual{position:relative;}
+.how-card{padding:28px;}
+.tool-list{display:flex;flex-direction:column;gap:10px;margin-top:4px;}
+.tool-item{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 14px;border-radius:10px;
+  background:var(--glass-highlight);border:1px solid var(--glass-border);
+  transition:all 0.2s;cursor:pointer;
+}
+.tool-item:hover{background:rgba(201,151,58,0.06);border-color:rgba(201,151,58,0.15);}
+.tool-item-icon{font-size:18px;width:32px;text-align:center;}
+.tool-item-name{font-size:13px;font-weight:600;}
+.tool-item-desc{font-size:11px;color:var(--faint);margin-top:1px;}
+.tool-item-tag{
+  margin-left:auto;font-size:10px;font-weight:700;
+  padding:3px 8px;border-radius:4px;flex-shrink:0;
+}
+.tag-live{background:rgba(99,153,34,0.2);color:#8fda3a;border:1px solid rgba(99,153,34,0.25);}
+.tag-soon{background:rgba(255,255,255,0.05);color:var(--faint);border:1px solid var(--glass-border);}
+
+/* ── PRICING ─────────────────────────────────────────────────── */
+.pricing-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:16px;margin-top:56px;
+}
+@media(max-width:900px){.pricing-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:580px){.pricing-grid{grid-template-columns:1fr;}}
+.price-card{padding:32px;position:relative;overflow:hidden;}
+.price-card.featured{
+  background:rgba(201,151,58,0.07);
+  border-color:rgba(201,151,58,0.3);
+}
+.price-card.featured::after{
+  content:'Most Popular';
+  position:absolute;top:14px;right:14px;
+  font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  color:var(--gold);background:rgba(201,151,58,0.15);
+  padding:3px 10px;border-radius:20px;border:1px solid rgba(201,151,58,0.25);
+}
+.price-name{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;}
+.price-amount{font-family:'Syne',sans-serif;font-size:40px;font-weight:800;letter-spacing:-1px;line-height:1;}
+.price-amount span{font-size:16px;font-weight:500;color:var(--faint);}
+.price-period{font-size:12px;color:var(--faint);margin-top:4px;margin-bottom:22px;}
+.price-divider{height:1px;background:var(--glass-border);margin:20px 0;}
+.price-features{list-style:none;display:flex;flex-direction:column;gap:10px;}
+.price-features li{display:flex;align-items:flex-start;gap:9px;font-size:13px;color:var(--dim);}
+.price-features li::before{content:'✓';color:var(--gold);font-weight:700;flex-shrink:0;margin-top:1px;}
+.price-cta{
+  display:block;text-align:center;margin-top:24px;
+  font-family:'Syne',sans-serif;font-size:13px;font-weight:700;
+  padding:12px;border-radius:9px;cursor:pointer;transition:all 0.2s;
+  text-decoration:none;
+}
+.price-cta-outline{color:var(--white);border:1px solid var(--glass-border);background:transparent;}
+.price-cta-outline:hover{background:var(--glass-highlight);}
+.price-cta-gold{
+  color:var(--bg);background:linear-gradient(135deg,var(--gold),var(--gold-l));
+  border:none;box-shadow:0 6px 20px rgba(201,151,58,0.2);
+}
+.price-cta-gold:hover{transform:translateY(-1px);box-shadow:0 10px 28px rgba(201,151,58,0.3);}
+
+/* ── CTA BANNER ─────────────────────────────────────────────── */
+.cta-banner{
+  margin:0 40px 100px;border-radius:20px;
+  padding:64px 60px;
+  background:linear-gradient(135deg,rgba(201,151,58,0.1),rgba(201,151,58,0.03));
+  border:1px solid rgba(201,151,58,0.2);
+  position:relative;z-index:2;overflow:hidden;
+  display:flex;align-items:center;justify-content:space-between;gap:40px;
+  flex-wrap:wrap;
+}
+.cta-banner::before{
+  content:'';position:absolute;top:-50%;right:-10%;
+  width:400px;height:400px;border-radius:50%;
+  background:radial-gradient(circle,rgba(201,151,58,0.12),transparent 70%);
+  pointer-events:none;
+}
+.cta-h2{font-family:'Syne',sans-serif;font-size:clamp(26px,3vw,38px);font-weight:800;letter-spacing:-1px;max-width:500px;}
+.cta-h2 em{font-style:normal;color:var(--gold);}
+
+/* ── FOOTER ─────────────────────────────────────────────────── */
+footer{
+  position:relative;z-index:2;
+  border-top:1px solid var(--glass-border);
+  padding:48px 40px 32px;
+  display:flex;align-items:flex-start;justify-content:space-between;
+  flex-wrap:wrap;gap:32px;
+}
+.footer-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:16px;margin-bottom:8px;}
+.footer-logo span{color:var(--gold);}
+.footer-tag{font-size:12px;color:var(--faint);}
+.footer-links{display:flex;gap:20px;flex-wrap:wrap;}
+.footer-link{font-size:13px;color:var(--faint);text-decoration:none;transition:color 0.2s;}
+.footer-link:hover{color:var(--white);}
+.footer-copy{width:100%;padding-top:24px;border-top:1px solid var(--glass-border);font-size:11px;color:var(--faint);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+
+/* ── LOGIN MODAL ─────────────────────────────────────────────── */
+.modal-overlay{
+  display:none;position:fixed;inset:0;z-index:200;
+  background:rgba(4,7,15,0.8);
+  backdrop-filter:blur(12px);
+  align-items:center;justify-content:center;padding:20px;
+}
+.modal-overlay.show{display:flex;}
+.modal{
+  width:100%;max-width:420px;
+  padding:36px;
+  background:rgba(10,16,30,0.95);
+  border:1px solid rgba(255,255,255,0.12);
+  border-radius:20px;
+  box-shadow:0 40px 80px rgba(0,0,0,0.6);
+  animation:modalIn 0.3s ease;
+}
+@keyframes modalIn{from{opacity:0;transform:translateY(20px) scale(0.97);}to{opacity:1;transform:none;};}
+.modal-close{
+  position:absolute;top:16px;right:16px;
+  width:32px;height:32px;border-radius:50%;
+  background:var(--glass-highlight);border:1px solid var(--glass-border);
+  color:var(--dim);font-size:16px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all 0.15s;
+}
+.modal-close:hover{background:rgba(255,255,255,0.12);color:var(--white);}
+.modal-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;margin-bottom:4px;}
+.modal-logo span{color:var(--gold);}
+.modal-sub{font-size:13px;color:var(--dim);margin-bottom:28px;}
+.form-label{font-size:11px;font-weight:600;color:var(--faint);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:6px;}
+.form-input{
+  font-family:'Figtree',sans-serif;font-size:14px;color:var(--white);
+  width:100%;padding:12px 14px;border-radius:9px;border:1px solid var(--glass-border);
+  background:rgba(255,255,255,0.04);outline:none;
+  transition:border-color 0.2s,box-shadow 0.2s;margin-bottom:14px;
+}
+.form-input:focus{border-color:rgba(201,151,58,0.4);box-shadow:0 0 0 3px rgba(201,151,58,0.08);}
+.form-input::placeholder{color:rgba(255,255,255,0.2);}
+.login-btn{
+  width:100%;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;
+  color:var(--bg);background:linear-gradient(135deg,var(--gold),var(--gold-l));
+  padding:13px;border-radius:9px;border:none;cursor:pointer;
+  transition:all 0.2s;margin-top:6px;
+  box-shadow:0 6px 20px rgba(201,151,58,0.2);
+}
+.login-btn:hover{transform:translateY(-1px);box-shadow:0 10px 28px rgba(201,151,58,0.3);}
+.modal-footer-text{font-size:12px;color:var(--faint);text-align:center;margin-top:16px;}
+.modal-footer-text a{color:var(--gold);text-decoration:none;}
+.login-error{
+  font-size:12px;color:#f07a5a;text-align:center;
+  margin-top:-8px;margin-bottom:10px;
+  display:none;
+}
+.login-error.show{display:block;}
+
+/* ── DASHBOARD ───────────────────────────────────────────────── */
+#dashView{display:none;min-height:100vh;padding:80px 0 0;}
+.dash-wrap{max-width:960px;margin:0 auto;padding:32px 40px;}
+.dash-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:28px;flex-wrap:wrap;gap:16px;
+}
+.dash-welcome{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;}
+.dash-welcome span{color:var(--gold);}
+.dash-meta{font-size:13px;color:var(--faint);margin-top:3px;}
+.dash-logout{
+  font-family:'Syne',sans-serif;font-size:12px;font-weight:600;
+  color:var(--faint);background:var(--glass-bg);
+  padding:8px 16px;border-radius:7px;border:1px solid var(--glass-border);
+  cursor:pointer;transition:all 0.2s;
+}
+.dash-logout:hover{color:var(--white);border-color:rgba(255,255,255,0.2);}
+.dash-stats-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:12px;margin-bottom:20px;
+}
+@media(max-width:700px){.dash-stats-grid{grid-template-columns:1fr 1fr;}}
+.dash-stat-box{padding:16px 18px;}
+.dsb-label{font-size:11px;color:var(--faint);margin-bottom:6px;font-weight:500;}
+.dsb-value{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;}
+.dsb-value.gold{color:var(--gold);}
+.dsb-value.green{color:var(--green);}
+.dsb-value.plan{font-size:16px;margin-top:4px;}
+.dash-section-label{
+  font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--faint);margin-bottom:12px;
+}
+.dash-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px;}
+@media(max-width:800px){.dash-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:500px){.dash-grid{grid-template-columns:1fr;}}
+.dash-tool{
+  padding:22px;cursor:pointer;
+  transition:all 0.3s;position:relative;overflow:hidden;
+  text-decoration:none;color:inherit;display:block;
+}
+.dash-tool.inactive{opacity:0.55;cursor:default;pointer-events:none;}
+.dash-tool::before{
+  content:'';position:absolute;inset:0;border-radius:var(--r);
+  background:radial-gradient(circle at 50% 0%,rgba(201,151,58,0.07),transparent 70%);
+  opacity:0;transition:opacity 0.3s;
+}
+.dash-tool:not(.inactive):hover{transform:translateY(-3px);border-color:rgba(201,151,58,0.25);}
+.dash-tool:not(.inactive):hover::before{opacity:1;}
+.dt-icon{font-size:26px;margin-bottom:14px;}
+.dt-name{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:5px;}
+.dt-desc{font-size:12px;color:var(--dim);line-height:1.5;}
+.dt-status{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:10px;font-weight:700;letter-spacing:0.5px;
+  padding:3px 9px;border-radius:4px;margin-top:12px;
+}
+.dt-live{background:rgba(99,153,34,0.15);color:#8fda3a;border:1px solid rgba(99,153,34,0.2);}
+.dt-soon{background:rgba(255,255,255,0.04);color:var(--faint);border:1px solid var(--glass-border);}
+.tool-launch-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'Syne',sans-serif;font-size:13px;font-weight:700;
+  color:var(--bg);background:linear-gradient(135deg,var(--gold),var(--gold-l));
+  padding:10px 20px;border-radius:8px;border:none;cursor:pointer;
+  transition:all 0.2s;margin-top:14px;
+  box-shadow:0 4px 16px rgba(201,151,58,0.2);
+  text-decoration:none;
+}
+.tool-launch-btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(201,151,58,0.3);}
+.dash-activity{padding:22px;}
+.da-item{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 0;border-bottom:1px solid var(--glass-border);
+  font-size:13px;
+}
+.da-item:last-child{border-bottom:none;}
+.da-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.da-gold{background:var(--gold);}
+.da-green{background:#8fda3a;}
+.da-blue{background:#5ab4f0;}
+.da-text{color:var(--dim);flex:1;}
+.da-time{font-size:11px;color:var(--faint);}
+.dash-footer-note{
+  font-size:12px;color:var(--faint);text-align:center;
+  margin-top:28px;padding-top:20px;border-top:1px solid var(--glass-border);
+}
+.dash-footer-note a{color:var(--gold);text-decoration:none;}
+
+/* Plan badge */
+.plan-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  padding:4px 10px;border-radius:20px;margin-left:10px;
+  background:rgba(201,151,58,0.15);color:var(--gold);
+  border:1px solid rgba(201,151,58,0.25);
+  vertical-align:middle;
+}
+
+@media(max-width:600px){
+  nav{padding:14px 20px;}
+  .hero{padding:100px 20px 60px;}
+  section{padding:70px 20px;}
+  .cta-banner{margin:0 20px 60px;padding:40px 28px;}
+  footer{padding:40px 20px 24px;}
+  .dash-wrap{padding:24px 20px;}
+}
 </style>
 </head>
 <body>
-<div class="logo">Streamline<span>AI</span></div>
-<div class="sub">Consulting</div>
-<a href="/flip-analyzer/" class="card">
-<div class="card-title">Flip Deal Analyzer</div>
-<div class="card-desc">Automated comps, deal analysis, and Excel/PDF reports</div>
-</a>
-<div class="footer">streamlinedai.net</div>
+
+<!-- Background -->
+<div class="bg-canvas">
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+  <div class="orb orb4"></div>
+</div>
+<div class="noise"></div>
+
+<!-- ── NAV ── -->
+<nav>
+  <div class="nav-logo" onclick="showLanding()">
+    <div class="nav-logo-mark">
+      <svg width="18" height="18" viewBox="0 0 32 32" fill="none">
+        <path d="M4 11 C7.5 7,12 17,16 11 C20 5,24.5 15,28 11" stroke="#C9973A" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+        <path d="M4 17 C7.5 13,12 23,16 17 C20 11,24.5 21,28 17" stroke="#E8C97A" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+        <path d="M4 23 C7.5 19,12 29,16 23 C20 17,24.5 27,28 23" stroke="rgba(255,255,255,0.3)" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+      </svg>
+    </div>
+    Streamline<span> AI</span>
+  </div>
+  <div class="nav-links" id="navLinks">
+    <a href="#services" class="nav-link">Services</a>
+    <a href="#how" class="nav-link">How It Works</a>
+    <a href="#pricing" class="nav-link">Pricing</a>
+    <a href="#" class="nav-cta" onclick="openLogin(event)">Client Login →</a>
+  </div>
+</nav>
+
+<!-- ══ LANDING PAGE ═══════════════════════════════════════════════ -->
+<div id="landingView">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-content">
+      <div class="hero-eyebrow">
+        <div class="eyebrow-dot"></div>
+        AI Consulting for NorCal Small Business
+      </div>
+      <h1 class="hero-h1">AI that<br/><em>works</em> for<br/>your business.</h1>
+      <p class="hero-sub">We build and run custom AI systems tailored to your business — automating the work that's slowing you down so you can focus on growth.</p>
+      <div class="hero-actions">
+        <a href="#services" class="btn-primary">See What We Do →</a>
+        <a href="#" class="btn-ghost" onclick="openLogin(event)">Client Portal ↗</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-n">3</div>
+          <div class="stat-l">Business Lines Automated</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-n">6</div>
+          <div class="stat-l">AI Agents Per Analysis</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-n">$500</div>
+          <div class="stat-l">Starting / Month</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="glass hero-card">
+        <div class="hc-label">🏠 Flip Analyzer — Live</div>
+        <div class="hc-deal">
+          <div><div class="hc-addr">1898 White Oak Dr</div><div style="font-size:11px;color:var(--faint)">Yuba City · $350K</div></div>
+          <span class="hc-grade grade-b">B+</span>
+        </div>
+        <div class="hc-deal">
+          <div><div class="hc-addr">6325 Burns Way</div><div style="font-size:11px;color:var(--faint)">Sacramento · $295K</div></div>
+          <span class="hc-grade grade-a">A</span>
+        </div>
+        <div class="hc-deal">
+          <div><div class="hc-addr">298 Table Mtn Blvd</div><div style="font-size:11px;color:var(--faint)">Oroville · $185K</div></div>
+          <span class="hc-grade grade-c">C</span>
+        </div>
+        <div class="wave-mini">
+          <div class="wm-dot done"></div>
+          <div class="wm-dot done"></div>
+          <div class="wm-dot active"></div>
+          <div class="wm-dot wait"></div>
+          <span class="wm-text">Wave 3 — Building Excel...</span>
+        </div>
+      </div>
+      <div class="glass" style="padding:16px 18px;display:flex;align-items:center;gap:12px;">
+        <div style="font-size:20px;">⚡</div>
+        <div>
+          <div style="font-size:12px;font-weight:600;">Morning Briefing Ready</div>
+          <div style="font-size:11px;color:var(--faint);margin-top:2px;">3 calendar items · 2 invoices pending · 1 new deal</div>
+        </div>
+        <div style="margin-left:auto;width:8px;height:8px;border-radius:50%;background:#8fda3a;flex-shrink:0;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Marquee -->
+  <div class="marquee-wrap">
+    <div class="marquee-track">
+      <span class="marquee-item">Real Estate Analysis <span class="marquee-sep">✦</span></span>
+      <span class="marquee-item">NEMT Operations <span class="marquee-sep">✦</span></span>
+      <span class="marquee-item">Retail Intelligence <span class="marquee-sep">✦</span></span>
+      <span class="marquee-item">Morning Briefings <span class="marquee-sep">✦</span></span>
+      <span class="marquee-item">Invoice Automation <span class="marquee-sep">✦</span></span>
+      <span class="marquee-item">SEO & Website Mgmt <span class="marquee-sep">✦</span></span>
+      <span class="marquee-item">Custom AI Workflows <span class="marquee-sep">✦</span></span>
+      <span class="marquee-item">Contractor Tracking <span class="marquee-sep">✦</span></span>
+      <span class="marquee-item">Real Estate Analysis <span class="marquee-sep">✦</span></span>
+      <span class="marquee-item">NEMT Operations <span class="marquee-sep">✦</span></span>
+      <span class="marquee-item">Retail Intelligence <span class="marquee-sep">✦</span></span>
+      <span class="marquee-item">Morning Briefings <span class="marquee-sep">✦</span></span>
+      <span class="marquee-item">Invoice Automation <span class="marquee-sep">✦</span></span>
+      <span class="marquee-item">SEO & Website Mgmt <span class="marquee-sep">✦</span></span>
+      <span class="marquee-item">Custom AI Workflows <span class="marquee-sep">✦</span></span>
+      <span class="marquee-item">Contractor Tracking <span class="marquee-sep">✦</span></span>
+    </div>
+  </div>
+
+  <!-- Services -->
+  <section id="services">
+    <div class="section-eyebrow">What We Build</div>
+    <h2 class="section-h2">Every tool built<br/>for your business.</h2>
+    <p class="section-sub">We don't use generic software. We build custom AI systems that know your operations, your pricing, and your goals.</p>
+    <div class="services-grid">
+      <div class="glass service-card">
+        <div class="service-icon">🏠</div>
+        <div class="service-name">Real Estate Analyzer</div>
+        <div class="service-desc">6-agent AI system pulls live comps, assesses photos, checks public records, and delivers a complete flip analysis in under 45 seconds.</div>
+        <div class="service-price">From <strong>$1,500</strong> setup · <strong>$500</strong>/mo</div>
+      </div>
+      <div class="glass service-card">
+        <div class="service-icon">🚐</div>
+        <div class="service-name">NEMT Operations AI</div>
+        <div class="service-desc">Automates trip scheduling, invoice generation, facility billing, and compliance documentation for medical transport businesses.</div>
+        <div class="service-price">From <strong>$1,500</strong> setup · <strong>$500</strong>/mo</div>
+      </div>
+      <div class="glass service-card">
+        <div class="service-icon">🛒</div>
+        <div class="service-name">Retail Intelligence</div>
+        <div class="service-desc">Tracks invoice pricing trends, margin opportunities, and ordering patterns across distributors. Built for gas stations and convenience stores.</div>
+        <div class="service-price">From <strong>$1,500</strong> setup · <strong>$500</strong>/mo</div>
+      </div>
+      <div class="glass service-card">
+        <div class="service-icon">☀️</div>
+        <div class="service-name">Morning Briefing</div>
+        <div class="service-desc">Daily AI executive briefing that pulls from your calendar, email, and task manager. Delivered every morning before you start your day.</div>
+        <div class="service-price">Included with <strong>Retainer</strong></div>
+      </div>
+      <div class="glass service-card">
+        <div class="service-icon">🌐</div>
+        <div class="service-name">Website Management</div>
+        <div class="service-desc">Monthly SEO reviews, content updates, performance reporting, and uptime monitoring. Your site stays fresh without lifting a finger.</div>
+        <div class="service-price"><strong>$300</strong>/mo</div>
+      </div>
+      <div class="glass service-card">
+        <div class="service-icon">📱</div>
+        <div class="service-name">Social Media Production</div>
+        <div class="service-desc">From content calendars to on-site shoots, we handle everything. Client-supplied media or full production — your choice.</div>
+        <div class="service-price">From <strong>$600</strong>/mo</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section id="how" style="padding-top:0;">
+    <div class="how-wrap">
+      <div>
+        <div class="section-eyebrow">The Process</div>
+        <h2 class="section-h2">Up and running<br/>in 2 weeks.</h2>
+        <p class="section-sub" style="margin-bottom:36px;">We handle all the technical setup. You just tell us how your business works.</p>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">01</div>
+            <div class="step-content">
+              <div class="step-title">Business Audit</div>
+              <div class="step-text">We map every workflow, tool, and pain point across your operations in a 90-minute session.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">02</div>
+            <div class="step-content">
+              <div class="step-title">Custom Build</div>
+              <div class="step-text">We design and build AI tools calibrated to your business — your pricing, your vendors, your terminology.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">03</div>
+            <div class="step-content">
+              <div class="step-title">Deploy & Train</div>
+              <div class="step-text">Your tools go live in your private portal. We walk you and your team through every workflow.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">04</div>
+            <div class="step-content">
+              <div class="step-title">Ongoing Retainer</div>
+              <div class="step-text">We monitor, update, and expand your tools every month. 24hr response. Two workflow updates included.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="how-visual">
+        <div class="glass-strong how-card">
+          <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:18px;">Your Tool Dashboard</div>
+          <div class="tool-list">
+            <div class="tool-item">
+              <div class="tool-item-icon">🏠</div>
+              <div><div class="tool-item-name">Flip Analyzer v3</div><div class="tool-item-desc">6-agent deal analysis</div></div>
+              <span class="tool-item-tag tag-live">Live</span>
+            </div>
+            <div class="tool-item">
+              <div class="tool-item-icon">☀️</div>
+              <div><div class="tool-item-name">Morning Briefing</div><div class="tool-item-desc">Daily executive summary</div></div>
+              <span class="tool-item-tag tag-live">Live</span>
+            </div>
+            <div class="tool-item">
+              <div class="tool-item-icon">🚐</div>
+              <div><div class="tool-item-name">NEMT Billing Agent</div><div class="tool-item-desc">Trip → invoice automation</div></div>
+              <span class="tool-item-tag tag-live">Live</span>
+            </div>
+            <div class="tool-item">
+              <div class="tool-item-icon">📊</div>
+              <div><div class="tool-item-name">Harbor Invoice Tracker</div><div class="tool-item-desc">Price trend analysis</div></div>
+              <span class="tool-item-tag tag-soon">Coming Soon</span>
+            </div>
+            <div class="tool-item">
+              <div class="tool-item-icon">🏗️</div>
+              <div><div class="tool-item-name">Contractor Expense AI</div><div class="tool-item-desc">Receipt extraction & matching</div></div>
+              <span class="tool-item-tag tag-soon">Coming Soon</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section id="pricing">
+    <div class="section-eyebrow">Pricing</div>
+    <h2 class="section-h2">Simple, transparent<br/>pricing.</h2>
+    <p class="section-sub">One-time setup fee + monthly retainer. No surprises, no hidden costs.</p>
+    <div class="pricing-grid">
+      <div class="glass price-card">
+        <div class="price-name">Starter</div>
+        <div class="price-amount">$750<span>/mo</span></div>
+        <div class="price-period">after $1,500 setup</div>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li>AI Retainer (1 business)</li>
+          <li>Website management</li>
+          <li>Morning briefing</li>
+          <li>2 workflow updates/mo</li>
+          <li>24hr response support</li>
+        </ul>
+        <a href="#" class="price-cta price-cta-outline" onclick="openLogin(event)">Get Started</a>
+      </div>
+      <div class="glass price-card featured">
+        <div class="price-name">Growth</div>
+        <div class="price-amount">$1,300<span>/mo</span></div>
+        <div class="price-period">after $1,500 setup · saves $100/mo</div>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li>Everything in Starter</li>
+          <li>Social media (client media)</li>
+          <li>12 posts/mo, 2 platforms</li>
+          <li>Monthly content calendar</li>
+          <li>Priority support</li>
+        </ul>
+        <a href="#" class="price-cta price-cta-gold" onclick="openLogin(event)">Get Started</a>
+      </div>
+      <div class="glass price-card">
+        <div class="price-name">Full Stack</div>
+        <div class="price-amount">$1,900<span>/mo</span></div>
+        <div class="price-period">after $1,500 setup · saves $100/mo</div>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li>Everything in Growth</li>
+          <li>Full social production</li>
+          <li>1 on-site shoot/month</li>
+          <li>8 edited assets/month</li>
+          <li>Reels & short-form video</li>
+        </ul>
+        <a href="#" class="price-cta price-cta-outline" onclick="openLogin(event)">Get Started</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Banner -->
+  <div class="cta-banner glass">
+    <div>
+      <h2 class="cta-h2">Ready to see what<br/><em>your business</em> can do?</h2>
+      <p style="font-size:14px;color:var(--dim);margin-top:12px;">Book a free 30-minute audit. We'll show you exactly what we'd build.</p>
+    </div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;flex-shrink:0;">
+      <a href="mailto:hello@streamlinedai.net" class="btn-primary">Book a Free Audit →</a>
+      <a href="#" class="btn-ghost" onclick="openLogin(event)">Client Login</a>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div>
+      <div class="footer-logo">Streamline<span> AI</span></div>
+      <div class="footer-tag">AI that works for your business.</div>
+    </div>
+    <div class="footer-links">
+      <a href="#services" class="footer-link">Services</a>
+      <a href="#how" class="footer-link">How It Works</a>
+      <a href="#pricing" class="footer-link">Pricing</a>
+      <a href="mailto:hello@streamlinedai.net" class="footer-link">Contact</a>
+    </div>
+    <div class="footer-copy">
+      <span>© 2026 Streamline AI Consulting · streamlinedai.net</span>
+      <span>Sacramento, CA · hello@streamlinedai.net</span>
+    </div>
+  </footer>
+
+</div><!-- /landingView -->
+
+<!-- ══ LOGIN MODAL ════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="loginModal" onclick="handleOverlayClick(event)">
+  <div class="modal" style="position:relative;">
+    <button class="modal-close" onclick="closeLogin()">✕</button>
+    <div class="modal-logo">Streamline<span> AI</span></div>
+    <div class="modal-sub">Sign in to your client portal</div>
+    <label class="form-label">Email</label>
+    <input type="email" class="form-input" id="loginEmail" placeholder="you@yourbusiness.com" autocomplete="email"/>
+    <label class="form-label">Password</label>
+    <input type="password" class="form-input" id="loginPass" placeholder="••••••••" autocomplete="current-password"/>
+    <div class="login-error" id="loginError">Incorrect email or password. Please try again.</div>
+    <button class="login-btn" onclick="doLogin()">Sign In →</button>
+    <div class="modal-footer-text">
+      Not a client yet? <a href="mailto:hello@streamlinedai.net">Contact us to get started</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CLIENT DASHBOARD ═══════════════════════════════════════════ -->
+<div id="dashView">
+  <div class="dash-wrap">
+
+    <div class="dash-header">
+      <div>
+        <div class="dash-welcome" id="dashWelcome">Good morning, <span id="dashName">—</span></div>
+        <div class="dash-meta" id="dashDate">—</div>
+      </div>
+      <button class="dash-logout" onclick="doLogout()">← Sign Out</button>
+    </div>
+
+    <!-- Quick stats — populated by JS -->
+    <div class="dash-stats-grid" id="dashStats"></div>
+
+    <!-- Tool cards — populated by JS -->
+    <div class="dash-section-label" style="margin-top:4px;">Your Tools</div>
+    <div class="dash-grid" id="dashToolGrid"></div>
+
+    <!-- Recent activity — populated by JS -->
+    <div class="dash-section-label" style="margin-top:8px;">Recent Activity</div>
+    <div class="glass dash-activity" id="dashActivity"></div>
+
+    <div class="dash-footer-note" id="dashFooterNote"></div>
+  </div>
+</div>
+
+<script>
+// ── Client Configuration ────────────────────────────────────────
+// Add new clients here. Each entry maps email → their portal config.
+const CLIENT_CONFIGS = {
+
+  "amrin@guardianms.org": {
+    name: "Amrin",
+    plan: "Full Stack",
+    stats: [
+      { label: "Tools Active",    value: "3",       cls: "" },
+      { label: "Deals Analyzed",  value: "47",      cls: "gold" },
+      { label: "Hours Saved / Mo",value: "~28",     cls: "green" },
+      { label: "Plan",            value: "Full Stack", cls: "plan" }
+    ],
+    tools: [
+      {
+        icon: "🏠", name: "Flip Analyzer v3", status: "live",
+        desc: "6-agent deal analysis. Auto-comps, photo AI, public records, Excel output.",
+        url:  "https://streamlinedai.net/flip-analyzer/",
+        btn:  "Launch Tool →"
+      },
+      {
+        icon: "☀️", name: "Morning Briefing", status: "live",
+        desc: "AI executive briefing pulling from your calendar, email, and task list. Every morning.",
+        url:  "",
+        btn:  "View Today's Briefing →"
+      },
+      {
+        icon: "🚐", name: "NEMT Billing Agent", status: "live",
+        desc: "Automates Guardian Medical invoicing — trip completion to facility invoice in seconds.",
+        url:  "",
+        btn:  "Open Billing →"
+      },
+      {
+        icon: "📊", name: "Harbor Invoice Tracker", status: "soon",
+        desc: "Price trend analysis across Harbor Wholesale invoices. Track margins and ordering patterns."
+      },
+      {
+        icon: "🏗️", name: "Contractor Expense AI", status: "soon",
+        desc: "Extract receipts from Gmail, match bank transactions, log to Excel with anomaly alerts."
+      },
+      {
+        icon: "🛒", name: "Plumas Retail Intelligence", status: "soon",
+        desc: "Margin optimization and DSD price tracking for Plumas Stop N Shop."
+      }
+    ],
+    activity: [
+      { color: "gold",  text: "Flip analysis completed — 1898 White Oak Dr, Yuba City · Grade B+ · $56K profit projected", time: "2h ago" },
+      { color: "green", text: "Morning briefing delivered — 3 calendar items, 2 Guardian invoices pending", time: "7:02 AM" },
+      { color: "blue",  text: "NEMT billing — The Fountains invoices sent · 4 trips · $892", time: "Yesterday" },
+      { color: "gold",  text: "Flip analysis completed — 470 Porter Lane, San Jose · Title flags detected — PRT Corp lien", time: "2 days ago" }
+    ],
+    footerMsg: "Need a new tool built? <a href='mailto:hello@streamlinedai.net'>Message Amrin →</a>"
+  },
+
+  "demo@streamlinedai.net": {
+    name: "Demo",
+    plan: "Starter",
+    stats: [
+      { label: "Tools Active",    value: "1",     cls: "" },
+      { label: "Deals Analyzed",  value: "5",     cls: "gold" },
+      { label: "Hours Saved / Mo",value: "~8",    cls: "green" },
+      { label: "Plan",            value: "Starter", cls: "plan" }
+    ],
+    tools: [
+      {
+        icon: "🏠", name: "Flip Analyzer v3", status: "live",
+        desc: "6-agent deal analysis. Auto-comps, photo AI, public records, Excel output.",
+        url:  "https://streamlinedai.net/flip-analyzer/",
+        btn:  "Launch Tool →"
+      }
+    ],
+    activity: [
+      { color: "gold",  text: "Flip analysis completed — Sample property · Grade A · $72K profit projected", time: "1h ago" },
+      { color: "green", text: "Account activated — Welcome to Streamline AI!", time: "Today" }
+    ],
+    footerMsg: "Want more tools? <a href='mailto:hello@streamlinedai.net'>Upgrade your plan →</a>"
+  }
+
+  // To add a new client, copy one of the blocks above and change the email key + data.
+};
+
+// ── Auth ────────────────────────────────────────────────────────
+let currentUser = null;
+
+function openLogin(e) {
+  if (e) e.preventDefault();
+  el("loginModal").classList.add("show");
+  el("loginError").classList.remove("show");
+  setTimeout(() => el("loginEmail").focus(), 100);
+}
+function closeLogin() {
+  el("loginModal").classList.remove("show");
+  el("loginError").classList.remove("show");
+}
+function handleOverlayClick(e) {
+  if (e.target === el("loginModal")) closeLogin();
+}
+
+function doLogin() {
+  const email = el("loginEmail").value.trim().toLowerCase();
+  const pass  = el("loginPass").value;
+
+  if (!email || !pass) {
+    showLoginError();
+    return;
+  }
+
+  const config = CLIENT_CONFIGS[email];
+
+  if (config) {
+    // Known client — accept any password for demo mode
+    currentUser = { email, config };
+    closeLogin();
+    showDashboard(config);
+  } else if (email.includes("@") && pass.length >= 3) {
+    // Unknown client — show generic starter dashboard
+    const genericName = email.split("@")[0];
+    const name = genericName.charAt(0).toUpperCase() + genericName.slice(1);
+    const genericConfig = buildGenericConfig(name);
+    currentUser = { email, config: genericConfig };
+    closeLogin();
+    showDashboard(genericConfig);
+  } else {
+    showLoginError();
+  }
+}
+
+function showLoginError() {
+  el("loginPass").style.borderColor = "rgba(226,75,74,0.5)";
+  el("loginError").classList.add("show");
+  setTimeout(() => {
+    el("loginPass").style.borderColor = "";
+  }, 1800);
+}
+
+function buildGenericConfig(name) {
+  return {
+    name,
+    plan: "Starter",
+    stats: [
+      { label: "Tools Active",    value: "1",       cls: "" },
+      { label: "Deals Analyzed",  value: "—",       cls: "gold" },
+      { label: "Hours Saved / Mo",value: "—",       cls: "green" },
+      { label: "Plan",            value: "Starter", cls: "plan" }
+    ],
+    tools: [
+      {
+        icon: "🏠", name: "Flip Analyzer v3", status: "live",
+        desc: "6-agent deal analysis. Auto-comps, photo AI, public records, Excel output.",
+        url:  "https://streamlinedai.net/flip-analyzer/",
+        btn:  "Launch Tool →"
+      }
+    ],
+    activity: [
+      { color: "green", text: "Welcome to Streamline AI — your portal is ready.", time: "Just now" }
+    ],
+    footerMsg: "Questions? <a href='mailto:hello@streamlinedai.net'>Contact Amrin →</a>"
+  };
+}
+
+// ── Dashboard Render ────────────────────────────────────────────
+function showDashboard(config) {
+  el("landingView").style.display = "none";
+  el("dashView").style.display    = "block";
+
+  // Greeting
+  const hour = new Date().getHours();
+  const greeting = hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
+  el("dashWelcome").innerHTML = `${greeting}, <span id="dashName">${config.name}</span> <span class="plan-badge">${config.plan}</span>`;
+  el("dashDate").textContent = new Date().toLocaleDateString("en-US", {
+    weekday:"long", month:"long", day:"numeric", year:"numeric"
+  });
+
+  // Stats
+  const statsHtml = config.stats.map(s => `
+    <div class="glass dash-stat-box">
+      <div class="dsb-label">${s.label}</div>
+      <div class="dsb-value ${s.cls}">${s.value}</div>
+    </div>
+  `).join("");
+  el("dashStats").innerHTML = statsHtml;
+
+  // Tools
+  const toolsHtml = config.tools.map(t => {
+    const inactive = t.status === "soon" ? "inactive" : "";
+    const statusBadge = t.status === "live"
+      ? `<span class="dt-status dt-live">● Live</span>`
+      : `<span class="dt-status dt-soon">⏳ In Development</span>`;
+    const launchBtn = t.status === "live" && t.url
+      ? `<a class="tool-launch-btn" href="${t.url}" target="_blank" rel="noopener">${t.btn}</a>`
+      : t.status === "live" && !t.url
+      ? `<button class="tool-launch-btn" onclick="comingSoon('${t.name}')">${t.btn}</button>`
+      : "";
+    return `
+      <div class="glass dash-tool ${inactive}">
+        <div class="dt-icon">${t.icon}</div>
+        <div class="dt-name">${t.name}</div>
+        <div class="dt-desc">${t.desc}</div>
+        <div>${statusBadge}</div>
+        ${launchBtn}
+      </div>
+    `;
+  }).join("");
+  el("dashToolGrid").innerHTML = toolsHtml;
+
+  // Activity
+  const actHtml = config.activity.map(a => `
+    <div class="da-item">
+      <div class="da-dot da-${a.color}"></div>
+      <div class="da-text">${a.text}</div>
+      <div class="da-time">${a.time}</div>
+    </div>
+  `).join("");
+  el("dashActivity").innerHTML = actHtml;
+
+  // Footer note
+  el("dashFooterNote").innerHTML = config.footerMsg || "";
+
+  window.scrollTo(0, 0);
+}
+
+function showLanding() {
+  el("landingView").style.display = "";
+  el("dashView").style.display    = "none";
+  currentUser = null;
+  window.scrollTo(0, 0);
+}
+
+function doLogout() { showLanding(); }
+
+function comingSoon(name) {
+  // Placeholder for tools without a live URL yet
+  alert(`${name} is live — URL coming soon.\n\nContact hello@streamlinedai.net to access.`);
+}
+
+function el(id) { return document.getElementById(id); }
+
+// Enter key on login modal
+document.addEventListener("keydown", e => {
+  if (e.key === "Enter" && el("loginModal").classList.contains("show")) doLogin();
+});
+</script>
 </body>
 </html>
