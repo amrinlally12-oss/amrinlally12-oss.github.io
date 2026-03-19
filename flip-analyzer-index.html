@@ -1,0 +1,2062 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Flip Deal Analyzer &#8212; Streamline AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Figtree:wght@300;400;500;600&family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root{
+  --navy:#0a0f1a;--navy2:#111827;--navy-mid:rgba(255,255,255,0.04);--gold:#C9973A;--gold-l:#E8C97A;
+  --white:#ffffff;--cream:#04070f;--steel:rgba(255,255,255,0.55);--border:rgba(255,255,255,0.10);
+  --text:#ffffff;--light:rgba(255,255,255,0.04);
+  --green:#8fda3a;--green-bg:rgba(99,153,34,0.15);--green-b:rgba(99,153,34,0.3);
+  --amber:#E8C97A;--amber-bg:rgba(201,151,58,0.15);--amber-b:rgba(201,151,58,0.3);
+  --red:#f07a5a;--red-bg:rgba(200,80,50,0.15);--red-b:rgba(200,80,50,0.3);
+  --blue:#5ab4f0;--blue-bg:rgba(90,180,240,0.1);
+  --radius:12px;
+  --shadow-sm:0 0.5px 1px rgba(0,0,0,0.2),0 1px 3px rgba(0,0,0,0.3);
+  --shadow-md:0 2px 8px rgba(0,0,0,0.3),0 4px 16px rgba(0,0,0,0.2);
+  --shadow-lg:0 4px 12px rgba(0,0,0,0.3),0 12px 40px rgba(0,0,0,0.4);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
+body{font-family:'Inter','Outfit',-apple-system,BlinkMacSystemFont,sans-serif;
+  background:var(--cream);color:var(--text);min-height:100vh;font-size:15px;line-height:1.47;}
+::-webkit-scrollbar{width:8px;height:8px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:rgba(201,151,58,0.3);border-radius:99px;border:2px solid transparent;background-clip:padding-box;}
+::-webkit-scrollbar-thumb:hover{background:rgba(201,151,58,0.5);border:2px solid transparent;background-clip:padding-box;}
+
+/* &#9472;&#9472; NAV &#9472;&#9472; */
+.topbar{background:rgba(4,7,15,0.6);z-index:100;backdrop-filter:saturate(180%) blur(20px);
+  -webkit-backdrop-filter:saturate(180%) blur(20px);
+  padding:0 32px;height:52px;display:flex;align-items:center;
+  justify-content:space-between;border-bottom:1px solid rgba(201,151,58,0.3);
+  position:sticky;top:0;}
+.logo{display:flex;align-items:center;gap:10px;}
+.logo-text{font-size:15px;font-weight:700;color:#fff;letter-spacing:-0.2px;}
+.logo-text span{color:var(--gold);}
+.logo-sub{font-size:9px;font-weight:600;color:var(--gold-l);letter-spacing:2px;text-transform:uppercase;}
+.tag{font-size:11px;font-weight:600;color:var(--gold-l);background:rgba(201,151,58,0.1);
+  padding:3px 10px;border-radius:99px;}
+.topbar-right{display:flex;align-items:center;gap:12px;}
+.nav-avatar{
+  width:32px;height:32px;border-radius:50%;
+  background:linear-gradient(135deg,var(--gold),var(--gold-l));
+  color:#04070f;font-family:'Syne',sans-serif;font-weight:800;font-size:12px;
+  display:flex;align-items:center;justify-content:center;
+  text-decoration:none;letter-spacing:0.5px;flex-shrink:0;
+  transition:transform 0.2s,box-shadow 0.2s;
+}
+.nav-avatar:hover{transform:scale(1.06);box-shadow:0 4px 16px rgba(201,151,58,0.4);}
+
+/* &#9472;&#9472; LAYOUT &#8212; 8px rhythm &#9472;&#9472; */
+.main{max-width:1080px;position:relative;z-index:2;margin:0 auto;padding:32px 24px 80px;}
+.card{background:rgba(255,255,255,0.04);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);
+  border:1px solid rgba(255,255,255,0.10);border-radius:18px;padding:32px;box-shadow:var(--shadow-sm);}
+
+/* &#9472;&#9472; FORM &#9472;&#9472; */
+.form-label{font-size:11px;font-weight:600;color:var(--steel);text-transform:uppercase;
+  letter-spacing:0.6px;display:block;margin-bottom:6px;}
+input[type=text],input[type=number],select,textarea{
+  font-family:inherit;font-size:15px;color:var(--text);
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.10);border-radius:10px;padding:11px 14px;outline:none;
+  transition:all 0.2s;width:100%;height:44px;}
+textarea{height:auto;min-height:72px;resize:vertical;}
+input[type=text]::placeholder,input[type=number]::placeholder,textarea::placeholder{
+  color:rgba(255,255,255,0.25);font-weight:400;}
+input:focus,select:focus,textarea:focus{border-color:rgba(201,151,58,0.5);
+  box-shadow:0 0 0 4px rgba(201,151,58,0.12);}
+input:hover:not(:focus),select:hover:not(:focus),textarea:hover:not(:focus){border-color:rgba(255,255,255,0.2);}
+select{cursor:pointer;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%23999999' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;padding-right:36px;}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+
+/* &#9472;&#9472; CUSTOM SLIDER (Apple-style pill thumb) &#9472;&#9472; */
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:36px;
+  border:none;padding:0;background:transparent;cursor:pointer;outline:none;margin:4px 0;}
+input[type=range]::-webkit-slider-runnable-track{height:5px;border-radius:99px;
+  background:rgba(255,255,255,0.15);}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
+  width:26px;height:16px;border-radius:8px;margin-top:-5.5px;
+  background:rgba(255,255,255,0.9);border:0.5px solid rgba(255,255,255,0.2);
+  box-shadow:0 0.5px 1px rgba(0,0,0,0.4),0 1px 4px rgba(0,0,0,0.3);
+  cursor:pointer;transition:box-shadow 0.15s,transform 0.1s;}
+input[type=range]::-webkit-slider-thumb:hover{
+  box-shadow:0 1px 3px rgba(0,0,0,0.14),0 2px 8px rgba(0,0,0,0.3);}
+input[type=range]::-webkit-slider-thumb:active{transform:scaleX(0.94);
+  box-shadow:0 0.5px 2px rgba(0,0,0,0.16);}
+input[type=range]::-moz-range-track{height:5px;border-radius:99px;background:var(--border);border:none;}
+input[type=range]::-moz-range-thumb{width:26px;height:16px;border-radius:8px;
+  background:rgba(255,255,255,0.9);border:0.5px solid rgba(255,255,255,0.2);
+  box-shadow:0 0.5px 1px rgba(0,0,0,0.4),0 1px 4px rgba(0,0,0,0.3);cursor:pointer;}
+input[type=range]::-moz-range-progress{height:5px;border-radius:99px;background:var(--gold);}
+
+/* &#9472;&#9472; BUTTONS &#9472;&#9472; */
+.btn{font-family:inherit;font-size:14px;font-weight:600;padding:10px 24px;
+  border-radius:980px;border:none;cursor:pointer;transition:all 0.15s;
+  display:inline-flex;align-items:center;gap:6px;letter-spacing:-0.1px;}
+.btn-primary{background:linear-gradient(135deg,var(--gold),var(--gold-l));color:#04070f;}
+.btn-primary:hover:not(:disabled){background:linear-gradient(135deg,var(--gold-l),var(--gold));transform:translateY(-1px);box-shadow:0 8px 24px rgba(201,151,58,0.3);}
+.btn-primary:active:not(:disabled){transform:scale(0.98);opacity:0.9;}
+.btn-primary:disabled{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.25);cursor:not-allowed;}
+.btn-gold{background:var(--gold);color:#fff;}
+.btn-gold:hover:not(:disabled){background:var(--gold-l);color:var(--navy);}
+.btn-gold:disabled{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.25);cursor:not-allowed;}
+.btn-outline{background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.10);font-weight:500;}
+.btn-outline:hover{border-color:rgba(255,255,255,0.2);color:#fff;background:rgba(255,255,255,0.08);}
+.btn-sm{font-size:13px;padding:7px 14px;}
+
+/* &#9472;&#9472; PHOTO UPLOAD &#9472;&#9472; */
+
+.photo-drop{
+  border:1.5px dashed rgba(255,255,255,0.15);border-radius:14px;padding:32px;
+  text-align:center;cursor:pointer;transition:all 0.2s;background:rgba(255,255,255,0.03);
+  position:relative;}
+.photo-drop:hover,.photo-drop.dragover{border-color:var(--gold);background:rgba(201,151,58,0.05);}
+.photo-drop input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.photo-drop-icon{font-size:28px;margin-bottom:8px;opacity:0.4;}
+.photo-drop-label{font-size:14px;color:var(--steel);font-weight:500;}
+.photo-drop-sub{font-size:12px;color:var(--steel);margin-top:4px;opacity:0.6;}
+.photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:8px;margin-top:12px;}
+.photo-thumb{
+  width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px;
+  border:2px solid transparent;transition:border-color 0.15s;}
+.photo-thumb:hover{border-color:var(--blue);}
+.photo-remove{position:absolute;top:4px;right:4px;background:rgba(0,0,0,0.55);color:#fff;
+  border:none;border-radius:50%;width:20px;height:20px;font-size:10px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.15s;
+  backdrop-filter:blur(4px);}
+.photo-thumb-wrap{position:relative;}
+.photo-thumb-wrap:hover .photo-remove{opacity:1;}
+
+/* &#9472;&#9472; CHECKBOXES &#9472;&#9472; */
+.check-item{display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;
+  padding:8px 12px;background:rgba(255,255,255,0.04);border-radius:10px;border:1px solid transparent;
+  transition:all 0.15s;user-select:none;}
+.check-item:hover{background:rgba(255,255,255,0.08);}
+.check-item.active{border-color:var(--blue);background:rgba(0,113,227,0.06);}
+.check-item input{width:16px;height:16px;accent-color:var(--blue);cursor:pointer;flex-shrink:0;
+  border-radius:4px;}
+
+/* &#9472;&#9472; ADVANCED OVERRIDES &#9472;&#9472; */
+.override-section{border-top:1px solid rgba(255,255,255,0.08);padding-top:12px;margin-top:4px;}
+.override-toggle{background:none;border:none;cursor:pointer;font-family:inherit;
+  font-size:13px;font-weight:600;color:var(--blue);padding:4px 0;display:flex;align-items:center;gap:6px;
+  transition:opacity 0.15s;}
+.override-toggle:hover{opacity:0.7;}
+.override-panel{overflow:hidden;transition:max-height 0.35s cubic-bezier(0.4,0,0.2,1),opacity 0.25s;max-height:0;opacity:0;}
+.override-panel.visible{max-height:300px;opacity:1;}
+.override-panel.hidden{max-height:0;opacity:0;}
+
+/* &#9472;&#9472; PROGRESS CHECKLIST &#9472;&#9472; */
+.progress-checklist{display:flex;flex-direction:column;gap:0;margin-bottom:24px;
+  background:rgba(255,255,255,0.04);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);
+  border:1px solid rgba(255,255,255,0.10);border-radius:14px;padding:20px 24px;box-shadow:var(--shadow-sm);}
+.checklist-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px;letter-spacing:-0.2px;}
+.check-step{display:flex;align-items:center;gap:12px;padding:10px 0;font-size:14px;color:var(--steel);
+  transition:all 0.25s;border-bottom:1px solid rgba(255,255,255,0.06);}
+.check-step:last-child{border-bottom:none;}
+.check-step.active{color:var(--blue);font-weight:500;}
+.check-step.done{color:var(--green);}
+.check-step.error{color:var(--red);}
+.check-icon{width:22px;height:22px;display:flex;align-items:center;justify-content:center;
+  border-radius:50%;flex-shrink:0;font-size:12px;border:2px solid var(--border);color:var(--border);
+  transition:all 0.3s cubic-bezier(0.4,0,0.2,1);}
+.check-step.active .check-icon{border-color:var(--blue);color:var(--blue);animation:pulse 1.2s ease infinite;}
+.check-step.done .check-icon{border-color:var(--green);background:var(--green);color:#fff;
+  transform:scale(1);font-weight:700;}
+.check-step.error .check-icon{border-color:var(--red);background:var(--red);color:#fff;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.35;}}
+
+/* &#9472;&#9472; WAVE INDICATOR &#9472;&#9472; */
+.wave-bar{display:flex;gap:6px;align-items:center;margin-bottom:16px;flex-wrap:wrap;}
+.wave-pill{
+  display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;
+  font-size:12px;font-weight:600;border:1px solid var(--border);background:rgba(255,255,255,0.04);
+  color:var(--steel);transition:all 0.2s;}
+.wave-pill.active{background:var(--blue-bg);border-color:rgba(90,180,240,0.35);color:var(--blue);}
+.wave-pill.done{background:var(--green-bg);border-color:var(--green-b);color:var(--green);}
+.wave-arrow{color:var(--border);font-size:14px;}
+
+/* &#9472;&#9472; DEAL HEADER &#9472;&#9472; */
+.deal-header{
+  background:rgba(4,7,15,0.6);border-radius:16px;
+  padding:28px 32px;margin-bottom:24px;position:relative;overflow:hidden;
+  box-shadow:var(--shadow-lg);animation:fadeUp 0.5s cubic-bezier(0.4,0,0.2,1) both;}
+.deal-header::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--gold);}
+.deal-address{font-size:22px;font-weight:700;color:#fff;letter-spacing:-0.4px;margin-bottom:6px;}
+.deal-facts{font-size:14px;color:rgba(255,255,255,0.5);font-weight:400;}
+.grade-badge{width:64px;height:64px;border-radius:16px;display:flex;align-items:center;
+  justify-content:center;font-size:28px;font-weight:800;flex-shrink:0;}
+
+/* &#9472;&#9472; STAT BOXES &#9472;&#9472; */
+.stat-box{background:rgba(255,255,255,0.04);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);
+  border:1px solid rgba(255,255,255,0.10);border-radius:14px;
+  padding:18px 20px;box-shadow:var(--shadow-sm);transition:all 0.2s cubic-bezier(0.4,0,0.2,1);
+  animation:fadeUp 0.4s cubic-bezier(0.4,0,0.2,1) both;}
+.stat-box:hover{transform:translateY(-1px);box-shadow:var(--shadow-md);}
+.stat-label{font-size:11px;color:var(--steel);margin-bottom:8px;font-weight:500;
+  text-transform:none;letter-spacing:0;}
+.stat-value{font-size:22px;font-weight:700;color:var(--text);letter-spacing:-0.5px;
+  font-variant-numeric:tabular-nums;}
+.sv-green{color:var(--green);}.sv-red{color:var(--red);}.sv-gold{color:var(--gold);}.sv-blue{color:var(--blue);}
+
+/* &#9472;&#9472; STAGGER ANIMATIONS &#9472;&#9472; */
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.grid-4 .stat-box:nth-child(1){animation-delay:0.05s;}
+.grid-4 .stat-box:nth-child(2){animation-delay:0.1s;}
+.grid-4 .stat-box:nth-child(3){animation-delay:0.15s;}
+.grid-4 .stat-box:nth-child(4){animation-delay:0.2s;}
+
+/* &#9472;&#9472; TABS (Apple segmented control style) &#9472;&#9472; */
+.tab-bar{display:flex;gap:1px;margin-bottom:24px;background:rgba(255,255,255,0.06);padding:3px;
+  border-radius:10px;width:100%;max-width:fit-content;
+  overflow-x:auto;-webkit-overflow-scrolling:touch;white-space:nowrap;flex-shrink:0;
+  scrollbar-width:none;animation:fadeUp 0.4s cubic-bezier(0.4,0,0.2,1) 0.25s both;}
+.tab-bar::-webkit-scrollbar{display:none;}
+.tab-btn{font-family:inherit;font-size:13px;font-weight:500;padding:7px 16px;
+  border-radius:8px;border:none;cursor:pointer;background:transparent;
+  color:var(--steel);transition:all 0.2s cubic-bezier(0.4,0,0.2,1);}
+.tab-btn:hover:not(.active){color:var(--text);}
+.tab-btn.active{background:rgba(255,255,255,0.04);color:var(--text);font-weight:600;
+  box-shadow:0 0.5px 1px rgba(255,255,255,0.08),0 1px 4px rgba(255,255,255,0.08);}
+
+/* &#9472;&#9472; TABLES &#9472;&#9472; */
+.dt{width:100%;border-collapse:collapse;font-size:14px;}
+.dt th{background:rgba(255,255,255,0.04);color:var(--steel);padding:10px 16px;text-align:left;
+  font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;
+  border-bottom:1px solid var(--border);}
+.dt th:first-child{border-radius:10px 0 0 0;}.dt th:last-child{border-radius:0 10px 0 0;}
+.dt td{padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.06);}
+.dt tr:last-child td{border-bottom:none;}
+.dt tr:nth-child(even) td{background:rgba(0,0,0,0.015);}
+.dt tr:hover td{background:rgba(0,0,0,0.025);}
+.dt .tr-total td{font-weight:700;background:rgba(255,255,255,0.04);border-top:1px solid var(--border);}
+.dt .tr-sub td{font-weight:600;color:var(--text);}
+.num{text-align:right;font-variant-numeric:tabular-nums;}
+.blue-v{color:var(--blue);font-weight:500;}
+.gold-v{color:var(--gold);}
+.green-v{color:var(--green);font-weight:600;}
+
+/* &#9472;&#9472; COST BARS &#9472;&#9472; */
+.cbar-row{margin-bottom:8px;}
+.cbar-meta{display:flex;justify-content:space-between;font-size:13px;color:var(--steel);margin-bottom:4px;}
+.cbar-bg{height:4px;background:rgba(255,255,255,0.08);border-radius:99px;}
+.cbar-fill{height:100%;border-radius:99px;transition:width 0.7s cubic-bezier(0.4,0,0.2,1);}
+
+/* &#9472;&#9472; KV ROWS &#9472;&#9472; */
+.kv{display:flex;justify-content:space-between;align-items:center;
+  font-size:14px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.06);}
+.kv:last-child{border-bottom:none;}
+.kv-k{color:var(--steel);}.kv-v{font-weight:600;color:var(--text);}
+
+/* &#9472;&#9472; FLAGS &#9472;&#9472; */
+.flag{display:flex;gap:10px;align-items:flex-start;margin-bottom:8px;}
+.fdot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:6px;}
+.fred{background:var(--red);}.fyellow{background:var(--amber);}.fgreen{background:var(--green);}
+.ftext{font-size:14px;color:var(--text);line-height:1.5;}
+
+/* &#9472;&#9472; REC BOX &#9472;&#9472; */
+.rec-box{border-radius:14px;padding:16px 20px;border-left:3px solid;}
+.rec-label{font-size:12px;font-weight:700;margin-bottom:6px;}
+.rec-text{font-size:14px;line-height:1.65;}
+
+/* &#9472;&#9472; SOURCE BADGE &#9472;&#9472; */
+.source-badge{
+  display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;
+  padding:3px 10px;border-radius:99px;border:none;}
+.sb-high{background:rgba(36,138,61,0.1);color:var(--green);}
+.sb-medium{background:rgba(191,86,0,0.1);color:var(--amber);}
+.sb-low{background:rgba(215,0,21,0.1);color:var(--red);}
+.sb-none{background:rgba(255,255,255,0.06);color:var(--steel);}
+
+/* &#9472;&#9472; SCORE BAR &#9472;&#9472; */
+.score-bar{height:6px;background:rgba(255,255,255,0.04);border-radius:3px;margin-top:5px;}
+.score-fill{height:100%;border-radius:3px;}
+
+/* &#9472;&#9472; MISC &#9472;&#9472; */
+.divider{border:none;border-top:1px solid rgba(255,255,255,0.08);margin:20px 0;}
+.section-hdr{font-size:15px;font-weight:700;color:var(--text);margin-bottom:16px;letter-spacing:-0.3px;}
+.err-box{display:none;background:var(--red-bg);color:var(--red);border:1px solid var(--red-b);
+  border-radius:8px;padding:10px 14px;font-size:13px;margin-top:12px;}
+.hidden{display:none!important;}
+.toast{position:fixed;bottom:28px;right:28px;z-index:300;
+  background:rgba(29,29,31,0.8);backdrop-filter:saturate(180%) blur(20px);
+  -webkit-backdrop-filter:saturate(180%) blur(20px);
+  color:#fff;padding:12px 20px;border-radius:14px;font-size:13px;font-weight:500;
+  box-shadow:0 4px 24px rgba(0,0,0,0.2);transform:translateY(80px);opacity:0;
+  transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1);pointer-events:none;}
+.toast.show{transform:translateY(0);opacity:1;}
+
+/* &#9472;&#9472; LOADING &#9472;&#9472; */
+.loading-overlay{display:none;position:fixed;inset:0;
+  background:rgba(4,7,15,0.85);backdrop-filter:saturate(180%) blur(24px);
+  -webkit-backdrop-filter:saturate(180%) blur(24px);
+  z-index:200;align-items:center;justify-content:center;animation:fadeIn 0.15s ease;}
+.loading-overlay.show{display:flex;}
+.loading-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.10);
+  border-radius:20px;padding:28px 32px;
+  max-width:440px;width:92%;box-shadow:var(--shadow-lg);
+  animation:slideUp 0.35s cubic-bezier(0.4,0,0.2,1);}
+.spinner{width:28px;height:28px;border:2.5px solid rgba(255,255,255,0.15);border-top-color:var(--blue);
+  border-radius:50%;animation:spin 0.7s linear infinite;margin:0 auto 10px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+@keyframes slideUp{from{opacity:0;transform:translateY(8px) scale(0.98);}to{opacity:1;transform:translateY(0) scale(1);}}
+
+/* &#9472;&#9472; LOADING CHECKLIST &#9472;&#9472; */
+.lc-steps{margin:16px 0 14px;border-top:1px solid rgba(255,255,255,0.08);padding-top:14px;}
+.lc-step{display:flex;align-items:center;gap:10px;padding:6px 0;font-size:13px;
+  color:#aeaeb2;border-bottom:1px solid rgba(255,255,255,0.06);transition:color 0.25s;}
+.lc-step:last-child{border-bottom:none;}
+.lc-step.active{color:var(--blue);font-weight:500;}
+.lc-step.done{color:var(--green);}
+.lc-step.error{color:var(--red);}
+.lcs-icon{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-size:10px;border:1.5px solid #d2d2d7;color:#d2d2d7;
+  flex-shrink:0;font-weight:700;transition:all 0.3s cubic-bezier(0.4,0,0.2,1);}
+.lc-step.active .lcs-icon{border-color:var(--blue);color:var(--blue);animation:pulse 1.2s ease infinite;}
+.lc-step.done .lcs-icon{border-color:var(--green);background:var(--green);color:#fff;}
+.lc-step.error .lcs-icon{border-color:var(--red);background:var(--red);color:#fff;}
+
+@media(max-width:768px){
+  .grid-2,.grid-3,.grid-4{grid-template-columns:1fr;}
+  .main{padding:16px 12px 48px;}
+  .card{padding:20px 16px;border-radius:12px;}
+  .deal-address{font-size:16px;}
+  .stat-value{font-size:17px;}
+  .topbar{padding:0 16px;}
+}
+/* DARK THEME: Animated BG */
+.bg-canvas{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;}
+.orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.35;animation:float 20s infinite ease-in-out;}
+.orb1{width:600px;height:600px;background:#1a3a6e;top:-100px;left:-150px;animation-delay:0s;}
+.orb2{width:500px;height:500px;background:#6e1a4a;top:30%;right:-100px;animation-delay:-7s;}
+.orb3{width:400px;height:400px;background:#1a6e5a;bottom:-50px;left:20%;animation-delay:-13s;}
+@keyframes float{0%,100%{transform:translate(0,0) scale(1);}25%{transform:translate(40px,-60px) scale(1.08);}50%{transform:translate(-30px,40px) scale(0.95);}75%{transform:translate(60px,20px) scale(1.05);}}
+.noise{position:fixed;inset:0;z-index:1;opacity:0.03;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px 200px;}
+</style>
+</head>
+<body>
+<!-- Dark Theme Background -->
+<div class="bg-canvas"><div class="orb orb1"></div><div class="orb orb2"></div><div class="orb orb3"></div></div>
+<div class="noise"></div>
+
+<script>
+  const SERVER_URL   = "https://flip-analyzer-server-production.up.railway.app";
+  const ACCESS_TOKEN = "streamline2025";
+</script>
+
+<div class="topbar">
+  <a href="https://streamlinedai.net" class="logo" style="text-decoration:none;">
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+      <rect width="32" height="32" rx="7" fill="rgba(201,151,58,0.15)"/>
+      <path d="M4 11 C7.5 7,12 17,16 11 C20 5,24.5 15,28 11" stroke="#C9973A" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+      <path d="M4 17 C7.5 13,12 23,16 17 C20 11,24.5 21,28 17" stroke="#E8C97A" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+      <path d="M4 23 C7.5 19,12 29,16 23 C20 17,24.5 27,28 23" stroke="rgba(255,255,255,0.25)" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+    </svg>
+    <div><div class="logo-text">Streamline<span> AI</span></div><div class="logo-sub">Consulting</div></div>
+  </a>
+  <div class="topbar-right">
+    <span class="tag">Flip Deal Analyzer</span>
+    <a href="/dashboard.html" class="nav-avatar" title="My Dashboard">AI</a>
+  </div>
+</div>
+
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-card">
+    <div style="text-align:center;margin-bottom:4px;">
+      <div class="spinner"></div>
+      <div style="font-size:17px;font-weight:700;color:var(--text);letter-spacing:-0.3px;margin-bottom:3px;">Analyzing Deal</div>
+      <div style="font-size:13px;color:var(--steel);line-height:1.5;" id="loadingMsg">Starting analysis&#8230;</div>
+    </div>
+    <!-- Live step checklist -->
+    <div class="lc-steps">
+      <div class="lc-step" id="lcs-comps"><div class="lcs-icon" id="lcsi-comps">&#9675;</div><span id="lcsl-comps">Researching comparable sales</span></div>
+      <div class="lc-step" id="lcs-condition"><div class="lcs-icon" id="lcsi-condition">&#9675;</div><span id="lcsl-condition">Assessing property condition</span></div>
+      <div class="lc-step" id="lcs-records"><div class="lcs-icon" id="lcsi-records">&#9675;</div><span id="lcsl-records">Checking public records</span></div>
+      <div class="lc-step" id="lcs-analysis"><div class="lcs-icon" id="lcsi-analysis">&#9675;</div><span id="lcsl-analysis">Calculating deal financials</span></div>
+      <div class="lc-step" id="lcs-verify"><div class="lcs-icon" id="lcsi-verify">&#9675;</div><span id="lcsl-verify">Verifying math</span></div>
+      <div class="lc-step" id="lcs-excel"><div class="lcs-icon" id="lcsi-excel">&#9675;</div><span id="lcsl-excel">Building Excel report</span></div>
+    </div>
+    <!-- Progress bar -->
+    <div style="height:4px;background:rgba(255,255,255,0.08);border-radius:99px;overflow:hidden;">
+      <div id="progressBar" style="height:100%;background:var(--blue);border-radius:99px;width:0%;transition:width 0.5s cubic-bezier(0.4,0,0.2,1);"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;margin-top:8px;">
+      <div style="font-size:11px;color:#aeaeb2;transition:opacity 0.3s;" id="hangTightMsg"></div>
+      <div style="font-size:11px;color:#aeaeb2;font-variant-numeric:tabular-nums;" id="timeRemaining"></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="main">
+
+  <!-- &#9552;&#9552; INPUT FORM &#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552; -->
+  <div id="viewInput">
+    <div style="margin-bottom:22px;">
+      <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:6px;">Fix &amp; Flip &#183; BRRRR &#183; Buy &amp; Hold</div>
+      <div style="font-size:26px;font-weight:800;color:var(--gold);letter-spacing:-0.5px;line-height:1.1;">Deal Analyzer</div>
+      <div style="font-size:14px;color:var(--steel);margin-top:5px;">
+        Automated comps &#183; AI condition assessment &#183; Public records &#183; Full deal report
+      </div>
+    </div>
+
+    <div class="grid-2" style="gap:24px;">
+      <!-- Left col -->
+      <div style="display:flex;flex-direction:column;gap:13px;">
+        <div>
+          <label class="form-label">Property Address <span style="color:var(--red);font-weight:400;">*</span></label>
+          <input type="text" id="address" placeholder="e.g. 123 Main St, Sacramento CA 95811"/>
+        </div>
+        <div class="grid-2">
+          <div><label class="form-label">Asking Price <span style="color:var(--red);font-weight:400;">*</span></label><input type="number" id="purchasePrice" placeholder="e.g. 350000"/></div>
+          <div><label class="form-label">Your Offer <span style="color:var(--steel);font-weight:400;text-transform:none;letter-spacing:0;font-size:10px;">optional</span></label><input type="number" id="offerPrice" placeholder="Defaults to asking price"/></div>
+          <div><label class="form-label">Estimated After-Repair Value <span style="color:var(--steel);font-weight:400;text-transform:none;letter-spacing:0;font-size:10px;">optional</span></label><input type="number" id="arv" placeholder="Leave blank for auto-estimate"/></div>
+          <div><label class="form-label">Year Built <span style="color:var(--steel);font-weight:400;text-transform:none;letter-spacing:0;font-size:10px;">optional</span></label><input type="number" id="yearBuilt" placeholder="e.g. 1978"/></div>
+        </div>
+        <div>
+          <label class="form-label">Beds / Baths / Sqft <span style="color:var(--steel);font-weight:400;text-transform:none;letter-spacing:0;font-size:10px;">optional</span></label>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1.5fr;gap:8px;">
+            <input type="number" id="beds" placeholder="Beds"/>
+            <input type="number" id="baths" placeholder="Baths"/>
+            <input type="number" id="sqft" placeholder="Sqft"/>
+          </div>
+        </div>
+        <div><label class="form-label">Lot Size <span style="color:var(--steel);font-weight:400;text-transform:none;letter-spacing:0;font-size:10px;">optional</span></label><input type="text" id="lotSize" placeholder="e.g. 6,200 sqft"/></div>
+
+        <!-- Photo upload &#8212; Guided Coverage UI -->
+        <div>
+          <label class="form-label">Property Photos
+            <span style="color:var(--steel);font-weight:400;text-transform:none;letter-spacing:0;font-size:10px;">optional &#8212; more coverage = higher confidence</span>
+          </label>
+
+          <!-- Coverage bar -->
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+            <div style="flex:1;height:6px;background:var(--navy-mid);border-radius:3px;overflow:hidden;">
+              <div id="coverageBar" style="height:100%;width:0%;background:var(--gold);border-radius:3px;transition:width 0.3s;"></div>
+            </div>
+            <span id="coverageLabel" style="font-size:11px;color:var(--steel);white-space:nowrap;">0 / 7 areas</span>
+          </div>
+
+          <!-- Labeled photo slots -->
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;" id="photoSlots">
+            <!-- slots injected by JS -->
+          </div>
+
+          <!-- Fallback: any extra photos -->
+          <div style="margin-top:8px;">
+            <label id="addMorePhotosLabel" style="font-size:11px;color:var(--steel);cursor:pointer;display:inline-flex;align-items:center;gap:4px;">
+              <input type="file" id="extraPhotos" accept="image/*" multiple style="display:none;" onchange="handleExtraPhotos(this)">
+              + Add more photos
+            </label>
+          </div>
+
+          <!-- Confidence note -->
+          <div id="photoCoverageNote" style="margin-top:8px;font-size:11px;color:var(--amber);display:none;">
+            &#9888; Limited coverage &#8212; AI will infer from web search. Add interior photos to improve confidence.
+          </div>
+        </div>
+      </div>
+
+      <!-- Right col -->
+      <div style="display:flex;flex-direction:column;gap:13px;">
+        <div class="grid-2">
+          <div>
+            <label class="form-label">Financing</label>
+            <select id="financing">
+              <option value="HML">Hard Money (HML)</option>
+              <option value="PML">Private Money (PML)</option>
+              <option value="HML+PML">HML + PML Gap</option>
+              <option value="Cash">All Cash</option>
+            </select>
+          </div>
+          <div>
+            <label class="form-label">Exit Strategy</label>
+            <select id="exitStrategy">
+              <option value="auto">Auto-detect (recommended)</option>
+              <option value="flip">Fix &amp; Flip</option>
+              <option value="brrrr">BRRRR</option>
+              <option value="hold">Buy &amp; Hold</option>
+              <option value="wholesale">Wholesale</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="form-label" style="display:flex;justify-content:space-between;">
+            Hold Period <span id="holdLabel" style="color:var(--gold);font-weight:700;">5 months</span>
+          </label>
+          <input type="range" id="holdMonths" min="2" max="12" step="1" value="5" oninput="el('holdLabel').textContent=this.value+' months'" style="margin-top:6px;"/>
+        </div>
+
+        <div>
+          <label class="form-label">Known Issues</label>
+          <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:5px;">
+            <label class="check-item" id="lbl-roof"><input type="checkbox" id="chk-roof" onchange="toggleCheck('roof')">Roof</label>
+            <label class="check-item" id="lbl-hvac"><input type="checkbox" id="chk-hvac" onchange="toggleCheck('hvac')">HVAC</label>
+            <label class="check-item" id="lbl-electrical"><input type="checkbox" id="chk-electrical" onchange="toggleCheck('electrical')">Elec</label>
+            <label class="check-item" id="lbl-foundation"><input type="checkbox" id="chk-foundation" onchange="toggleCheck('foundation')">Found</label>
+            <label class="check-item" id="lbl-sewer"><input type="checkbox" id="chk-sewer" onchange="toggleCheck('sewer')">Sewer</label>
+          </div>
+        </div>
+
+        <div>
+          <label class="form-label">Notes</label>
+          <textarea id="condNotes" rows="2" placeholder="Any details about the property or deal..."></textarea>
+        </div>
+
+        <!-- Advanced overrides (collapsed by default) -->
+        <div class="override-section">
+          <button type="button" class="override-toggle" onclick="toggleOverrides()">
+            <span id="overrideArrow">&#9656;</span> Advanced Overrides
+            <span style="font-weight:400;color:var(--steel);font-size:10px;margin-left:6px;">condition, renovation scope</span>
+          </button>
+          <div id="overridePanel" class="override-panel hidden">
+            <div style="display:flex;flex-direction:column;gap:12px;padding:12px 0 4px;">
+              <div>
+                <label class="form-label" style="display:flex;justify-content:space-between;">
+                  Property Condition Override <span id="condLabel" style="color:var(--gold);font-weight:700;">5 / 10</span>
+                </label>
+                <input type="range" id="conditionScore" min="1" max="10" step="1" value="5" oninput="el('condLabel').textContent=this.value+' / 10'"/>
+                <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--steel);margin-top:2px;">
+                  <span>Gut (1)</span><span>Average (5)</span><span>Excellent (10)</span>
+                </div>
+                <div style="font-size:11px;color:var(--steel);margin-top:3px;">Photos and AI will estimate this automatically &#8212; override only if you know the condition</div>
+              </div>
+              <div>
+                <label class="form-label">Renovation Scope Override</label>
+                <select id="rehabScope">
+                  <option value="auto" selected>Auto-detect from condition</option>
+                  <option value="minimal">Minimal ($0&#8211;5K)</option>
+                  <option value="cosmetic">Cosmetic ($25&#8211;40K)</option>
+                  <option value="moderate">Moderate ($45&#8211;65K)</option>
+                  <option value="heavy">Heavy ($65&#8211;90K)</option>
+                  <option value="gut">Gut ($90K+)</option>
+                </select>
+                <div style="font-size:11px;color:var(--steel);margin-top:3px;">Leave on auto to let the analysis determine renovation scope</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="err-box" id="formError"></div>
+    <div style="display:flex;gap:12px;align-items:center;margin-top:20px;flex-wrap:wrap;padding-top:16px;border-top:1px solid var(--border);">
+      <button class="btn btn-primary" onclick="runAnalysis()" id="runBtn" style="padding:13px 32px;font-size:15px;">
+        Run Analysis &#8594;
+      </button>
+      <div style="font-size:12px;color:var(--steel);line-height:1.5;">
+        Researches comps, assesses condition, analyzes deal,<br/>and builds downloadable Excel + PDF reports
+      </div>
+    </div>
+  </div>
+
+  <!-- &#9552;&#9552; RESULTS &#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552; -->
+  <div id="viewResults" class="hidden">
+
+    <!-- Progress managed by checklist now -->
+
+    <!-- Progress checklist -->
+    <div class="progress-checklist" id="progressChecklist">
+      <div class="checklist-title">Analysis Progress</div>
+      <div class="check-step" id="step-comps">
+        <div class="check-icon" id="icon-comps">&#9675;</div>
+        <span id="label-comps">Researching comparable sales</span>
+      </div>
+      <div class="check-step" id="step-condition">
+        <div class="check-icon" id="icon-condition">&#9675;</div>
+        <span id="label-condition">Assessing property condition</span>
+      </div>
+      <div class="check-step" id="step-records">
+        <div class="check-icon" id="icon-records">&#9675;</div>
+        <span id="label-records">Checking public records</span>
+      </div>
+      <div class="check-step" id="step-analysis">
+        <div class="check-icon" id="icon-analysis">&#9675;</div>
+        <span id="label-analysis">Calculating deal financials</span>
+      </div>
+      <div class="check-step" id="step-verify">
+        <div class="check-icon" id="icon-verify">&#9675;</div>
+        <span id="label-verify">Verifying math</span>
+      </div>
+      <div class="check-step" id="step-excel">
+        <div class="check-icon" id="icon-excel">&#9675;</div>
+        <span id="label-excel">Building Excel report</span>
+      </div>
+    </div>
+
+    <!-- Top action bar -->
+    <div style="display:flex;gap:8px;margin-bottom:14px;align-items:center;flex-wrap:wrap;">
+      <button class="btn btn-outline btn-sm" onclick="resetForm()">&#8592; New Deal</button>
+      <button class="btn btn-gold btn-sm" id="xlsxBtn" onclick="downloadXLSX()" disabled>Download XLSX &#8595;</button>
+      <button class="btn btn-sm" id="pdfBtn" onclick="downloadPDF()" disabled style="background:rgba(4,7,15,0.6);color:#fff;">Download PDF &#8595;</button>
+    </div>
+
+    <!-- Deal header (hidden until Agent 1 done) -->
+    <div id="dealHeaderWrap" class="hidden">
+      <div class="deal-header">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;">
+          <div>
+            <div class="deal-address" id="rAddr">&#8212;</div>
+            <div class="deal-facts" id="rFacts">&#8212;</div>
+            <div style="font-size:12px;color:rgba(255,255,255,0.3);margin-top:4px;" id="rCond">&#8212;</div>
+            <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;" id="sourceBadges"></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:16px;">
+            <div class="grade-badge" id="gradeBadge" style="width:72px;height:72px;border-radius:18px;font-size:32px;">&#8212;</div>
+            <div>
+              <div style="font-size:22px;font-weight:800;letter-spacing:-0.5px;line-height:1.1;" id="rVerdict">&#8212;</div>
+              <div style="font-size:13px;color:rgba(255,255,255,0.45);margin-top:5px;font-weight:500;" id="rMetrics">&#8212;</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Key numbers -->
+      <div class="grid-4" style="margin-bottom:10px;">
+        <div class="stat-box"><div class="stat-label">Purchase Price</div><div class="stat-value" id="kPurchase">&#8212;</div></div>
+        <div class="stat-box"><div class="stat-label">Total Rehab</div><div class="stat-value sv-gold" id="kRehab">&#8212;</div></div>
+        <div class="stat-box"><div class="stat-label">ARV</div><div class="stat-value" id="kArv">&#8212;</div></div>
+        <div class="stat-box"><div class="stat-label">Net Profit</div><div class="stat-value" id="kProfit">&#8212;</div></div>
+      </div>
+      <div class="grid-4" style="margin-bottom:18px;">
+        <div class="stat-box"><div class="stat-label">All-In Cost</div><div class="stat-value" id="kAllin">&#8212;</div></div>
+        <div class="stat-box"><div class="stat-label">Cash Invested</div><div class="stat-value" id="kCash">&#8212;</div></div>
+        <div class="stat-box"><div class="stat-label">Suggested Offer</div><div class="stat-value sv-blue" id="kOffer">&#8212;</div></div>
+        <div class="stat-box"><div class="stat-label">Annualized ROI</div><div class="stat-value" id="kARoi">&#8212;</div></div>
+      </div>
+
+      <!-- Always-visible risks panel (outside tabs) -->
+      <div id="risksAlwaysPanel" class="hidden" style="margin-bottom:14px;">
+        <div style="background:rgba(255,255,255,0.04);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);
+          border:1px solid rgba(255,255,255,0.10);border-left:4px solid var(--amber);border-radius:14px;padding:18px 22px;box-shadow:var(--shadow-sm);">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+            <div style="font-size:15px;font-weight:700;color:var(--text);letter-spacing:-0.3px;">&#9888; Deal Risks &amp; Unknowns</div>
+            <span id="riskCountBadge" style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px;
+              background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-b);"></span>
+          </div>
+          <div id="risksFlagsAlways"></div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="setTab('overview')">Overview</button>
+        <button class="tab-btn" onclick="setTab('condition')">Condition</button>
+        <button class="tab-btn" onclick="setTab('comps')">Comps</button>
+        <button class="tab-btn" onclick="setTab('rehab')">Rehab</button>
+        <button class="tab-btn" onclick="setTab('financing')">Financing</button>
+        <button class="tab-btn" onclick="setTab('brrrr')">BRRRR</button>
+      </div>
+
+      <!-- Tab: Overview -->
+      <div id="tab-overview">
+        <div class="grid-2" style="gap:14px;">
+          <div class="card">
+            <div class="section-hdr">Cost Breakdown</div>
+            <div id="costBars"></div>
+            <div class="divider"></div>
+            <div id="costRows"></div>
+            <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;padding-top:8px;border-top:1px solid var(--border);margin-top:4px;">
+              <span>NET PROFIT</span><span id="netProfitRow" style="font-size:15px;">&#8212;</span>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div class="card">
+              <div class="section-hdr">Max Offer Thresholds</div>
+              <div id="maxOfferRows"></div>
+            </div>
+            <div class="card" id="flagsCard">
+              <div class="section-hdr">Risk &amp; Permit Flags</div>
+              <div id="riskFlags"></div>
+            </div>
+            <div class="rec-box" id="recBox">
+              <div class="rec-label" id="recLabel">Recommendation</div>
+              <div class="rec-text" id="recText">&#8212;</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab: Condition -->
+      <div id="tab-condition" class="hidden">
+        <div class="grid-2" style="gap:14px;">
+          <div class="card">
+            <div class="section-hdr">Room-by-Room Assessment</div>
+            <div id="conditionTable"></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div class="card">
+              <div class="section-hdr">Photo Source &amp; Confidence</div>
+              <div id="photoSourceInfo"></div>
+            </div>
+            <div class="card" id="condRedFlagsCard">
+              <div class="section-hdr">Visual Red Flags</div>
+              <div id="condRedFlags"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab: Comps -->
+      <div id="tab-comps" class="hidden">
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
+            <div class="section-hdr" style="margin:0;">Sold Comparables</div>
+            <div id="arvRangeDisplay" style="font-size:13px;color:var(--steel);"></div>
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="dt" id="compsTable">
+              <thead><tr>
+                <th>Address</th><th>Bd/Ba</th><th>Sqft</th>
+                <th class="num">Sold Price</th><th class="num">$/Sqft</th>
+                <th class="num">Adjusted</th><th>DOM</th><th>Date</th><th>Notes</th>
+              </tr></thead>
+              <tbody id="compsBody"></tbody>
+            </table>
+          </div>
+          <div id="compsNote" style="margin-top:12px;font-size:12px;color:var(--steel);"></div>
+        </div>
+      </div>
+
+      <!-- Tab: Rehab -->
+      <div id="tab-rehab" class="hidden">
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
+            <div class="section-hdr" style="margin:0;">Itemized Rehab Budget</div>
+            <div style="font-size:12px;color:var(--steel);">Blue = editable &#183; Replace with contractor bids in XLSX</div>
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="dt">
+              <thead><tr><th>Line Item</th><th class="num">Labor</th><th class="num">Material</th><th class="num">Total</th><th>Notes</th></tr></thead>
+              <tbody id="rehabBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab: Financing -->
+      <div id="tab-financing" class="hidden">
+        <div class="grid-2" style="gap:14px;">
+          <div class="card">
+            <div class="section-hdr">Hard Money Loan (HML)</div>
+            <div id="hmlRows"></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div class="card">
+              <div class="section-hdr">Private Money (PML)</div>
+              <div id="pmlRows"></div>
+            </div>
+            <div class="card">
+              <div class="section-hdr">Cash to Close</div>
+              <div id="cashRows"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab: BRRRR -->
+      <div id="tab-brrrr" class="hidden">
+        <div class="grid-2" style="gap:14px;">
+          <div class="card">
+            <div class="section-hdr">BRRRR Analysis</div>
+            <div id="brrrrRows"></div>
+          </div>
+          <div class="card">
+            <div class="section-hdr">Strategy Comparison</div>
+            <div id="stratRows"></div>
+            <div class="divider"></div>
+            <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:10px 12px;font-size:13px;color:var(--steel);line-height:1.6;" id="brrrrVerdict"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- &#9472;&#9472;&#9472; SCENARIO MODELING &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472; -->
+      <div id="scenarioPanel" class="hidden" style="margin-top:20px;padding:20px;background:var(--navy-mid);border-radius:10px;border:1px solid var(--border);">
+        <div style="font-size:13px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;">
+          &#9889; Scenario Modeling &#8212; Adjust &amp; Recalculate
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px;">
+
+          <div>
+            <label style="font-size:11px;color:var(--steel);display:block;margin-bottom:4px;">Purchase Price</label>
+            <input type="number" id="sc_purchasePrice" style="width:100%;background:rgba(4,7,15,0.6);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:6px;font-size:13px;" oninput="runScenario()">
+          </div>
+
+          <div>
+            <label style="font-size:11px;color:var(--steel);display:block;margin-bottom:4px;">ARV</label>
+            <input type="number" id="sc_arv" style="width:100%;background:rgba(4,7,15,0.6);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:6px;font-size:13px;" oninput="runScenario()">
+          </div>
+
+          <div>
+            <label style="font-size:11px;color:var(--steel);display:block;margin-bottom:4px;">Hold Months</label>
+            <input type="number" id="sc_holdMonths" min="1" max="24" style="width:100%;background:rgba(4,7,15,0.6);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:6px;font-size:13px;" oninput="runScenario()">
+          </div>
+
+          <div>
+            <label style="font-size:11px;color:var(--steel);display:block;margin-bottom:4px;">Rehab Budget</label>
+            <input type="number" id="sc_rehabBudget" style="width:100%;background:rgba(4,7,15,0.6);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:6px;font-size:13px;" oninput="runScenario()">
+          </div>
+
+          <div>
+            <label style="font-size:11px;color:var(--steel);display:block;margin-bottom:4px;">Contingency %</label>
+            <input type="number" id="sc_contingencyPct" min="0" max="50" style="width:100%;background:rgba(4,7,15,0.6);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:6px;font-size:13px;" oninput="runScenario()">
+          </div>
+
+          <div>
+            <label style="font-size:11px;color:var(--steel);display:block;margin-bottom:4px;">Financing</label>
+            <select id="sc_financing" style="width:100%;background:rgba(4,7,15,0.6);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:6px;font-size:13px;" onchange="runScenario()">
+              <option value="HML">HML (Hard Money)</option>
+              <option value="CASH">Cash</option>
+              <option value="PML">PML (Private)</option>
+              <option value="HML+PML">HML + PML</option>
+            </select>
+          </div>
+
+        </div>
+
+        <!-- Scenario results row -->
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;padding-top:14px;border-top:1px solid var(--border);">
+          <div style="text-align:center;">
+            <div style="font-size:11px;color:var(--steel);margin-bottom:2px;">All-In Cost</div>
+            <div id="sc_allInCost" style="font-size:14px;font-weight:700;color:var(--text);">&#8212;</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-size:11px;color:var(--steel);margin-bottom:2px;">Net Profit</div>
+            <div id="sc_netProfit" style="font-size:14px;font-weight:700;">&#8212;</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-size:11px;color:var(--steel);margin-bottom:2px;">Cash to Close</div>
+            <div id="sc_cashToClose" style="font-size:14px;font-weight:700;color:var(--text);">&#8212;</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-size:11px;color:var(--steel);margin-bottom:2px;">ROI</div>
+            <div id="sc_roi" style="font-size:14px;font-weight:700;color:var(--text);">&#8212;</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-size:11px;color:var(--steel);margin-bottom:2px;">Grade</div>
+            <div id="sc_grade" style="font-size:14px;font-weight:700;color:var(--gold);">&#8212;</div>
+          </div>
+        </div>
+
+      </div>
+
+    </div><!-- /dealHeaderWrap -->
+  </div><!-- /viewResults -->
+</div><!-- /main -->
+
+<script>
+// \u2500\u2500 Config \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+let DEAL = null, XL_DATA = null;
+let uploadedPhotos = [];
+
+const fmt = n => n != null ? "$" + Math.round(n).toLocaleString() : "$0";
+const pct = n => n != null ? (Math.round(n * 10) / 10) + "%" : "0%";
+const el  = id => document.getElementById(id);
+
+// \u2500\u2500 Toast \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+function toast(msg, dur = 3500) {
+  const t = el("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), dur);
+}
+
+// \u2500\u2500\u2500 PHOTO COVERAGE \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+
+const PHOTO_SLOTS = [
+  { id: "slot_exterior",  label: "Front Exterior", icon: "\u{1F3E0}", weight: 0.15 },
+  { id: "slot_kitchen",   label: "Kitchen",        icon: "\u{1F379}", weight: 0.25 },
+  { id: "slot_bathrooms", label: "Bathrooms",      icon: "\u{1F6BF}", weight: 0.20 },
+  { id: "slot_living",    label: "Living Areas",   icon: "\u{1F6CB}", weight: 0.10 },
+  { id: "slot_bedrooms",  label: "Bedrooms",       icon: "\u{1F6CF}", weight: 0.10 },
+  { id: "slot_roof",      label: "Roof / Attic",   icon: "\u{1F3D7}", weight: 0.10 },
+  { id: "slot_systems",   label: "HVAC / Systems", icon: "\u2699", weight: 0.10 },
+];
+
+let slotPhotos = {}; // slotId { data, mediaType, file }
+
+function initPhotoSlots() {
+  const container = document.getElementById("photoSlots");
+  if (!container) return;
+  container.innerHTML = PHOTO_SLOTS.map(s => `
+    <div id="${s.id}_wrap" style="position:relative;cursor:pointer;" onclick="triggerSlotUpload('${s.id}')">
+      <input type="file" id="${s.id}_input" accept="image/*" style="display:none;"
+             onchange="handleSlotPhoto('${s.id}', this)">
+      <div id="${s.id}_thumb" style="height:72px;background:var(--navy-mid);border:1.5px dashed var(--steel);
+           border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+           font-size:18px;gap:2px;transition:border-color 0.2s;">
+        <span>${s.icon}</span>
+        <span style="font-size:9px;color:var(--steel);text-align:center;line-height:1.2;">${s.label}</span>
+      </div>
+    </div>
+  `).join("");
+}
+
+function triggerSlotUpload(slotId) {
+  document.getElementById(slotId + "_input").click();
+}
+
+function handleSlotPhoto(slotId, input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const data = e.target.result.split(",")[1];
+    slotPhotos[slotId] = { data, mediaType: file.type, file };
+    // Show thumbnail
+    const thumb = document.getElementById(slotId + "_thumb");
+    thumb.style.backgroundImage = `url(${e.target.result})`;
+    thumb.style.backgroundSize = "cover";
+    thumb.style.backgroundPosition = "center";
+    thumb.style.border = "1.5px solid var(--gold)";
+    thumb.innerHTML = `<div style="position:absolute;top:2px;right:3px;font-size:10px;background:var(--gold);color:var(--navy);padding:1px 4px;border-radius:3px;font-weight:700;">\u2713</div>`;
+    updateCoverage();
+  };
+  reader.readAsDataURL(file);
+}
+
+function handleExtraPhotos(input) {
+  Array.from(input.files).forEach((file, i) => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const data = e.target.result.split(",")[1];
+      slotPhotos[`extra_${i}`] = { data, mediaType: file.type, file };
+      updateCoverage();
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function updateCoverage() {
+  const slotCount = Object.keys(slotPhotos).filter(k => !k.startsWith("extra_")).length;
+  const total = PHOTO_SLOTS.length;
+  const pct = Math.round((slotCount / total) * 100);
+  document.getElementById("coverageBar").style.width = pct + "%";
+  document.getElementById("coverageLabel").textContent = `${slotCount} / ${total} areas`;
+  // Change bar color by coverage
+  const bar = document.getElementById("coverageBar");
+  bar.style.background = pct >= 70 ? "var(--green, #22c55e)" : pct >= 40 ? "var(--gold)" : "var(--amber)";
+  // Show warning if low coverage
+  const note = document.getElementById("photoCoverageNote");
+  if (note) note.style.display = slotCount < 3 && slotCount > 0 ? "block" : "none";
+}
+
+function getAllPhotos() {
+  return Object.values(slotPhotos).map(p => ({ data: p.data, mediaType: p.mediaType }));
+}
+
+// Initialize on load
+document.addEventListener("DOMContentLoaded", initPhotoSlots);
+
+// \u2500\u2500 Form helpers \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+function toggleCheck(name) {
+  const lbl = el("lbl-" + name);
+  if (lbl) lbl.classList.toggle("active", el("chk-" + name).checked);
+}
+
+function gradeStyle(g) {
+  if (!g) return { bg: "#f1efe8", color: "#5f5e5a" };
+  if (g === "A+" || g === "A")  return { bg: "#eaf3de", color: "#3b6d11" };
+  if (g === "B+")                return { bg: "#eaf3de", color: "#3b6d11" };
+  if (g === "B")                return { bg: "#faeeda", color: "#854f0b" };
+  if (g === "C")                return { bg: "#faece7", color: "#993c1d" };
+  return                               { bg: "#fcebeb", color: "#a32d2d" };
+}
+
+function setTab(name) {
+  const tabs = ["overview","condition","comps","rehab","financing","brrrr"];
+  tabs.forEach(t => el("tab-" + t).classList.toggle("hidden", t !== name));
+  document.querySelectorAll(".tab-btn").forEach((b, i) =>
+    b.classList.toggle("active", tabs[i] === name));
+}
+
+function toggleOverrides() {
+  const panel = el("overridePanel");
+  const arrow = el("overrideArrow");
+  if (panel.classList.contains("hidden")) {
+    panel.classList.remove("hidden");
+    panel.classList.add("visible");
+    arrow.textContent = "\u25BE";
+  } else {
+    panel.classList.add("hidden");
+    panel.classList.remove("visible");
+    arrow.textContent = "\u25B8";
+  }
+}
+
+function resetForm() {
+  el("viewInput").classList.remove("hidden");
+  el("viewResults").classList.add("hidden");
+  el("dealHeaderWrap").classList.add("hidden");
+  DEAL = null; XL_DATA = null;
+  el("xlsxBtn").disabled = true;
+  el("pdfBtn").disabled = true;
+  setAllAgents("idle");
+  setWave(0);
+}
+
+// \u2500\u2500 Agent status helpers \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+// \u2500\u2500 Checklist step management \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+const STEPS = ["comps","condition","records","analysis","verify","excel"];
+
+function setStep(name, status) {
+  // Update results-view checklist
+  const step = el("step-" + name);
+  const icon = el("icon-" + name);
+  if (step && icon) {
+    step.className = "check-step " + status;
+    if (status === "active") icon.textContent = "\u25CF";
+    else if (status === "done") icon.textContent = "\u2713";
+    else if (status === "error") icon.textContent = "\u2717";
+    else icon.textContent = "\u25CB";
+  }
+  // Mirror into loading overlay checklist
+  const lcs  = el("lcs-" + name);
+  const lcsi = el("lcsi-" + name);
+  if (lcs && lcsi) {
+    lcs.className = "lc-step " + status;
+    if (status === "active") lcsi.textContent = "\u25CF";
+    else if (status === "done") lcsi.textContent = "\u2713";
+    else if (status === "error") lcsi.textContent = "\u2717";
+    else lcsi.textContent = "\u25CB";
+  }
+}
+
+function resetAllSteps() {
+  STEPS.forEach(s => setStep(s, ""));
+  // Reset results-view labels
+  const defaults = {comps:"Researching comparable sales",condition:"Assessing property condition",
+    records:"Checking public records",analysis:"Calculating deal financials",
+    verify:"Verifying math",excel:"Building Excel report"};
+  Object.entries(defaults).forEach(([k,v]) => {
+    const l = el("label-"+k); if (l) l.textContent = v;
+    const ll = el("lcsl-"+k); if (ll) ll.textContent = v;
+  });
+}
+
+// Legacy compatibility wrappers
+function setAgent(id, status, msg = null) {
+  const map = { 3:"comps", 4:"condition", 5:"records", 1:"analysis", 7:"verify", 2:"excel" };
+  const step = map[id];
+  if (step) setStep(step, status === "running" ? "active" : status);
+}
+function setAllAgents(status) { resetAllSteps(); }
+function setWave(n) { /* no-op \u2014 waves hidden now */ }
+
+// \u2500\u2500 Progress bar \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u250
+let progInterval = null;
+let progValue = 0;
+let hangTightInterval = null;
+let countdownInterval = null;
+let analysisStartTime = null;
+
+const HANG_TIGHT_MSGS = [
+  "Searching recent sales nearby\u2026",
+  "Comparing property features\u2026",
+  "Checking listing history\u2026",
+  "Crunching the numbers\u2026",
+  "Reviewing market conditions\u2026",
+  "Calculating rehab estimates\u2026",
+  "Cross-referencing public records\u2026",
+  "Almost there \u2014 finalizing analysis\u2026",
+  "Running the numbers one more time\u2026",
+  "Putting together your report\u2026",
+];
+
+function startProgress() {
+  progValue = 0;
+  analysisStartTime = Date.now();
+  const estimatedSeconds = 65;
+  let hangIdx = 0;
+
+  clearInterval(progInterval);
+  clearInterval(hangTightInterval);
+  clearInterval(countdownInterval);
+
+  // Progress bar
+  progInterval = setInterval(() => {
+    progValue = Math.min(progValue + (95 - progValue) * 0.025, 93);
+    el("progressBar").style.width = progValue + "%";
+  }, 500);
+
+  // Rotating hang tight messages
+  const htm = el("hangTightMsg");
+  if (htm) {
+    htm.style.opacity = "1";
+    htm.textContent = HANG_TIGHT_MSGS[0];
+    hangTightInterval = setInterval(() => {
+      hangIdx = (hangIdx + 1) % HANG_TIGHT_MSGS.length;
+      htm.style.opacity = "0";
+      setTimeout(() => {
+        htm.textContent = HANG_TIGHT_MSGS[hangIdx];
+        htm.style.opacity = "1";
+      }, 200);
+    }, 4000);
+  }
+
+  // Estimated time remaining
+  const tr = el("timeRemaining");
+  if (tr) {
+    countdownInterval = setInterval(() => {
+      const elapsed = Math.floor((Date.now() - analysisStartTime) / 1000);
+      const remaining = Math.max(0, estimatedSeconds - elapsed);
+      if (remaining > 0) {
+        tr.textContent = `~${remaining}s remaining`;
+      } else {
+        tr.textContent = "Wrapping up\u2026";
+      }
+    }, 1000);
+  }
+}
+
+function completeProgress() {
+  clearInterval(progInterval);
+  clearInterval(hangTightInterval);
+  clearInterval(countdownInterval);
+  el("progressBar").style.width = "100%";
+  const htm = el("hangTightMsg");
+  const tr = el("timeRemaining");
+  if (htm) htm.textContent = "Complete!";
+  if (tr) tr.textContent = "";
+  if (el("loadingMsg")) el("loadingMsg").textContent = "Analysis complete ✓";
+}
+
+// \u2500\u2500 Build deal prompt \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+function buildPrompt(f) {
+  const issues = ["roof","hvac","electrical","foundation","sewer"]
+    .filter(k => el("chk-"+k)?.checked).join(", ") || "None";
+  return `Address: ${f.address}
+Purchase Price (asking): $${f.purchasePrice}
+Offer Price: $${f.offerPrice}
+User ARV Estimate: ${f.arv ? "$" + f.arv : "None \u2014 use comp-derived ARV"}
+Beds/Baths/Sqft: ${f.beds||"?"}/${f.baths||"?"}/${f.sqft||"?"} sqft
+Year Built: ${f.yearBuilt||"Unknown"} | Lot: ${f.lotSize||"Unknown"}
+Manual Condition Score: ${f.conditionScore}/10
+Condition Notes: ${f.conditionNotes||"None"}
+Financing: ${f.financing} | Hold: ${f.holdMonths} months
+Exit Strategy: ${f.exitStrategy === "auto" ? "Auto-detect from deal metrics" : f.exitStrategy}
+Rehab Scope: ${f.rehabScope === "auto" ? "Auto-detect from condition assessment" : f.rehabScope}
+Known Issues: ${issues}`;
+}
+
+function updateLoadingMsg(wave) {
+  const msgs = {
+    1: "Wave 1 \u2014 Researching comps, condition & records\u2026",
+    2: "Wave 2 \u2014 Synthesizing analysis & financials\u2026",
+    3: "Wave 3 \u2014 Building Excel workbook\u2026"
+  };
+  if (el("loadingMsg")) el("loadingMsg").textContent = msgs[wave] || "";
+}
+
+// \u2500\u2500 Run analysis \u2014 3-wave REST \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+async function runAnalysis() {
+  const addr = el("address").value.trim();
+  const pp   = el("purchasePrice").value;
+  if (!addr || !pp) {
+    const err = el("formError");
+    err.textContent = "Address and purchase price are required.";
+    err.style.display = "block";
+    return;
+  }
+  el("formError").style.display = "none";
+
+  const formData = {
+    address:       addr,
+    purchasePrice: parseFloat(pp),
+    offerPrice:    parseFloat(el("offerPrice").value) || parseFloat(pp),
+    arv:           parseFloat(el("arv").value) || null,
+    beds:          el("beds").value,
+    baths:         el("baths").value,
+    sqft:          el("sqft").value,
+    yearBuilt:     el("yearBuilt").value,
+    lotSize:       el("lotSize").value,
+    conditionScore:parseInt(el("conditionScore").value),
+    conditionNotes:el("condNotes").value,
+    financing:     el("financing").value,
+    holdMonths:    parseInt(el("holdMonths").value),
+    exitStrategy:  el("exitStrategy").value,
+    rehabScope:    el("rehabScope").value,
+  };
+  const prompt       = buildPrompt(formData);
+  const photos       = getAllPhotos();
+  const needsRental  = false; // rental comps disabled
+
+  // Switch to results view
+  el("viewInput").classList.add("hidden");
+  el("viewResults").classList.remove("hidden");
+  el("loadingOverlay").classList.add("show");
+  setAllAgents("idle");
+  setWave(1);
+  startProgress();
+
+  const hdrs = { "Content-Type":"application/json", "x-access-token": ACCESS_TOKEN };
+
+  const apiCall = async (path, body) => {
+    const resp = await fetch(SERVER_URL + path, { method:"POST", headers:hdrs, body:JSON.stringify(body) });
+    if (!resp.ok) throw new Error(path + " returned HTTP " + resp.status);
+    const json = await resp.json();
+    if (!json.ok) throw new Error(path + " error: " + (json.error || "unknown"));
+    return json;
+  };
+
+  try {
+    // \u2500\u2500 WAVE 1 \u2500\u2500 Comps + Photos + Records in parallel \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+    updateLoadingMsg(1);
+    setAgent(3,"running"); setAgent(4,"running"); setAgent(5,"running");
+
+    const w1 = await apiCall("/api/wave1", {
+      prompt, address: addr, photos,
+      beds:  formData.beds  || undefined,
+      baths: formData.baths || undefined,
+      sqft:  formData.sqft  || undefined
+    });
+
+    setAgent(3, w1.agentStatus?.agent3 || "done");
+    setAgent(4, w1.agentStatus?.agent4 || "done");
+    setAgent(5, w1.agentStatus?.agent5 || "done");
+
+    // Surface comp failures visibly
+    if (w1.comps?.error) {
+      setStep("comps", "error");
+      el("label-comps").textContent = "Comp search issue \u2014 using estimates";
+      console.warn("Comps error:", w1.comps.error, w1.comps.parseError || "");
+    }
+    if (w1.condition?.error) {
+      setStep("condition", "error");
+      el("label-condition").textContent = "Condition check issue \u2014 using defaults";
+    }
+
+    // \u2500\u2500 WAVE 2 \u2500\u2500 Core deal analysis \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+    setWave(2);
+    updateLoadingMsg(2);
+    setAgent(1, "running", "synthesizing research\u2026");
+    setAgent(7, "running");
+
+    const w2 = await apiCall("/api/wave2", {
+      prompt,
+      address: addr,
+      wave1: { comps: w1.comps, condition: w1.condition, records: w1.records }
+    });
+
+    setAgent(1, w2.agentStatus?.agent1 === "done" ? "done" : "error");
+    setAgent(7, w2.agentStatus?.verifier === "done" ? "done" : "error");
+
+    // Render deal card
+    renderDeal(w2.deal);
+    el("dealHeaderWrap").classList.remove("hidden");
+    el("pdfBtn").disabled = false;
+    toast("\u2713 Deal analysis complete");
+
+    // \u2500\u2500 WAVE 3 \u2500\u2500 Excel + optional rental comps \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+    setWave(3);
+    updateLoadingMsg(3);
+    setAgent(2, "running");
+    if (needsRental) setAgent(6, "running");
+
+    const w3 = await apiCall("/api/wave3", {
+      deal:             w2.deal,
+      prompt,
+      needsRentalComps: needsRental
+    });
+
+    setAgent(2, w3.agentStatus?.agent2 || "done");
+    if (needsRental) setAgent(6, w3.agentStatus?.agent6 || "done");
+
+    if (w3.excel) {
+      XL_DATA = w3.excel;
+      el("xlsxBtn").disabled = false;
+      toast("\u2713 Excel workbook ready \u2014 download above");
+    } else {
+      toast("\u26A0 Excel build failed \u2014 deal card is still valid");
+    }
+
+    completeProgress();
+    setTimeout(() => el("loadingOverlay").classList.remove("show"), 400);
+
+  } catch (err) {
+    console.error("Analysis error:", err);
+    completeProgress();
+    el("loadingOverlay").classList.remove("show");
+    // Show inline error in results view (no alert)
+    el("progressChecklist").innerHTML = `
+      <div style="background:var(--red-bg);border:1px solid var(--red-b);border-radius:14px;padding:20px 22px;">
+        <div style="font-size:15px;font-weight:700;color:var(--red);margin-bottom:6px;">\u26A0 Analysis Failed</div>
+        <div style="font-size:13px;color:var(--text);line-height:1.6;margin-bottom:10px;">${(err.message || "Unknown error \u2014 please try again.").replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>
+        <div style="font-size:11px;color:var(--steel);margin-bottom:14px;">Server: ${SERVER_URL}</div>
+        <button class="btn btn-outline btn-sm" onclick="resetForm()">\u2190 Try Again</button>
+      </div>`;
+    el("dealHeaderWrap").classList.add("hidden");
+    setAllAgents("idle");
+    setWave(0);
+  }
+}
+
+// \u2500\u2500 Render deal card \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+function renderDeal(d) {
+  DEAL = d;
+  const gs  = gradeStyle(d.dealGrade);
+  const pos = d.netProfit > 0;
+
+  el("rAddr").textContent = d.address;
+  el("rFacts").textContent = `${d.propertyFacts?.beds||"?"}bd/${d.propertyFacts?.baths||"?"}ba \u00B7 ${(d.propertyFacts?.sqft||0).toLocaleString()} sqft \u00B7 Built ${d.propertyFacts?.yearBuilt||"?"} \u00B7 ${d.propertyFacts?.lotSize||""}`;
+  el("rCond").textContent  = `Condition: ${d.conditionScore}/10 \u2014 ${d.conditionLabel} (${d.conditionSource})`;
+
+  const gb = el("gradeBadge");
+  gb.textContent = d.dealGrade;
+  Object.assign(gb.style, { background: gs.bg, color: gs.color });
+  el("rVerdict").textContent = d.verdict;
+  el("rVerdict").style.color = gs.bg;
+  el("rMetrics").textContent = `ROI ${pct(d.roi)} \u00B7 Ann. ${pct(d.annualizedRoi)} \u00B7 ${d.holdMonths}mo hold`;
+
+  // Source badges
+  const badges = [];
+  const pc = d.photoConfidence || "none";
+  const pcClass = { high:"sb-high", medium:"sb-medium", low:"sb-low", none:"sb-none" }[pc] || "sb-none";
+  badges.push(`<span class="source-badge ${pcClass}">\u{1F4F7} ${d.photoSource?.replace(/_/g," ") || "no photos"}</span>`);
+  if (d.arvSource === "comps") badges.push(`<span class="source-badge sb-high">\u{1F4CA} comp-derived ARV</span>`);
+  if (d.floodZone && d.floodZone !== "X" && d.floodZone !== "unknown")
+    badges.push(`<span class="source-badge sb-low">\u{1F30A} Flood zone ${d.floodZone}</span>`);
+  el("sourceBadges").innerHTML = badges.join("");
+
+  // Key numbers
+  el("kPurchase").textContent = fmt(d.purchasePrice);
+  el("kRehab").textContent    = fmt(d.totalRehab);
+  el("kArv").textContent      = fmt(d.arv);
+  el("kProfit").textContent   = fmt(d.netProfit);
+  el("kProfit").className     = "stat-value " + (pos ? "sv-green" : "sv-red");
+  el("kAllin").textContent    = fmt(d.allInCost);
+  el("kCash").textContent     = fmt(d.cashInvested);
+  el("kOffer").textContent    = fmt(d.suggestedOffer);
+  el("kARoi").textContent     = pct(d.annualizedRoi);
+  el("kARoi").className       = "stat-value " + (d.annualizedRoi >= 15 ? "sv-green" : d.annualizedRoi >= 10 ? "sv-gold" : "sv-red");
+
+  // Cost bars
+  const bars = [
+    ["Purchase", d.purchasePrice, "#0b1f3a"],
+    ["Rehab", d.totalRehab, "#c9973a"],
+    ["Buy Closing", d.purchaseClosing, "#888780"],
+    ["Holding", d.holdingCosts?.total, "#b4b2a9"],
+    ["Sale Costs", d.saleCosts?.total, "#d3d1c7"],
+  ];
+  el("costBars").innerHTML = bars.map(([l,v,c]) => {
+    const w = Math.max(2, Math.round(((v||0) / d.allInCost) * 100));
+    return `<div class="cbar-row"><div class="cbar-meta"><span>${l}</span><span>${fmt(v)}</span></div>
+      <div class="cbar-bg"><div class="cbar-fill" style="width:${w}%;background:${c}"></div></div></div>`;
+  }).join("");
+
+  // Cost rows
+  const cr = [
+    ["Purchase Price", d.purchasePrice],
+    ["Purchase Closing", d.purchaseClosing],
+    ["Total Rehab", d.totalRehab],
+    ["Insurance", d.holdingCosts?.insurance],
+    ["Property Tax", d.holdingCosts?.taxes],
+    ["Utilities", d.holdingCosts?.utilities],
+    ["HML Interest", d.holdingCosts?.hmlInterest],
+    ["HML Origination", d.holdingCosts?.hmlOrigination],
+    ["PML Interest", d.holdingCosts?.pmlInterest],
+    ["Buyer Commission (2.5%)", d.saleCosts?.buyerCommission],
+    ["Listing Costs", d.saleCosts?.kwListing],
+    ["Sale Closing (1.5%)", d.saleCosts?.saleClosing]
+  ].filter(([,v]) => v && v > 0);
+  el("costRows").innerHTML = cr.map(([l,v]) =>
+    `<div class="kv"><span class="kv-k">${l}</span><span class="kv-v">${fmt(v)}</span></div>`).join("") +
+    `<div class="kv" style="font-weight:700;border-top:1px solid var(--border);margin-top:3px;padding-top:6px;">
+      <span>All-In Cost</span><span>${fmt(d.allInCost)}</span></div>`;
+  el("netProfitRow").textContent = fmt(d.netProfit);
+  el("netProfitRow").style.color = pos ? "var(--green)" : "var(--red)";
+
+  // Max offer
+  el("maxOfferRows").innerHTML = [
+    ["Conservative (65%)", d.maxOffer?.conservative, "#888"],
+    ["Standard (70%)", d.maxOffer?.standard, "#378add"],
+    ["Aggressive (75%)", d.maxOffer?.aggressive, "#e24b4a"],
+  ].map(([l,v,c]) =>
+    `<div class="kv"><span class="kv-k">${l}</span><span class="kv-v" style="color:${c}">${fmt(v)}</span></div>`
+  ).join("");
+
+  // Risk flags \u2014 render into both the tab card and the always-visible panel
+  const allFlags = [...(d.riskFlags||[]), ...(d.permitFlags||[])];
+  const flagHtml = allFlags.length
+    ? allFlags.map(f =>
+        `<div class="flag"><div class="fdot f${f.level==="red"?"red":f.level==="green"?"green":"yellow"}"></div>
+         <span class="ftext">${f.text}</span></div>`).join("")
+    : `<div style="font-size:13px;color:var(--steel);">No major flags identified.</div>`;
+  el("riskFlags").innerHTML = flagHtml;
+  // Always-visible panel
+  const redCount  = allFlags.filter(f => f.level === "red").length;
+  const warnCount = allFlags.filter(f => f.level !== "green").length;
+  if (allFlags.length > 0) {
+    el("risksFlagsAlways").innerHTML = flagHtml;
+    el("riskCountBadge").textContent = redCount > 0 ? `${redCount} critical` : `${warnCount} warning${warnCount!==1?"s":""}`;
+    el("risksAlwaysPanel").classList.remove("hidden");
+    // Tint border by severity
+    el("risksAlwaysPanel").querySelector("div").style.borderLeftColor = redCount > 0 ? "var(--red)" : "var(--amber)";
+  } else {
+    el("risksAlwaysPanel").classList.add("hidden");
+  }
+
+  // Recommendation
+  const isGo = d.netProfit > 30000, isCau = d.netProfit > 0;
+  const rb = el("recBox");
+  rb.style.cssText = `border-radius:10px;padding:15px 18px;border-left:4px solid ${isGo?"var(--green)":isCau?"#ef9f27":"var(--red)"};background:${isGo?"var(--green-bg)":isCau?"var(--amber-bg)":"var(--red-bg)"};`;
+  el("recLabel").textContent = d.suggestedOffer && d.suggestedOffer !== d.purchasePrice
+    ? `Recommendation \u2014 Offer ${fmt(d.suggestedOffer)}` : "Recommendation";
+  el("recLabel").style.color = isGo?"var(--green)":isCau?"var(--amber)":"var(--red)";
+  el("recText").textContent  = d.recommendation;
+
+  // \u2500\u2500 Condition tab \u2500\u2500
+  const rd = d.conditionRoomBreakdown || {};
+  const scoreColor = s => s >= 7 ? "#639922" : s >= 5 ? "#c9973a" : s >= 3 ? "#e85d26" : "#e24b4a";
+  el("conditionTable").innerHTML = Object.entries(rd).map(([area, v]) => {
+    const s = v.score || 0;
+    const c = scoreColor(s);
+    return `<div style="margin-bottom:12px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;">
+        <span style="font-size:13px;font-weight:600;color:var(--gold);text-transform:capitalize;">${area}</span>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:11px;color:var(--steel);">weight ${Math.round((v.weight||0)*100)}%</span>
+          <span style="font-size:15px;font-weight:700;color:${c};">${s || "N/A"}</span>
+        </div>
+      </div>
+      <div class="score-bar"><div class="score-fill" style="width:${(s/10)*100}%;background:${c}"></div></div>
+      <div style="font-size:12px;color:var(--steel);margin-top:3px;">${v.notes||""}</div>
+    </div>`;
+  }).join("");
+
+  el("photoSourceInfo").innerHTML = `
+    <div class="kv"><span class="kv-k">Source</span><span class="kv-v">${(d.photoSource||"none").replace(/_/g," ")}</span></div>
+    <div class="kv"><span class="kv-k">Photos analyzed</span><span class="kv-v">${d.photosAnalyzed||0}</span></div>
+    <div class="kv"><span class="kv-k">Confidence</span><span class="kv-v">${d.photoConfidence||"none"}</span></div>
+    <div class="kv"><span class="kv-k">Rooms covered</span><span class="kv-v">${(d.roomsCovered||[]).join(", ")||"none"}</span></div>
+    <div class="kv"><span class="kv-k">Rooms missing</span><span class="kv-v" style="color:${(d.roomsMissing||[]).length?"var(--red)":"var(--green)"}">${(d.roomsMissing||[]).join(", ")||"none"}</span></div>
+    <div class="kv"><span class="kv-k">Staging detected</span><span class="kv-v">${d.stagingDetected?"Yes \u2014 scores adjusted conservatively":"No"}</span></div>`;
+
+  // \u2500\u2500 Comps tab \u2500\u2500
+  const comps = d.soldComps || [];
+  if (d.arvRange) {
+    el("arvRangeDisplay").innerHTML = `ARV Range: <strong>${fmt(d.arvRange.low)}</strong> \u2014 <strong>${fmt(d.arvRange.mid)}</strong> \u2014 <strong>${fmt(d.arvRange.high)}</strong> \u00B7 Using: <strong style="color:var(--gold)">${fmt(d.arv)}</strong>`;
+  }
+  el("compsBody").innerHTML = comps.length
+    ? comps.map(c =>
+        `<tr><td>${c.address||"\u2014"}</td><td>${c.beds||""}/${c.baths||""}</td><td>${(c.sqft||0).toLocaleString()}</td>
+         <td class="num">${fmt(c.soldPrice)}</td><td class="num">${fmt(c.pricePerSqft)}/sqft</td>
+         <td class="num gold-v">${fmt(c.adjustedPrice)}</td>
+         <td>${c.daysOnMarket||"\u2014"} days</td><td>${c.soldDate||"\u2014"}</td>
+         <td style="font-size:12px;color:var(--steel);">${c.adjustmentNotes||""}</td></tr>`
+      ).join("")
+    : `<tr><td colspan="9" style="text-align:center;color:var(--steel);padding:20px;">No comps found \u2014 ARV based on user input</td></tr>`;
+
+  if (d.marketContext) {
+    el("compsNote").textContent = d.marketContext.marketComment || "";
+  }
+
+  // \u2500\u2500 Rehab tab \u2500\u2500
+  const items = d.rehabLineItems || [];
+  el("rehabBody").innerHTML = items.filter(r => r.include !== false).map(r =>
+    `<tr><td>${r.item}</td>
+     <td class="num blue-v">${r.labor ? fmt(r.labor) : "\u2014"}</td>
+     <td class="num blue-v">${r.material ? fmt(r.material) : "\u2014"}</td>
+     <td class="num" style="font-weight:600">${fmt(r.total)}</td>
+     <td style="font-size:12px;color:var(--steel)">${r.notes||""}</td></tr>`
+  ).join("") +
+  `<tr class="tr-sub"><td>Subtotal</td><td></td><td></td><td class="num">${fmt(d.rehabBudget)}</td><td></td></tr>
+   <tr><td style="color:var(--steel)">Contingency (${d.rehabBudget>0?Math.round((d.rehabContingency/d.rehabBudget)*100):15}%)</td><td></td><td></td><td class="num gold-v">${fmt(d.rehabContingency)}</td><td></td></tr>
+   <tr class="tr-total"><td>GRAND TOTAL</td><td></td><td></td><td class="num" style="color:var(--gold);font-size:15px">${fmt(d.totalRehab)}</td><td></td></tr>`;
+
+  // \u2500\u2500 Financing tab \u2500\u2500
+  const h = d.financing?.hml||{}, p = d.financing?.pml||{};
+  el("hmlRows").innerHTML = [
+    ["Loan Amount", fmt(h.loanAmount)], ["LTV", "90%"],
+    ["Rate", pct(h.rate)], ["Points", (h.points||1)+"pt"],
+    ["Origination Fee", fmt(h.originationFee)],
+    ["Monthly Payment", fmt(h.monthlyPayment)],
+    ["Hold Months", (d.holdMonths||5)+" mo"],
+    ["Total Interest", fmt(h.totalInterest)],
+    ["Total HML Cost", fmt((h.originationFee||0)+(h.totalInterest||0))],
+  ].map(([l,v]) => `<div class="kv"><span class="kv-k">${l}</span><span class="kv-v">${v}</span></div>`).join("");
+  el("pmlRows").innerHTML = [
+    ["Loan Amount", fmt(p.loanAmount)], ["Rate", pct(p.rate)],
+    ["Monthly Payment", fmt(p.monthlyPayment)], ["Total Cost", fmt(p.totalInterest)],
+  ].map(([l,v]) => `<div class="kv"><span class="kv-k">${l}</span><span class="kv-v">${v}</span></div>`).join("");
+  el("cashRows").innerHTML = [
+    ["Cash to Close", fmt(d.financing?.cashToClose)],
+    ["Total Financing Cost", fmt(d.financing?.totalFinancingCost)],
+    ["Total Cash Invested", fmt(d.cashInvested)],
+  ].map(([l,v]) => `<div class="kv"><span class="kv-k">${l}</span><span class="kv-v" style="font-weight:700">${v}</span></div>`).join("");
+
+  // \u2500\u2500 BRRRR tab \u2500\u2500
+  const br = d.brrrr||{};
+  el("brrrrRows").innerHTML = [
+    ["Refi Amount (ARV\u00D775%)", fmt(br.refiAmount)],
+    ["Cash Recovered", fmt(br.cashRecovered)],
+    ["Cash Left In Deal", fmt(br.cashLeftIn)],
+    ["Est. Rent / mo", fmt(br.estimatedRent)],
+    ["New Mortgage (30yr 7.5%)", fmt(br.monthlyMortgage)],
+    ["Monthly Cash Flow", fmt(br.monthlyCashFlow)],
+    ["Annual Cash Flow", fmt(br.annualCashFlow)],
+    ["Cash-on-Cash Return", pct(br.cashOnCash)],
+    ["Cap Rate", pct(br.capRate)],
+  ].map(([l,v]) => `<div class="kv"><span class="kv-k">${l}</span><span class="kv-v">${v}</span></div>`).join("");
+
+  const gs2 = gradeStyle(d.dealGrade);
+  el("stratRows").innerHTML = [
+    ["Flip Net Profit", fmt(d.netProfit), d.dealGrade],
+    ["Flip ROI", pct(d.roi), null],
+    ["Flip Annualized ROI", pct(d.annualizedRoi), null],
+    ["BRRRR Monthly CF", fmt(br.monthlyCashFlow), null],
+    ["BRRRR Cash-on-Cash", pct(br.cashOnCash), null],
+    ["BRRRR Cap Rate", pct(br.capRate), null],
+  ].map(([l,v,g]) => {
+    const badge = g ? `<span style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;margin-right:6px;background:${gradeStyle(g).bg};color:${gradeStyle(g).color}">${g}</span>` : "";
+    return `<div class="kv"><span class="kv-k">${l}</span><span class="kv-v">${badge}${v}</span></div>`;
+  }).join("");
+  el("brrrrVerdict").textContent = br.verdict||"";
+
+  // Initialize scenario modeling panel
+  initScenarioPanel(d);
+}
+
+// \u2500\u2500\u2500 SCENARIO MODELING \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+// Client-side port of computeDealMath for instant recalculation
+
+function clientComputeDealMath(purchasePrice, arv, holdMonths, rehabBudget, contingencyPct, financingType) {
+  const fType  = (financingType || "HML").toUpperCase();
+  const isCash = fType === "CASH";
+  const hasPml = fType === "PML" || fType === "HML+PML";
+  const hasHml = !isCash && (fType === "HML" || fType === "HML+PML");
+
+  const hmlLtv        = fType === "HML+PML" ? 0.70 : 0.90;
+  const hmlRate       = 10;
+  const hmlLoanAmount = hasHml ? Math.round(purchasePrice * hmlLtv) : 0;
+  const hmlOriginFee  = Math.round(hmlLoanAmount * 0.01);
+  const hmlMonthly    = Math.round((hmlLoanAmount * hmlRate / 100) / 12);
+  const hmlInterest   = hmlMonthly * holdMonths;
+
+  const pmlRate       = 12;
+  const pmlLoanAmount = hasPml
+    ? (fType === "HML+PML" ? Math.round(purchasePrice * 0.20) : Math.round(purchasePrice * 0.85))
+    : 0;
+  const pmlMonthly  = Math.round((pmlLoanAmount * pmlRate / 100) / 12);
+  const pmlInterest = pmlMonthly * holdMonths;
+
+  const purchaseClosing = isCash ? Math.round(purchasePrice * 0.015) : Math.round(purchasePrice * 0.03);
+
+  const insurance = 200 * holdMonths;
+  const utilities = 200 * holdMonths;
+  const taxes     = Math.round((4500 / 12) * holdMonths);
+  const holdTotal = insurance + utilities + taxes + hmlInterest + hmlOriginFee + pmlInterest;
+
+  const rehabContingency = Math.round(rehabBudget * contingencyPct / 100);
+  const totalRehab       = rehabBudget + rehabContingency;
+
+  const buyerComm = Math.round(arv * 0.025);
+  const saleClose = Math.round(arv * 0.015);
+  const saleTotal = buyerComm + 8000 + saleClose;
+
+  const allInCost    = purchasePrice + purchaseClosing + totalRehab + holdTotal + saleTotal;
+  const netProfit    = arv - allInCost;
+  const cashToClose  = allInCost - hmlLoanAmount - pmlLoanAmount;
+  const cashInvested = Math.max(0, cashToClose);
+  const roi          = cashInvested > 0 ? Math.round((netProfit / cashInvested) * 1000) / 10 : 0;
+
+  const profitRatio = cashInvested > 0 ? (netProfit / cashInvested) * 100 : 0;
+  const grade       = profitRatio > 30 ? "A+" : profitRatio > 20 ? "A" : profitRatio > 15 ? "B+" :
+                      profitRatio > 10 ? "B"  : profitRatio > 5  ? "C" : "D";
+
+  return { allInCost, netProfit, cashToClose: cashInvested, roi, grade };
+}
+
+let _scenarioDeal = null; // set when renderDeal() runs
+
+function initScenarioPanel(deal) {
+  _scenarioDeal = deal;
+  el("sc_purchasePrice").value = deal.purchasePrice || "";
+  el("sc_arv").value           = deal.arv           || "";
+  el("sc_holdMonths").value    = deal.holdMonths     || 5;
+  el("sc_rehabBudget").value   = deal.rehabBudget    || "";
+  el("sc_contingencyPct").value = deal.rehabContingency && deal.rehabBudget
+    ? Math.round(deal.rehabContingency / deal.rehabBudget * 100) : 15;
+  const finType = (deal.financing?.type || "HML").toUpperCase();
+  el("sc_financing").value = finType;
+  el("scenarioPanel").classList.remove("hidden");
+  runScenario();
+}
+
+function runScenario() {
+  const pp   = parseFloat(el("sc_purchasePrice").value) || 0;
+  const arv  = parseFloat(el("sc_arv").value)           || 0;
+  const hold = parseInt(el("sc_holdMonths").value)       || 5;
+  const reh = parseFloat(el("sc_rehabBudget").value)    || 0;
+  const con  = parseFloat(el("sc_contingencyPct").value) || 15;
+  const fin  = el("sc_financing").value                  || "HML";
+
+  if (!pp || !arv) return;
+
+  const r = clientComputeDealMath(pp, arv, hold, reh, con, fin);
+
+  const fmtVal = v => "$" + Math.abs(Math.round(v)).toLocaleString();
+  el("sc_allInCost").textContent  = fmtVal(r.allInCost);
+  el("sc_cashToClose").textContent = fmtVal(r.cashToClose);
+  el("sc_roi").textContent        = r.roi + "%";
+  el("sc_grade").textContent      = r.grade;
+
+  const profitEl = el("sc_netProfit");
+  profitEl.textContent = (r.netProfit >= 0 ? "+" : "-") + fmtVal(r.netProfit);
+  profitEl.style.color = r.netProfit >= 0 ? "var(--green, #22c55e)" : "var(--red, #ef4444)";
+}
+
+// \u2500\u2500 PDF Download (3-page deal report) \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+function downloadPDF() {
+  if (!DEAL) { toast("Run analysis first"); return; }
+  const d = DEAL;
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: "pt", format: "letter" });
+  const W = 612, H = 792;
+  const NAVY = "#0B1F3A", GOLD = "#C9973A", GOLD_L = "#E8C97A", STEEL = "#8896A5",
+        GREEN = "#3b6d11", GREEN_BG = "#eaf3de", RED = "#a32d2d", BLUE = "#185fa5",
+        LIGHT = "#F4F7FB", BORDER = "#DDE3EC", AMBER = "#854f0b", AMBER_BG = "#faeeda",
+        BLUE_BG = "#e6f1fb", WHITE = "#FFFFFF";
+
+  const fmtP = n => n != null ? "$" + Math.round(n).toLocaleString() : "$0";
+  const pctP = n => n != null ? (Math.round(n * 10) / 10) + "%" : "0%";
+  const today = new Date().toLocaleDateString("en-US", { month:"short", day:"numeric", year:"numeric" });
+
+  function drawHeader(title, pageNum) {
+    doc.setFillColor(NAVY); doc.rect(0, 0, W, 48, "F");
+    doc.setFillColor(GOLD); doc.rect(0, 48, W, 2, "F");
+    doc.setFont("helvetica","bold"); doc.setFontSize(13); doc.setTextColor(WHITE);
+    doc.text("Streamline", 24, 33);
+    const sw = doc.getTextWidth("Streamline");
+    doc.setTextColor(GOLD); doc.text("AI", 24 + sw + 2, 33);
+    doc.setFontSize(6.5); doc.setTextColor(GOLD_L); doc.text("CONSULTING", 24, 42);
+    doc.setFontSize(9); doc.setFont("helvetica","bold"); doc.setTextColor(GOLD_L);
+    doc.text(title, W - 24, 30, { align: "right" });
+    doc.setFontSize(7); doc.setFont("helvetica","normal"); doc.setTextColor(STEEL);
+    doc.text(today, W - 24, 41, { align: "right" });
+    // Footer
+    doc.setDrawColor(GOLD); doc.setLineWidth(0.5); doc.line(24, H - 36, W - 24, H - 36);
+    doc.setFontSize(6.5); doc.setTextColor(STEEL);
+    doc.text("Streamline AI Consulting  \u00B7  Flip Deal Analyzer  \u00B7  For informational purposes only", 24, H - 24);
+    doc.text("Page " + pageNum + " of 3", W - 24, H - 24, { align: "right" });
+  }
+
+  function rRect(x, y, w, h, r, fill, stroke) {
+    if (fill) {  doc.setFillColor(fill); doc.roundedRect(x, y, w, h, r, r, stroke ? "FD" : "F"); }
+    else if (stroke) { doc.setDrawColor(stroke); doc.roundedRect(x, y, w, h, r, r, "S"); }
+  }
+
+  function statBox(x, y, w, h, label, value, color) {
+    doc.setDrawColor(BORDER); doc.setLineWidth(0.5);
+    rRect(x, y, w, h, 6, WHITE, BORDER);
+    doc.setFont("helvetica","normal"); doc.setFontSize(7); doc.setTextColor(STEEL);
+    doc.text(label, x + 10, y + 14);
+    doc.setFont("helvetica","bold"); doc.setFontSize(15); doc.setTextColor(color || NAVY);
+    doc.text(value, x + 10, y + h - 10);
+  }
+
+  // \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+  // PAGE 1 \u2014 DEAL SUMMARY
+  // \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+  drawHeader("Deal Summary", 1);
+
+  // Deal header card
+  const top = 66;
+  rRect(24, top, W - 48, 72, 10, NAVY);
+  doc.setFillColor(GOLD); doc.rect(24, top, W - 48, 2.5, "F");
+  doc.setFont("helvetica","bold"); doc.setFontSize(16); doc.setTextColor(WHITE);
+  doc.text(d.address || "\u2014", 38, top + 24);
+  doc.setFont("helvetica","normal"); doc.setFontSize(9.5); doc.setTextColor(180, 180, 180);
+  const facts = `${d.propertyFacts?.beds||"?"}bd / ${d.propertyFacts?.baths||"?"}ba  \u00B7  ${(d.propertyFacts?.sqft||0).toLocaleString()} sqft  \u00B7  Built ${d.propertyFacts?.yearBuilt||"?"}`;
+  doc.text(facts, 38, top + 38);
+  doc.setFontSize(8); doc.setTextColor(140, 140, 140);
+  doc.text(`Condition: ${d.conditionScore||"?"}/10 \u2014 ${d.conditionLabel||""}`, 38, top + 52);
+
+  // Grade badge
+  const gx = W - 82, gy = top + 12;
+  const gBg = (d.dealGrade === "A+" || d.dealGrade === "A" || d.dealGrade === "B+") ? GREEN_BG : AMBER_BG;
+  const gFg = (d.dealGrade === "A+" || d.dealGrade === "A" || d.dealGrade === "B+") ? GREEN : AMBER;
+  rRect(gx, gy, 44, 44, 8, gBg);
+  doc.setFont("helvetica","bold"); doc.setFontSize(22); doc.setTextColor(gFg);
+  doc.text(d.dealGrade || "?", gx + 22, gy + 30, { align: "center" });
+
+  // Verdict
+  doc.setFont("helvetica","bold"); doc.setFontSize(9.5); doc.setTextColor(220, 220, 220);
+  doc.text(d.verdict || "", gx - 14, gy + 16, { align: "right" });
+  doc.setFont("helvetica","normal"); doc.setFontSize(7.5); doc.setTextColor(150, 150, 150);
+  doc.text(`ROI ${pctP(d.roi)}  \u00B7  Annualized ${pctP(d.annualizedRoi)}  \u00B7  ${d.holdMonths||5}mo hold`, gx - 14, gy + 28, { align: "right" });
+
+  // Stat boxes
+  let y1 = top + 82;
+  const bw = (W - 48 - 24) / 4;
+  const r1 = [["PURCHASE PRICE", fmtP(d.purchasePrice), NAVY], ["TOTAL REHAB", fmtP(d.totalRehab), GOLD],
+              ["ARV", fmtP(d.arv), NAVY], ["NET PROFIT", fmtP(d.netProfit), GREEN]];
+  r1.forEach(([l,v,c], i) => statBox(24 + i * (bw + 8), y1, bw, 44, l, v, c));
+
+  const y2 = y1 + 52;
+  const r2 = [["ALL-IN COST", fmtP(d.allInCost), NAVY], ["CASH INVESTED", fmtP(d.cashInvested), NAVY],
+              ["SUGGESTED OFFER", fmtP(d.suggestedOffer), BLUE], ["ANNUALIZED ROI", pctP(d.annualizedRoi), GREEN]];
+  r2.forEach(([l,v,c], i) => statBox(24 + i * (bw + 8), y2, bw, 44, l, v, c));
+
+  // Rehab budget (left column)
+  const yBody = y2 + 60;
+  const colW = (W - 48 - 16) / 2;
+  doc.setFont("helvetica","bold"); doc.setFontSize(11); doc.setTextColor(NAVY);
+  doc.text("Rehab Budget", 24, yBody);
+  const rehabItems = d.rehabLineItems || [];
+  let ry = yBody + 16;
+  const topItems = rehabItems.filter(r => r.include !== false).slice(0, 8);
+  topItems.forEach(r => {
+    doc.setFont("helvetica","normal"); doc.setFontSize(8); doc.setTextColor(NAVY);
+    doc.text(r.item || "", 26, ry);
+    doc.setFont("helvetica","bold"); doc.setTextColor(GOLD);
+    doc.text(fmtP(r.total), 150, ry, { align: "right" });
+    const barW = Math.max(3, Math.min(colW - 160, ((r.total || 0) / (d.totalRehab || 1)) * (colW - 160)));
+    doc.setFillColor(GOLD); doc.roundedRect(158, ry - 7, barW, 8, 3, 3, "F");
+    ry += 15;
+  });
+  ry += 4;
+  doc.setDrawColor(NAVY); doc.setLineWidth(0.8); doc.line(24, ry, 24 + colW, ry);
+  ry += 12;
+  doc.setFont("helvetica","bold"); doc.setFontSize(10); doc.setTextColor(NAVY);
+  doc.text("TOTAL REHAB", 26, ry);
+  doc.setTextColor(GOLD); doc.text(fmtP(d.totalRehab), 24 + colW, ry, { align: "right" });
+
+  // Cost summary (right column)
+  const rx = 24 + colW + 16;
+  doc.setFont("helvetica","bold"); doc.setFontSize(11); doc.setTextColor(NAVY);
+  doc.text("Cost Summary", rx, yBody);
+  const costs = [["Purchase Price", d.purchasePrice], ["Purchase Closing", d.purchaseClosing],
+    ["Total Rehab", d.totalRehab], ["Holding Costs", d.holdingCosts?.total], ["Sale Costs", d.saleCosts?.total]];
+  let cy = yBody + 16;
+  costs.forEach(([l,v]) => {
+    doc.setFont("helvetica","normal"); doc.setFontSize(8.5); doc.setTextColor(STEEL);
+    doc.text(l, rx + 4, cy);
+    doc.setTextColor(NAVY); doc.text(fmtP(v), rx + colW - 4, cy, { align: "right" });
+    cy += 14;
+  });
+  cy += 2;
+  doc.setDrawColor(BORDER); doc.setLineWidth(0.4); doc.line(rx, cy, rx + colW, cy);
+  cy += 12;
+  doc.setFont("helvetica","bold"); doc.setFontSize(9); doc.setTextColor(NAVY);
+  doc.text("All-In Cost", rx + 4, cy);
+  doc.text(fmtP(d.allInCost), rx + colW - 4, cy, { align: "right" });
+  cy += 16;
+  doc.setFontSize(10); doc.setTextColor(GREEN);
+  doc.text("NET PROFIT", rx + 4, cy);
+  doc.text(fmtP(d.netProfit), rx + colW - 4, cy, { align: "right" });
+
+  // Max offers
+  cy += 28;
+  doc.setFont("helvetica","bold"); doc.setFontSize(11); doc.setTextColor(NAVY);
+  doc.text("Max Offer Thresholds", rx, cy);
+  cy += 16;
+  [["Conservative (65%)", d.maxOffer?.conservative, STEEL],
+   ["Standard (70%)", d.maxOffer?.standard, BLUE],
+   ["Aggressive (75%)", d.maxOffer?.aggressive, RED]].forEach(([l,v,c]) => {
+    doc.setFont("helvetica","normal"); doc.setFontSize(9); doc.setTextColor(STEEL);
+    doc.text(l, rx + 4, cy);
+    doc.setFont("helvetica","bold"); doc.setTextColor(c);
+    doc.text(fmtP(v), rx + colW - 4, cy, { align: "right" });
+    cy += 14;
+  });
+
+  // Recommendation
+  rRect(24, H - 100, W - 48, 50, 8, GREEN_BG);
+  doc.setFillColor(GREEN); doc.rect(24, H - 100, 4, 50, "F");
+  doc.setFont("helvetica","bold"); doc.setFontSize(9); doc.setTextColor(GREEN);
+  doc.text(`Recommendation \u2014 Offer ${fmtP(d.suggestedOffer)}`, 38, H - 86);
+  doc.setFont("helvetica","normal"); doc.setFontSize(8); doc.setTextColor(NAVY);
+  const recLines = doc.splitTextToSize(d.recommendation || "", W - 80);
+  doc.text(recLines.slice(0, 3), 38, H - 74);
+
+  // \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+  // PAGE 2 \u2014 COMPARABLE SALES & ARV
+  // \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+  doc.addPage();
+  drawHeader("Comparable Sales & ARV", 2);
+
+  let y = 72;
+  doc.setFont("helvetica","bold"); doc.setFontSize(14); doc.setTextColor(NAVY);
+  doc.text("Comparable Sales Analysis", 24, y);
+  y += 14;
+  const comps = d.soldComps || [];
+  doc.setFont("helvetica","normal"); doc.setFontSize(9); doc.setTextColor(STEEL);
+  doc.text(`${comps.length} comps  \u00B7  Subject: ${(d.propertyFacts?.sqft||0).toLocaleString()} sqft, ${d.propertyFacts?.beds||"?"}bd/${d.propertyFacts?.baths||"?"}ba`, 24, y);
+  y += 18;
+
+  // Comp table header
+  const cols = [24, 175, 215, 260, 330, 385, 445, 490, 550];
+  const hdrs = ["ADDRESS", "BD/BA", "SQFT", "SOLD PRICE", "$/SQFT", "ADJ PRICE", "DOM", "SOLD", "DIST"];
+  rRect(20, y - 12, W - 40, 16, 4, NAVY);
+  doc.setFont("helvetica","bold"); doc.setFontSize(7); doc.setTextColor(WHITE);
+  hdrs.forEach((h, i) => doc.text(h, cols[i], y));
+  y += 12;
+
+  let totalPpsf = 0, totalAdj = 0;
+  comps.forEach((comp, i) => {
+    if (i % 2 === 1) { doc.setFillColor(LIGHT); doc.rect(20, y - 10, W - 40, 14, "F"); }
+    doc.setFont("helvetica","normal"); doc.setFontSize(8); doc.setTextColor(NAVY);
+    doc.text((comp.address || "\u2014").substring(0, 28), cols[0], y);
+    doc.setTextColor(STEEL);
+    doc.text(`${comp.beds||"?"}/${comp.baths||"?"}`, cols[1], y);
+    doc.text(`${(comp.sqft||0).toLocaleString()}`, cols[2], y);
+    doc.setFont("helvetica","bold"); doc.setTextColor(NAVY);
+    doc.text(fmtP(comp.soldPrice), cols[3], y);
+    doc.setFont("helvetica","normal"); doc.setTextColor(STEEL);
+    doc.text(`$${comp.pricePerSqft||0}`, cols[4], y);
+    doc.setFont("helvetica","bold"); doc.setTextColor(GOLD);
+    doc.text(fmtP(comp.adjustedPrice), cols[5], y);
+    doc.setFont("helvetica","normal"); doc.setTextColor(STEEL);
+    doc.text(`${comp.daysOnMarket||"?"}`, cols[6], y);
+    doc.text((comp.soldDate||"\u2014").substring(0, 8), cols[7], y);
+    doc.text(comp.distance || "", cols[8], y);
+    totalPpsf += (comp.pricePerSqft || 0);
+    totalAdj += (comp.adjustedPrice || 0);
+    y += 16;
+  });
+
+  // Averages
+  if (comps.length > 0) {
+    y += 2;
+    rRect(20, y - 12, W - 40, 16, 4, "#132c52");
+    doc.setFont("helvetica","bold"); doc.setFontSize(8); doc.setTextColor(WHITE);
+    doc.text("AVERAGE", cols[0], y);
+    const avgPpsf = totalPpsf / comps.length;
+    const avgAdj = totalAdj / comps.length;
+    doc.text(`$${Math.round(avgPpsf)}`, cols[4], y);
+    doc.setTextColor(GOLD_L);
+    doc.text(fmtP(avgAdj), cols[5], y);
+    y += 22;
+
+    // Adjustment notes
+    doc.setFont("helvetica","bold"); doc.setFontSize(10); doc.setTextColor(NAVY);
+    doc.text("Adjustment Notes", 24, y);
+    y += 14;
+    comps.forEach(comp => {
+      doc.setFont("helvetica","normal"); doc.setFontSize(8); doc.setTextColor(STEEL);
+      const short = (comp.address||"").split(",")[0];
+      doc.text(`\u2022  ${short}: ${comp.adjustmentNotes||"no adjustments"}`, 28, y);
+      y += 12;
+    });
+
+    // ARV Calculation box
+    y += 12;
+    rRect(24, y, W - 48, 120, 10, LIGHT, BORDER);
+    doc.setFont("helvetica","bold"); doc.setFontSize(12); doc.setTextColor(NAVY);
+    doc.text("ARV Calculation", 40, y + 18);
+    doc.setFillColor(GOLD); doc.rect(40, y + 22, 50, 2, "F");
+
+    let ay = y + 38;
+    doc.setFont("helvetica","normal"); doc.setFontSize(9); doc.setTextColor(STEEL);
+    doc.text("Method 1 \u2014 Average Adjusted Sale Price", 40, ay);
+    doc.setFont("helvetica","bold"); doc.setTextColor(NAVY);
+    doc.text(fmtP(avgAdj), W - 72, ay, { align: "right" });
+    ay += 16;
+
+    const ppsf_arv = avgPpsf * (d.propertyFacts?.sqft || 1450);
+    doc.setFont("helvetica","normal"); doc.setTextColor(STEEL);
+    doc.text(`Method 2 \u2014 Avg $/sqft ($${Math.round(avgPpsf)}) \u00D7 Subject sqft (${(d.propertyFacts?.sqft||0).toLocaleString()})`, 40, ay);
+    doc.setFont("helvetica","bold"); doc.setTextColor(NAVY);
+    doc.text(fmtP(ppsf_arv), W - 72, ay, { align: "right" });
+    ay += 20;
+
+    doc.setDrawColor(BORDER); doc.line(40, ay, W - 72, ay);
+    ay += 16;
+    doc.setFont("helvetica","bold"); doc.setFontSize(11); doc.setTextColor(NAVY);
+    doc.text("SELECTED ARV", 40, ay);
+    doc.setFontSize(16); doc.setTextColor(GOLD);
+    doc.text(fmtP(d.arv), W - 72, ay, { align: "right" });
+    ay += 14;
+    doc.setFont("helvetica","normal"); doc.setFontSize(8); doc.setTextColor(STEEL);
+    doc.text(`Average $/sqft: $${Math.round(avgPpsf)}  \u00B7  Subject implied: ${fmtP(ppsf_arv)}  \u00B7  Reconciled to ${fmtP(d.arv)}`, 40, ay);
+  }
+
+  // Market context
+  if (d.marketContext?.marketComment) {
+    const mcy = comps.length > 0 ? y + 132 : y + 20;
+    rRect(24, mcy, W - 48, 36, 6, BLUE_BG);
+    doc.setFont("helvetica","bold"); doc.setFontSize(8.5); doc.setTextColor(BLUE);
+    doc.text("Market Context", 38, mcy + 14);
+    doc.setFont("helvetica","normal"); doc.setFontSize(8); doc.setTextColor(NAVY);
+    const mcLines = doc.splitTextToSize(d.marketContext.marketComment, W - 80);
+    doc.text(mcLines.slice(0, 2), 38, mcy + 26);
+  }
+
+  // \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+  // PAGE 3 \u2014 PROJECTED P&L
+  // \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+  doc.addPage();
+  drawHeader("Projected Profit & Loss", 3);
+
+  y = 72;
+  doc.setFont("helvetica","bold"); doc.setFontSize(14); doc.setTextColor(NAVY);
+  doc.text("Projected Profit & Loss", 24, y);
+  y += 14;
+  doc.setFont("helvetica","normal"); doc.setFontSize(9); doc.setTextColor(STEEL);
+  doc.text(`Purchase at ${fmtP(d.purchasePrice)}  \u00B7  ${d.holdMonths||5}-month hold  \u00B7  Sale at ARV ${fmtP(d.arv)}`, 24, y);
+  y += 20;
+
+  // Table header
+  const c1 = 28, c2 = 330, c3 = 430, c4 = 530;
+  rRect(20, y - 12, W - 40, 18, 4, NAVY);
+  doc.setFont("helvetica","bold"); doc.setFontSize(8); doc.setTextColor(WHITE);
+  doc.text("LINE ITEM", c1, y);
+  doc.text("AT ASKING", c2, y, { align: "right" });
+  doc.text("AT OFFER", c3, y, { align: "right" });
+  doc.text("NOTES", c4, y, { align: "right" });
+  y += 14;
+
+  function plRow(label, v1, v2, note, opts = {}) {
+    if (opts.section) {
+      y += 2;
+      doc.setFillColor(LIGHT); doc.rect(20, y - 10, W - 40, 14, "F");
+      doc.setFont("helvetica","bold"); doc.setFontSize(8.5); doc.setTextColor(NAVY);
+      doc.text(label, c1, y);
+      y += 14;
+      return;
+    }
+    if (opts.divider) { doc.setDrawColor(BORDER); doc.setLineWidth(0.3); doc.line(20, y - 4, W - 20, y - 4); y += 2; return; }
+    const f = opts.bold ? "bold" : "normal";
+    doc.setFont("helvetica", f); doc.setFontSize(opts.bold ? 8.5 : 8);
+    doc.setTextColor(opts.green ? GREEN : opts.bold ? NAVY : "#4a5568");
+    doc.text(label, c1 + (opts.bold ? 0 : 8), y);
+    doc.setFont("helvetica", f); doc.setFontSize(opts.bold ? 9 : 8.5);
+    const clr1 = opts.green ? (v1 > 0 ? GREEN : RED) : NAVY;
+    doc.setTextColor(clr1); doc.text(fmtP(v1), c2, y, { align: "right" });
+    const clr2 = opts.green ? (v2 > 0 ? GREEN : RED) : NAVY;
+    doc.setTextColor(clr2); doc.text(fmtP(v2), c3, y, { align: "right" });
+    if (note) { doc.setFont("helvetica","normal"); doc.setFontSize(7); doc.setTextColor(STEEL); doc.text(note, c4, y, { align: "right" }); }
+    y += 12;
+  }
+
+  const sale = d.arv || 0;
+  const offer = d.suggestedOffer || d.purchasePrice;
+  const askClose = d.purchaseClosing || Math.round(d.purchasePrice * 0.015);
+  const offClose = Math.round(offer * 0.015);
+  const offHolding = Math.round((d.holdingCosts?.total || 0) * offer / d.purchasePrice);
+
+  plRow("REVENUE", 0, 0, "", { section: true });
+  plRow("Projected Sale Price (ARV)", sale, sale, "Based on comps");
+  plRow("Total Revenue", sale, sale, "", { bold: true });
+  plRow("", 0, 0, "", { divider: true });
+
+  plRow("ACQUISITION COSTS", 0, 0, "", { section: true });
+  plRow("Purchase Price", d.purchasePrice, offer);
+  plRow("Purchase Closing (1.5%)", askClose, offClose, "Title, escrow");
+  plRow("Total Acquisition", d.purchasePrice + askClose, offer + offClose, "", { bold: true });
+  plRow("", 0, 0, "", { divider: true });
+
+  plRow("RENOVATION", 0, 0, "", { section: true });
+  rehabItems.filter(r => r.include !== false).slice(0, 6).forEach(r => {
+    plRow(r.item, r.total, r.total, r.notes || "");
+  });
+  if (rehabItems.length > 6) plRow("Other items", d.totalRehab - rehabItems.slice(0,6).reduce((s,r)=>s+(r.total||0),0), d.totalRehab - rehabItems.slice(0,6).reduce((s,r)=>s+(r.total||0),0));
+  plRow("Total Renovation", d.totalRehab, d.totalRehab, "", { bold: true });
+  plRow("", 0, 0, "", { divider: true });
+
+  plRow("HOLDING COSTS", 0, 0, "", { section: true });
+  plRow("HML Interest", d.holdingCosts?.hmlInterest || 0, Math.round((d.holdingCosts?.hmlInterest||0) * offer / d.purchasePrice), "12% annual");
+  plRow("Insurance", d.holdingCosts?.insurance || 0, d.holdingCosts?.insurance || 0);
+  plRow("Property Tax", d.holdingCosts?.taxes || 0, d.holdingCosts?.taxes || 0);
+  plRow("Total Holding", d.holdingCosts?.total || 0, offHolding, "", { bold: true });
+  plRow("", 0, 0, "", { divider: true });
+
+  plRow("SALE COSTS", 0, 0, "", { section: true });
+  plRow("Buyer Agent (2.5%)", d.saleCosts?.buyerCommission || 0, d.saleCosts?.buyerCommission || 0);
+  plRow("Listing Costs", d.saleCosts?.kwListing || 0, d.saleCosts?.kwListing || 0);
+  plRow("Sale Closing (1.5%)", d.saleCosts?.saleClosing || 0, d.saleCosts?.saleClosing || 0);
+  plRow("Total Sale Costs", d.saleCosts?.total || 0, d.saleCosts?.total || 0, "", { bold: true });
+  plRow("", 0, 0, "", { divider: true });
+
+  // Totals
+  const askTotal = d.allInCost + (d.saleCosts?.total || 0);
+  const offTotal = offer + offClose + d.totalRehab + offHolding + (d.saleCosts?.total || 0);
+  const askProfit = sale - askTotal;
+  const offProfit = sale - offTotal;
+
+  y += 2;
+  doc.setFillColor(LIGHT); doc.rect(20, y - 10, W - 40, 16, "F");
+  doc.setFont("helvetica","bold"); doc.setFontSize(9); doc.setTextColor(NAVY);
+  doc.text("TOTAL COSTS", c1, y);
+  doc.text(fmtP(askTotal), c2, y, { align: "right" });
+  doc.text(fmtP(offTotal), c3, y, { align: "right" });
+  y += 18;
+
+  rRect(20, y - 12, W - 40, 20, 6, GREEN_BG);
+  doc.setFont("helvetica","bold"); doc.setFontSize(10); doc.setTextColor(GREEN);
+  doc.text("NET PROFIT", c1, y);
+  doc.setFontSize(12);
+  doc.text(fmtP(askProfit), c2, y, { align: "right" });
+  doc.text(fmtP(offProfit), c3, y, { align: "right" });
+  y += 20;
+
+  // ROI
+  const askRoi = askTotal > 0 ? (askProfit / askTotal * 100) : 0;
+  const offRoi = offTotal > 0 ? (offProfit / offTotal * 100) : 0;
+  doc.setFont("helvetica","bold"); doc.setFontSize(9); doc.setTextColor(NAVY);
+  doc.text("ROI", c1, y);
+  doc.setTextColor(GREEN);
+  doc.text(askRoi.toFixed(1) + "%", c2, y, { align: "right" });
+  doc.text(offRoi.toFixed(1) + "%", c3, y, { align: "right" });
+  y += 14;
+  doc.setTextColor(NAVY); doc.text("Annualized ROI", c1, y);
+  doc.setTextColor(GREEN);
+  doc.text((askRoi * 12 / (d.holdMonths||5)).toFixed(1) + "%", c2, y, { align: "right" });
+  doc.text((offRoi * 12 / (d.holdMonths||5)).toFixed(1) + "%", c3, y, { align: "right" });
+
+  // Save
+  const safe = (d.address || "deal").replace(/[^a-z0-9]/gi, "_").slice(0, 30);
+  doc.save(`FlipAnalysis_${safe}_${new Date().toISOString().split("T")[0]}.pdf`);
+  toast("\u2713 PDF downloaded!");
+}
+
+// \u2500\u2500 XLSX Download \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+function downloadXLSX() {
+  if (!XL_DATA) { toast("Excel still building\u2026"); return; }
+  const wb = XLSX.utils.book_new();
+  [
+    [XL_DATA.dealSummary,        "Deal Summary"],
+    [XL_DATA.arvAnalysis,        "ARV Analysis"],
+    [XL_DATA.renoBudget,         "Reno Budget"],
+    [XL_DATA.financing,          "Financing"],
+    [XL_DATA.exitComparison,     "Exit Strategy"],
+    [XL_DATA.conditionAssessment,"Condition"],
+  ].forEach(([data, name]) => {
+    if (!data?.length) return;
+    const ws = XLSX.utils.aoa_to_sheet(data);
+    ws["!cols"] = (data[0]||[]).map((_,ci) => ({
+      wch: Math.min(42, Math.max(10, ...data.map(r => String(r[ci]??'').length + 2)))
+    }));
+    XLSX.utils.book_append_sheet(wb, ws, name);
+  });
+  const safe = (el("address").value||"deal").replace(/[^a-z0-9]/gi,"_").slice(0,30);
+  XLSX.writeFile(wb, `FlipAnalysis_${safe}_${new Date().toISOString().split("T")[0]}.xlsx`);
+  toast("\u2713 XLSX downloaded!");
+}
+</script>
+
+<!-- Footer -->
+<footer style="padding:20px 32px 24px;text-align:center;border-top:1px solid rgba(255,255,255,0.08);">
+  <div style="font-size:12px;color:var(--steel);font-weight:500;margin-bottom:4px;">
+    Streamline<span style="color:var(--gold);font-weight:700;">AI</span> Consulting
+  </div>
+  <div style="font-size:11px;color:#aeaeb2;">For informational purposes only &#8212; verify all figures independently</div>
+</footer>
+
+</body>
+</html>

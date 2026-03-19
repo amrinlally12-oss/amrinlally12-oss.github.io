@@ -159,7 +159,7 @@ nav{
   z-index:50;width:220px;
   box-shadow:0 20px 50px rgba(0,0,0,0.5);
   display:none;
-  backdrop-filter:blur(20px);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
   animation:tipIn 0.2s ease;
 }
 @keyframes tipIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
@@ -506,7 +506,7 @@ nav{
       <div class="tc-desc">Daily AI executive summary pulling from your calendar, Gmail, and Notion tasks.</div>
       <div class="tc-footer">
         <span class="tc-status tc-live">● Live</span>
-        <a class="tc-launch" href="#" onclick="showToast('Opening today\'s briefing…','blue')">
+        <a class="tc-launch" href="javascript:void(0)" onclick="showToast('Opening today\'s briefing…','blue')">
           View today →
         </a>
       </div>
@@ -518,7 +518,7 @@ nav{
       <div class="tc-desc">Trip invoicing, Bambi sync, PDF generation, and automated sends to facilities.</div>
       <div class="tc-footer">
         <span class="tc-status tc-live">● Live</span>
-        <a class="tc-launch" href="#" onclick="showToast('Opening billing portal…','blue')">
+        <a class="tc-launch" href="javascript:void(0)" onclick="showToast('Opening billing portal…','blue')">
           Open billing →
         </a>
       </div>
@@ -663,21 +663,23 @@ nav{
         showDashboard(data);
         return;
       }
-    } catch(e) {}
+    } catch(e) { sessionStorage.removeItem('sl_user'); }
   }
   document.getElementById('gateView').classList.add('show');
 })();
 
+function esc(str) { const d = document.createElement('div'); d.textContent = str; return d.innerHTML; }
+
 function showDashboard(data) {
   const name = data.name || data.email.split('@')[0];
-  const initials = name.split(' ').map(p => p[0]).join('').slice(0, 2).toUpperCase();
+  const initials = name.split(' ').map(p => p && p[0]).filter(Boolean).join('').slice(0, 2).toUpperCase() || '?';
   document.getElementById('navAvatar').textContent = initials;
   document.getElementById('navName').textContent = name.split(' ')[0];
 
   const h = new Date().getHours();
   const greetWord = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
   document.getElementById('dashGreet').innerHTML =
-    greetWord + ', <span>' + name.split(' ')[0] + '</span><span class="plan-badge" id="planBadge">' + (data.plan || 'Growth') + '</span>';
+    esc(greetWord) + ', <span>' + esc(name.split(' ')[0]) + '</span><span class="plan-badge" id="planBadge">' + esc(data.plan || 'Growth') + '</span>';
   document.getElementById('dashDate').textContent = new Date().toLocaleDateString('en-US', {
     weekday:'long', month:'long', day:'numeric', year:'numeric'
   });
