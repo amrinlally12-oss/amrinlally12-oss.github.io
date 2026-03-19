@@ -24,7 +24,9 @@
   --white:#ffffff;--dim:rgba(255,255,255,0.55);--faint:rgba(255,255,255,0.22);
   --orb1:#1a3a6e;--orb2:#6e1a4a;--orb3:#1a6e5a;--orb4:#4a1a6e;
   --green:#8fda3a;--green-bg:rgba(99,153,34,0.15);--green-b:rgba(99,153,34,0.3);
-  --blue:#5ab4f0;
+  --red:#f07a5a;--red-bg:rgba(226,75,74,0.12);--red-b:rgba(226,75,74,0.3);
+  --amber:#f0b840;--amber-bg:rgba(240,184,64,0.12);--amber-b:rgba(240,184,64,0.3);
+  --blue:#5ab4f0;--blue-bg:rgba(90,180,240,0.12);
   --r:16px;
 }
 html{scroll-behavior:smooth;overflow-x:hidden;scroll-padding-top:72px;}
@@ -34,6 +36,7 @@ body{
   color:var(--white);
   min-height:100vh;
   overflow-x:hidden;
+  position:relative;
 }
 ::selection{background:rgba(201,151,58,0.3);}
 ::-webkit-scrollbar{width:4px;}
@@ -107,6 +110,39 @@ nav{
   display:flex;align-items:center;justify-content:center;
 }
 .nav-links{display:flex;align-items:center;gap:8px;}
+/* ── MOBILE NAV ────────────────────────────────────────────── */
+.nav-toggle{
+  display:none;
+  background:none;border:none;cursor:pointer;
+  width:36px;height:36px;
+  flex-direction:column;align-items:center;justify-content:center;gap:5px;
+  padding:0;z-index:110;
+}
+.nav-toggle span{
+  display:block;width:22px;height:2px;background:var(--white);
+  border-radius:2px;transition:all 0.3s;
+}
+.nav-toggle.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px);}
+.nav-toggle.open span:nth-child(2){opacity:0;}
+.nav-toggle.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px);}
+
+@media(max-width:768px){
+  .nav-toggle{display:flex;}
+  .nav-links{
+    position:fixed;top:0;left:0;width:100%;height:100vh;
+    flex-direction:column;align-items:center;justify-content:center;gap:28px;
+    background:rgba(4,7,15,0.97);
+    backdrop-filter:blur(40px);
+    -webkit-backdrop-filter:blur(40px);
+    z-index:105;
+    opacity:0;pointer-events:none;
+    transition:opacity 0.3s ease;
+  }
+  .nav-links.open{opacity:1;pointer-events:auto;}
+  .nav-links .nav-link{font-size:20px;padding:14px 28px;color:var(--white);}
+  .nav-links .nav-cta{font-size:18px;padding:16px 36px;margin-top:8px;}
+  .nav-toggle{z-index:110;}
+}
 .nav-link{
   font-size:13px;font-weight:500;color:var(--dim);
   text-decoration:none;padding:7px 14px;border-radius:8px;
@@ -200,13 +236,13 @@ nav{
 .hc-deal:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
 .hc-addr{font-size:12px;font-weight:500;color:var(--dim);}
 .hc-grade{font-size:11px;font-weight:700;padding:3px 9px;border-radius:5px;}
-.grade-a{background:rgba(99,153,34,0.2);color:#8fda3a;border:1px solid rgba(99,153,34,0.3);}
+.grade-a{background:rgba(99,153,34,0.2);color:var(--green);border:1px solid rgba(99,153,34,0.3);}
 .grade-b{background:rgba(201,151,58,0.2);color:var(--gold-l);border:1px solid rgba(201,151,58,0.3);}
-.grade-c{background:rgba(200,80,50,0.2);color:#f07a5a;border:1px solid rgba(200,80,50,0.3);}
+.grade-c{background:rgba(200,80,50,0.2);color:var(--red);border:1px solid rgba(200,80,50,0.3);}
 .wave-mini{display:flex;gap:4px;align-items:center;margin-top:14px;}
 .wm-dot{width:8px;height:8px;border-radius:50%;}
 .wm-dot.active{background:var(--gold);animation:pulse2 1.5s infinite;}
-.wm-dot.done{background:#8fda3a;}
+.wm-dot.done{background:var(--green);}
 .wm-dot.wait{background:rgba(255,255,255,0.15);}
 @keyframes pulse2{0%,100%{opacity:1;}50%{opacity:0.3;};}
 .wm-text{font-size:11px;color:var(--dim);margin-left:6px;}
@@ -322,7 +358,7 @@ section{position:relative;z-index:2;padding:100px 40px;max-width:960px;margin:0 
   margin-left:auto;font-size:10px;font-weight:700;
   padding:3px 8px;border-radius:4px;flex-shrink:0;
 }
-.tag-live{background:rgba(99,153,34,0.2);color:#8fda3a;border:1px solid rgba(99,153,34,0.25);}
+.tag-live{background:rgba(99,153,34,0.2);color:var(--green);border:1px solid rgba(99,153,34,0.25);}
 .tag-soon{background:rgba(255,255,255,0.05);color:var(--faint);border:1px solid var(--glass-border);}
 
 /* ── PRICING ─────────────────────────────────────────────────── */
@@ -451,7 +487,7 @@ footer{
 .modal-footer-text{font-size:12px;color:var(--faint);text-align:center;margin-top:16px;}
 .modal-footer-text a{color:var(--gold);text-decoration:none;}
 .login-error{
-  font-size:12px;color:#f07a5a;text-align:center;
+  font-size:12px;color:var(--red);text-align:center;
   margin-top:-8px;margin-bottom:10px;
   display:none;
 }
@@ -513,7 +549,7 @@ footer{
   font-size:10px;font-weight:700;letter-spacing:0.5px;
   padding:3px 9px;border-radius:4px;margin-top:12px;
 }
-.dt-live{background:rgba(99,153,34,0.15);color:#8fda3a;border:1px solid rgba(99,153,34,0.2);}
+.dt-live{background:rgba(99,153,34,0.15);color:var(--green);border:1px solid rgba(99,153,34,0.2);}
 .dt-soon{background:rgba(255,255,255,0.04);color:var(--faint);border:1px solid var(--glass-border);}
 .tool-launch-btn{
   display:inline-flex;align-items:center;gap:8px;
@@ -534,8 +570,8 @@ footer{
 .da-item:last-child{border-bottom:none;}
 .da-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
 .da-gold{background:var(--gold);}
-.da-green{background:#8fda3a;}
-.da-blue{background:#5ab4f0;}
+.da-green{background:var(--green);}
+.da-blue{background:var(--blue);}
 .da-text{color:var(--dim);flex:1;}
 .da-time{font-size:11px;color:var(--faint);}
 .dash-footer-note{
@@ -565,8 +601,9 @@ footer{
 
 /* ── INDUSTRY WORDS EFFECT ───────────────────────────────────── */
 #industryCanvas{
-  position:fixed;
-  inset:0;
+  position:absolute;
+  top:0;left:0;
+  width:100%;height:100%;
   z-index:1;
   pointer-events:none;
   overflow:hidden;
@@ -583,6 +620,11 @@ footer{
   letter-spacing:-1.5px;
   line-height:1;
   will-change:opacity;
+  -webkit-mask-image:
+    linear-gradient(to right, transparent 0%, black 18%, black 82%, transparent 100%);
+  mask-image:
+    linear-gradient(to right, transparent 0%, black 18%, black 82%, transparent 100%);
+  filter:blur(0.25px);
 }
 /* ── SCROLL REVEAL ───────────────────────────────────────────── */
 .reveal{
@@ -634,11 +676,14 @@ footer{
     </div>
     Streamline<span> AI</span>
   </div>
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" onclick="toggleMobileNav()">
+    <span></span><span></span><span></span>
+  </button>
   <div class="nav-links" id="navLinks">
-    <a href="#services" class="nav-link">Services</a>
-    <a href="#how" class="nav-link">How It Works</a>
-    <a href="#pricing" class="nav-link">Pricing</a>
-    <a href="#" class="nav-cta" onclick="openLogin(event)">Client Login →</a>
+    <a href="#services" class="nav-link" onclick="closeMobileNav()">Services</a>
+    <a href="#how" class="nav-link" onclick="closeMobileNav()">How It Works</a>
+    <a href="#pricing" class="nav-link" onclick="closeMobileNav()">Pricing</a>
+    <a href="#" class="nav-cta" onclick="openLogin(event);closeMobileNav();">Client Login →</a>
   </div>
 </nav>
 
@@ -866,7 +911,7 @@ footer{
           <li>2 workflow updates/mo</li>
           <li>24hr response support</li>
         </ul>
-        <a href="#" class="price-cta price-cta-outline" onclick="openLogin(event)">Get Started</a>
+        <a href="/get-started.html" class="price-cta price-cta-outline">Get Started →</a>
       </div>
       <div class="glass price-card featured">
         <div class="price-name">Growth</div>
@@ -880,7 +925,7 @@ footer{
           <li>Monthly content calendar</li>
           <li>Priority support</li>
         </ul>
-        <a href="#" class="price-cta price-cta-gold" onclick="openLogin(event)">Get Started</a>
+        <a href="/get-started.html" class="price-cta price-cta-gold">Get Started →</a>
       </div>
       <div class="glass price-card">
         <div class="price-name">Full Stack</div>
@@ -894,7 +939,7 @@ footer{
           <li>8 edited assets/month</li>
           <li>Reels & short-form video</li>
         </ul>
-        <a href="#" class="price-cta price-cta-outline" onclick="openLogin(event)">Get Started</a>
+        <a href="/get-started.html" class="price-cta price-cta-outline">Get Started →</a>
       </div>
     </div>
     <div style="text-align:center;margin-top:24px;font-size:13px;color:var(--faint);">
@@ -940,7 +985,7 @@ footer{
 <!-- ══ LOGIN MODAL ════════════════════════════════════════════════ -->
 <div class="modal-overlay" id="loginModal" onclick="handleOverlayClick(event)">
   <div class="modal" style="position:relative;">
-    <button class="modal-close" onclick="closeLogin()">✕</button>
+    <button class="modal-close" aria-label="Close" onclick="closeLogin()">✕</button>
     <div class="modal-logo">Streamline<span> AI</span></div>
     <div class="modal-sub">Sign in to your client portal</div>
     <label class="form-label">Email</label>
@@ -988,6 +1033,18 @@ footer{
 <script>
 // ── Helpers ─────────────────────────────────────────────────────
 const el = id => document.getElementById(id);
+
+// ── Mobile Nav ──────────────────────────────────────────────────
+function toggleMobileNav(){
+  document.getElementById('navToggle').classList.toggle('open');
+  document.getElementById('navLinks').classList.toggle('open');
+  document.body.style.overflow = document.getElementById('navLinks').classList.contains('open') ? 'hidden' : '';
+}
+function closeMobileNav(){
+  document.getElementById('navToggle').classList.remove('open');
+  document.getElementById('navLinks').classList.remove('open');
+  document.body.style.overflow = '';
+}
 
 // ── Client Configuration ────────────────────────────────────────
 // Add new clients here. Each entry maps email → their portal config.
@@ -1263,86 +1320,167 @@ function comingSoon(name) {
   // Desktop only — hidden on mobile
   if (('ontouchstart' in window) || navigator.maxTouchPoints > 0) return;
 
-  const WORDS = [
-    { text: 'Healthcare',     size: 80, x:  2, y:  4 },
-    { text: 'Real Estate',    size: 96, x: 30, y:  3 },
-    { text: 'Transport',      size: 68, x: 68, y:  6 },
-    { text: 'Restaurants',    size: 88, x:  1, y: 13 },
-    { text: 'Logistics',      size: 72, x: 48, y: 14 },
-    { text: 'Legal',          size: 60, x: 80, y: 12 },
-    { text: 'Retail',         size:104, x:  3, y: 22 },
-    { text: 'Construction',   size: 84, x: 38, y: 23 },
-    { text: 'Insurance',      size: 66, x: 76, y: 21 },
-    { text: 'Weddings',       size: 78, x:  2, y: 32 },
-    { text: 'Finance',        size: 90, x: 32, y: 33 },
-    { text: 'Automotive',     size: 74, x: 68, y: 31 },
-    { text: 'Hospitality',    size: 86, x:  1, y: 42 },
-    { text: 'Medical',        size: 92, x: 34, y: 43 },
-    { text: 'E-commerce',     size: 70, x: 74, y: 42 },
-    { text: 'NEMT',           size: 72, x:  4, y: 52 },
-    { text: 'Property Mgmt',  size: 80, x: 24, y: 53 },
-    { text: 'Dental',         size: 64, x: 62, y: 52 },
-    { text: 'Staffing',       size: 76, x: 82, y: 53 },
-    { text: 'Wholesale',      size: 84, x:  2, y: 62 },
-    { text: 'Catering',       size: 72, x: 36, y: 63 },
-    { text: 'Landscaping',    size: 78, x: 68, y: 62 },
-    { text: 'Photography',    size: 88, x:  1, y: 72 },
-    { text: 'Law Firms',      size: 66, x: 40, y: 73 },
-    { text: 'Home Services',  size: 80, x: 64, y: 71 },
-    { text: 'Event Planning', size: 76, x:  3, y: 82 },
-    { text: 'Accounting',     size: 84, x: 34, y: 83 },
-    { text: 'Fitness',        size: 70, x: 72, y: 82 },
-    { text: 'Trucking',       size: 78, x:  2, y: 91 },
-    { text: 'Beauty & Salons',size: 90, x: 28, y: 92 },
-    { text: 'Veterinary',     size: 68, x: 72, y: 91 },
+  /* ── Word pool — these get tiled down the full page ───────── */
+  const WORD_POOL = [
+    'Healthcare','Real Estate','Transport','Restaurants','Logistics',
+    'Legal','Retail','Construction','Insurance','Weddings',
+    'Finance','Automotive','Hospitality','Medical','E-commerce',
+    'NEMT','Property Mgmt','Dental','Staffing','Wholesale',
+    'Catering','Landscaping','Photography','Law Firms','Home Services',
+    'Event Planning','Accounting','Fitness','Trucking','Beauty & Salons',
+    'Veterinary','Plumbing','Gas Stations','Agriculture','Chiropractic',
+    'Cleaning Services','Tutoring','Pet Care','Pharmacies','Consulting'
   ];
 
-  const BRUSH_RADIUS   = 260;
-  const MAX_OP_DESKTOP = 0.17;
+  /* ── Layout config ────────────────────────────────────────── */
+  const ROW_HEIGHT   = 115;      // px between rows
+  const SIZE_MIN     = 58;
+  const SIZE_MAX     = 108;
+  const BRUSH_RADIUS = 280;
+  const MAX_OPACITY  = 0.18;
 
-  const canvas = document.getElementById('industryCanvas');
-  let wordEls  = [];
-  let mouseX   = -9999, mouseY = -9999;
+  /* Exclusion zone — the marquee ticker bar */
+  const EXCLUDE_TOP  = 830;     // px from page top
+  const EXCLUDE_BOT  = 920;     // px from page top
 
-  WORDS.forEach(w => {
-    const el       = document.createElement('span');
-    el.className   = 'ind-word';
-    el.textContent = w.text;
-    el.style.fontSize = w.size + 'px';
-    el.style.left     = w.x + 'vw';
-    el.style.top      = w.y + 'vh';
-    el.style.opacity  = '0';
-    el._cx = 0; el._cy = 0;
-    canvas.appendChild(el);
-    wordEls.push(el);
-  });
+  const canvas  = document.getElementById('industryCanvas');
+  let wordEls   = [];
+  let mouseX    = -9999, mouseY = -9999;
+  let poolIdx   = 0;
 
-  function measure() {
+  function nextWord() {
+    const w = WORD_POOL[poolIdx % WORD_POOL.length];
+    poolIdx++;
+    return w;
+  }
+
+  function seed(v) { /* simple hash for deterministic pseudo-random */ return ((v * 9301 + 49297) % 233280) / 233280; }
+
+  function buildWords() {
+    // Clear existing
+    canvas.innerHTML = '';
+    wordEls = [];
+    poolIdx = 0;
+
+    const pageH = Math.max(
+      document.body.scrollHeight,
+      document.documentElement.scrollHeight
+    );
+    canvas.style.height = pageH + 'px';
+
+    const rows = Math.ceil(pageH / ROW_HEIGHT);
+
+    /* ── Column layout: heavier on sides, lighter in middle ──
+       4 words per row: far-left, left-center, right-center, far-right
+       Center columns appear only ~40% of rows for a sparser middle */
+    const SIDE_ZONES   = [ [0, 22], [78, 98] ];     // always placed
+    const CENTER_ZONES = [ [24, 44], [50, 74] ];     // placed ~40% of rows
+
+    for (let r = 0; r < rows; r++) {
+      const rowSeed = seed(r * 31);
+
+      // — Always place two side words —
+      for (let s = 0; s < 2; s++) {
+        const text = nextWord();
+        const h    = seed(r * 5 + s * 17 + text.length);
+        const size = Math.round(SIZE_MIN + h * (SIZE_MAX - SIZE_MIN));
+        const zone = SIDE_ZONES[s];
+        const xVw  = zone[0] + h * (zone[1] - zone[0]);
+        const jitter = (seed(r * 7 + s * 13) - 0.5) * ROW_HEIGHT * 0.6;
+        const yPx    = r * ROW_HEIGHT + jitter;
+
+        // Skip if inside exclusion zone
+        if (yPx > EXCLUDE_TOP && yPx < EXCLUDE_BOT) continue;
+
+        const el       = document.createElement('span');
+        el.className   = 'ind-word';
+        el.textContent = text;
+        el.style.fontSize = size + 'px';
+        el.style.left     = xVw + 'vw';
+        el.style.top      = yPx + 'px';
+        el.style.opacity  = '0';
+        el._yPx  = yPx;
+        el._cx   = 0;
+        canvas.appendChild(el);
+        wordEls.push(el);
+      }
+
+      // — Sometimes place a center word (~40% of rows) —
+      if (rowSeed < 0.4) {
+        const cIdx = rowSeed < 0.2 ? 0 : 1;
+        const text = nextWord();
+        const h    = seed(r * 11 + 7 + text.length);
+        const size = Math.round(SIZE_MIN + h * (SIZE_MAX - SIZE_MIN));
+        const zone = CENTER_ZONES[cIdx];
+        const xVw  = zone[0] + h * (zone[1] - zone[0]);
+        const jitter = (seed(r * 3 + 29) - 0.5) * ROW_HEIGHT * 0.6;
+        const yPx    = r * ROW_HEIGHT + jitter;
+
+        if (!(yPx > EXCLUDE_TOP && yPx < EXCLUDE_BOT)) {
+          const el       = document.createElement('span');
+          el.className   = 'ind-word';
+          el.textContent = text;
+          el.style.fontSize = size + 'px';
+          el.style.left     = xVw + 'vw';
+          el.style.top      = yPx + 'px';
+          el.style.opacity  = '0';
+          el._yPx  = yPx;
+          el._cx   = 0;
+          canvas.appendChild(el);
+          wordEls.push(el);
+        }
+      }
+    }
+  }
+
+  /* ── Measure x-centers (only changes on resize) ───────────── */
+  function measureX() {
     wordEls.forEach(el => {
       const r = el.getBoundingClientRect();
-      el._cx  = r.left + r.width  / 2;
-      el._cy  = r.top  + r.height / 2;
+      el._cx  = r.left + r.width / 2;
     });
   }
 
+  /* ── Render loop ──────────────────────────────────────────── */
   function tick() {
+    const sy = window.scrollY;
+    const vh = window.innerHeight;
+
     wordEls.forEach(el => {
-      const dist = Math.hypot(mouseX - el._cx, mouseY - el._cy);
+      // Viewport-relative Y of this word's center
+      const elViewY = el._yPx - sy + (el.offsetHeight || 40) / 2;
+
+      // Quick cull: skip words far off screen
+      if (elViewY < -BRUSH_RADIUS || elViewY > vh + BRUSH_RADIUS) {
+        if (el.style.opacity !== '0') el.style.opacity = '0';
+        return;
+      }
+
+      const dist = Math.hypot(mouseX - el._cx, mouseY - elViewY);
       const t    = Math.max(0, 1 - dist / BRUSH_RADIUS);
-      el.style.opacity = (t * t * MAX_OP_DESKTOP).toFixed(4);
+      el.style.opacity = (t * t * MAX_OPACITY).toFixed(4);
     });
     requestAnimationFrame(tick);
   }
 
+  /* ── Events ───────────────────────────────────────────────── */
   document.addEventListener('mousemove', e => {
     mouseX = e.clientX;
     mouseY = e.clientY;
   });
 
-  window.addEventListener('resize', () => setTimeout(measure, 120));
+  window.addEventListener('resize', () => {
+    clearTimeout(window._indResizeT);
+    window._indResizeT = setTimeout(() => {
+      buildWords();
+      measureX();
+    }, 200);
+  });
 
+  /* ── Init ─────────────────────────────────────────────────── */
   requestAnimationFrame(() => requestAnimationFrame(() => {
-    measure();
+    buildWords();
+    measureX();
     tick();
   }));
 

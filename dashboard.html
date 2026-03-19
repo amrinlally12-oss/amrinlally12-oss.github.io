@@ -387,6 +387,18 @@ nav{
 .feed-card{animation-delay:0.2s;}
 .needs-card{animation-delay:0.25s;}
 
+/* ── FOOTER ─────────────────────────────────────────────────── */
+.dash-footer{
+  padding:32px 0 0;margin-top:16px;
+  border-top:1px solid var(--glass-border);
+  display:flex;align-items:center;justify-content:center;gap:16px;
+  font-size:11px;color:var(--faint);
+}
+.dash-footer a{
+  color:var(--faint);text-decoration:none;transition:color 0.2s;
+}
+.dash-footer a:hover{color:var(--white);}
+
 /* ── RESPONSIVE ──────────────────────────────────────────────── */
 @media(max-width:600px){
   nav{padding:0 16px;}
@@ -409,7 +421,7 @@ nav{
 
 <!-- NAV -->
 <nav>
-  <a href="https://streamlinedai.net" class="nav-logo">
+  <a href="/" class="nav-logo">
     <div class="nav-logo-mark">
       <svg width="20" height="20" viewBox="0 0 32 32" fill="none">
         <path d="M4 11 C7.5 7,12 17,16 11 C20 5,24.5 15,28 11" stroke="#C9973A" stroke-width="2.2" stroke-linecap="round" fill="none"/>
@@ -432,7 +444,7 @@ nav{
 <div class="gate" id="gateView">
   <div class="gate-title">Sign in to access your dashboard</div>
   <div class="gate-sub">Your personalized AI tools and insights are waiting.</div>
-  <a href="https://streamlinedai.net" class="gate-btn">Sign In at Streamline AI →</a>
+  <a href="/" class="gate-btn">Sign In at Streamline AI →</a>
 </div>
 
 <!-- DASHBOARD -->
@@ -574,7 +586,6 @@ nav{
     <div class="feed-card">
       <div class="section-label flush">
         Recent activity
-        <span class="section-action">View all</span>
       </div>
       <div class="da-list" id="activityFeed">
         <div class="da-item">
@@ -652,11 +663,11 @@ nav{
 
   </div>
 
-  <div style="padding:32px 0 0;margin-top:16px;border-top:1px solid var(--glass-border);display:flex;align-items:center;justify-content:center;gap:16px;font-size:11px;color:var(--faint);">
+  <div class="dash-footer">
     <span>© 2026 Streamline AI</span>
-    <a href="/terms" style="color:var(--faint);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--white)'" onmouseout="this.style.color='var(--faint)'">Terms</a>
-    <a href="/privacy" style="color:var(--faint);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--white)'" onmouseout="this.style.color='var(--faint)'">Privacy</a>
-    <a href="/faq" style="color:var(--faint);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--white)'" onmouseout="this.style.color='var(--faint)'">FAQ</a>
+    <a href="/terms">Terms</a>
+    <a href="/privacy">Privacy</a>
+    <a href="/faq">FAQ</a>
   </div>
 
 </div>
@@ -743,7 +754,7 @@ function showToast(msg, type) {
 function handleLogout() {
   sessionStorage.removeItem('sl_user');
   showToast('Signing out…', 'gold');
-  setTimeout(() => { window.location.href = 'https://streamlinedai.net'; }, 1200);
+  setTimeout(() => { window.location.href = '/'; }, 1200);
 }
 </script>
 </body>
