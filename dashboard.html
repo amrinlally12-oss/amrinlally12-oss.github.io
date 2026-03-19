@@ -140,6 +140,7 @@ nav{
 .sc-val{font-family:'Inter',sans-serif;font-size:24px;font-weight:700;letter-spacing:-0.5px;color:var(--white);font-variant-numeric:tabular-nums;}
 .sc-sub{font-size:11px;color:var(--faint);margin-top:5px;}
 .sc-sub.up{color:var(--green);}
+.sc-val.sm{font-size:18px;padding-top:4px;}
 
 /* Hours tooltip */
 .hours-wrap{position:relative;display:inline-block;}
@@ -182,6 +183,7 @@ nav{
   color:var(--gold);cursor:pointer;opacity:0.8;transition:opacity 0.2s;
 }
 .section-action:hover{opacity:1;}
+.section-label.flush{margin-bottom:0;}
 
 /* ── TOOLS GRID ──────────────────────────────────────────────── */
 .tools-grid{
@@ -301,7 +303,7 @@ nav{
   font-size:9px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;
   padding:3px 8px;border-radius:20px;flex-shrink:0;margin-top:1px;
 }
-.pill-warn{background:rgba(240,122,90,0.12);color:#f0a07a;border:1px solid rgba(240,122,90,0.25);}
+.pill-warn{background:rgba(240,122,90,0.12);color:var(--red);border:1px solid rgba(240,122,90,0.25);}
 .pill-info{background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-b);}
 .pill-sync{background:rgba(201,151,58,0.1);color:var(--gold-l);border:1px solid rgba(201,151,58,0.2);}
 .needs-text{font-size:12px;line-height:1.6;color:var(--dim);}
@@ -349,11 +351,26 @@ nav{
 .gate-sub{font-size:14px;color:var(--dim);margin-bottom:28px;}
 .gate-btn{
   font-family:'Syne',sans-serif;font-size:14px;font-weight:700;
-  background:linear-gradient(135deg,var(--gold),var(--gold-l));color:#04070f;
+  background:linear-gradient(135deg,var(--gold),var(--gold-l));color:var(--bg);
   padding:12px 28px;border-radius:99px;text-decoration:none;
   transition:all 0.15s;display:inline-block;
 }
 .gate-btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(201,151,58,0.3);}
+
+/* ── TOAST ───────────────────────────────────────────────────── */
+.toast{
+  position:fixed;bottom:24px;right:24px;z-index:500;
+  padding:13px 20px;border-radius:12px;
+  background:rgba(8,14,28,0.97);border:1px solid rgba(255,255,255,0.12);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  box-shadow:0 16px 40px rgba(0,0,0,0.4);
+  display:flex;align-items:center;gap:10px;
+  font-size:13px;font-weight:500;color:var(--dim);
+  transform:translateY(80px);opacity:0;
+  transition:all 0.35s cubic-bezier(0.4,0,0.2,1);
+  max-width:300px;pointer-events:none;
+}
+.toast-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
 
 /* ── ANIMATIONS ──────────────────────────────────────────────── */
 @keyframes fadeUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
@@ -475,7 +492,7 @@ nav{
 
     <div class="stat-card">
       <div class="sc-label">Last activity</div>
-      <div class="sc-val" style="font-size:18px;padding-top:4px;" id="statLast">2 hrs ago</div>
+      <div class="sc-val sm" id="statLast">2 hrs ago</div>
       <div class="sc-sub" id="statLastDetail">Flip Analyzer</div>
     </div>
   </div>
@@ -555,7 +572,7 @@ nav{
 
     <!-- Activity Feed -->
     <div class="feed-card">
-      <div class="section-label" style="margin-bottom:0;">
+      <div class="section-label flush">
         Recent activity
         <span class="section-action">View all</span>
       </div>
@@ -607,7 +624,7 @@ nav{
 
     <!-- Needs Attention -->
     <div class="needs-card">
-      <div class="section-label" style="margin-bottom:0;">Needs attention</div>
+      <div class="section-label flush">Needs attention</div>
       <div class="needs-list" id="needsList">
         <div class="needs-item">
           <span class="needs-pill pill-warn">Invoice</span>
@@ -637,18 +654,8 @@ nav{
 </div>
 
 <!-- Toast -->
-<div id="toast" style="
-  position:fixed;bottom:24px;right:24px;z-index:500;
-  padding:13px 20px;border-radius:12px;
-  background:rgba(8,14,28,0.97);border:1px solid rgba(255,255,255,0.12);
-  backdrop-filter:blur(20px);box-shadow:0 16px 40px rgba(0,0,0,0.4);
-  display:flex;align-items:center;gap:10px;
-  font-size:13px;font-weight:500;color:var(--dim);
-  transform:translateY(80px);opacity:0;
-  transition:all 0.35s cubic-bezier(0.4,0,0.2,1);
-  max-width:300px;pointer-events:none;
-">
-  <div id="toastDot" style="width:8px;height:8px;border-radius:50%;flex-shrink:0;"></div>
+<div id="toast" class="toast">
+  <div id="toastDot" class="toast-dot"></div>
   <span id="toastMsg"></span>
 </div>
 
