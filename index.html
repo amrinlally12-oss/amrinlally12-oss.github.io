@@ -8,7 +8,9 @@
 <meta property="og:title" content="Streamline AI — AI That Works For Your Business"/>
 <meta property="og:description" content="Custom AI tools built for your business. Real estate analysis, NEMT operations, retail intelligence."/>
 <meta property="og:url" content="https://streamlinedai.net"/>
+<meta property="og:type" content="website"/>
 <link rel="canonical" href="https://streamlinedai.net"/>
+<meta name="theme-color" content="#04070f"/>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Figtree:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
 /* ── RESET & VARS ─────────────────────────────────────────────── */
@@ -25,7 +27,7 @@
   --blue:#5ab4f0;
   --r:16px;
 }
-html{scroll-behavior:smooth;overflow-x:hidden;}
+html{scroll-behavior:smooth;overflow-x:hidden;scroll-padding-top:72px;}
 body{
   font-family:'Figtree',sans-serif;
   background:var(--bg);
@@ -172,7 +174,7 @@ nav{
   font-family:'Syne',sans-serif;font-size:14px;font-weight:600;
   color:var(--white);background:var(--glass-bg);
   padding:14px 30px;border-radius:10px;cursor:pointer;
-  border:1px solid var(--glass-border);backdrop-filter:blur(12px);
+  border:1px solid var(--glass-border);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
   transition:all 0.25s;text-decoration:none;display:inline-flex;align-items:center;gap:8px;
 }
 .btn-ghost:hover{background:var(--glass-highlight);border-color:rgba(255,255,255,0.2);}
@@ -403,7 +405,7 @@ footer{
 .modal-overlay{
   display:none;position:fixed;inset:0;z-index:200;
   background:rgba(4,7,15,0.8);
-  backdrop-filter:blur(12px);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
   align-items:center;justify-content:center;padding:20px;
 }
 .modal-overlay.show{display:flex;}
@@ -553,13 +555,59 @@ footer{
 }
 
 @media(max-width:600px){
-  nav{padding:14px 20px;}
+  nav{padding:0 20px;height:52px;}
   .hero{padding:100px 20px 60px;}
   section{padding:70px 20px;}
   .cta-banner{margin:0 20px 60px;padding:40px 28px;}
   footer{padding:40px 20px 24px;}
   .dash-wrap{padding:24px 20px;}
 }
+
+/* ── INDUSTRY WORDS EFFECT ───────────────────────────────────── */
+#industryCanvas{
+  position:fixed;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+  overflow:hidden;
+}
+.ind-word{
+  position:absolute;
+  font-family:'Syne',sans-serif;
+  font-weight:800;
+  color:var(--white);
+  opacity:0;
+  pointer-events:none;
+  user-select:none;
+  white-space:nowrap;
+  letter-spacing:-1.5px;
+  line-height:1;
+  will-change:opacity;
+}
+/* ── SCROLL REVEAL ───────────────────────────────────────────── */
+.reveal{
+  opacity:0;
+  transform:translateY(28px);
+  transition:opacity 0.65s cubic-bezier(0.4,0,0.2,1),
+             transform 0.65s cubic-bezier(0.4,0,0.2,1);
+}
+.reveal.visible{
+  opacity:1;
+  transform:translateY(0);
+}
+/* Stagger children inside a reveal-group */
+.reveal-group > *{
+  opacity:0;
+  transform:translateY(22px);
+  transition:opacity 0.55s cubic-bezier(0.4,0,0.2,1),
+             transform 0.55s cubic-bezier(0.4,0,0.2,1);
+}
+.reveal-group.visible > *:nth-child(1){ transition-delay:0.05s; opacity:1; transform:none; }
+.reveal-group.visible > *:nth-child(2){ transition-delay:0.13s; opacity:1; transform:none; }
+.reveal-group.visible > *:nth-child(3){ transition-delay:0.21s; opacity:1; transform:none; }
+.reveal-group.visible > *:nth-child(4){ transition-delay:0.29s; opacity:1; transform:none; }
+.reveal-group.visible > *:nth-child(5){ transition-delay:0.37s; opacity:1; transform:none; }
+.reveal-group.visible > *:nth-child(6){ transition-delay:0.45s; opacity:1; transform:none; }
 </style>
 </head>
 <body>
@@ -572,6 +620,7 @@ footer{
   <div class="orb orb4"></div>
 </div>
 <div class="noise"></div>
+<div id="industryCanvas"></div>
 
 <!-- ── NAV ── -->
 <nav>
@@ -597,7 +646,7 @@ footer{
 <div id="landingView">
 
   <!-- Hero -->
-  <div class="hero">
+  <div class="hero" id="heroSection">
     <div class="hero-content">
       <div class="hero-eyebrow">
         <div class="eyebrow-dot"></div>
@@ -606,7 +655,7 @@ footer{
       <h1 class="hero-h1">AI that<br/><em>works</em> for<br/>your business.</h1>
       <p class="hero-sub">We build and run custom AI systems tailored to your business — automating the work that's slowing you down so you can focus on growth.</p>
       <div class="hero-actions">
-        <a href="#services" class="btn-primary">See What We Do →</a>
+        <a href="/get-started.html" class="btn-primary">Book a Free Audit →</a>
         <a href="#" class="btn-ghost" onclick="openLogin(event)">Client Portal ↗</a>
       </div>
       <div class="hero-stats">
@@ -654,13 +703,13 @@ footer{
           <div style="font-size:12px;font-weight:600;">Morning Briefing Ready</div>
           <div style="font-size:11px;color:var(--faint);margin-top:2px;">3 calendar items · 2 invoices pending · 1 new deal</div>
         </div>
-        <div style="margin-left:auto;width:8px;height:8px;border-radius:50%;background:#8fda3a;flex-shrink:0;"></div>
+        <div style="margin-left:auto;width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0;"></div>
       </div>
     </div>
   </div>
 
   <!-- Marquee -->
-  <div class="marquee-wrap">
+  <div class="marquee-wrap reveal">
     <div class="marquee-track">
       <span class="marquee-item">Real Estate Analysis <span class="marquee-sep">✦</span></span>
       <span class="marquee-item">NEMT Operations <span class="marquee-sep">✦</span></span>
@@ -683,10 +732,10 @@ footer{
 
   <!-- Services -->
   <section id="services">
-    <div class="section-eyebrow">What We Build</div>
+    <div class="reveal"><div class="section-eyebrow">What We Build</div>
     <h2 class="section-h2">Every tool built<br/>for your business.</h2>
-    <p class="section-sub">We don't use generic software. We build custom AI systems that know your operations, your pricing, and your goals.</p>
-    <div class="services-grid">
+    <p class="section-sub">We don't use generic software. We build custom AI systems that know your operations, your pricing, and your goals.</p></div>
+    <div class="services-grid reveal-group">
       <div class="glass service-card">
         <div class="service-icon">🏠</div>
         <div class="service-name">Real Estate Analyzer</div>
@@ -729,11 +778,11 @@ footer{
   <!-- How it works -->
   <section id="how" style="padding-top:0;">
     <div class="how-wrap">
-      <div>
+      <div class="reveal">
         <div class="section-eyebrow">The Process</div>
         <h2 class="section-h2">Up and running<br/>in 2 weeks.</h2>
         <p class="section-sub" style="margin-bottom:36px;">We handle all the technical setup. You just tell us how your business works.</p>
-        <div class="steps">
+        <div class="steps reveal-group">
           <div class="step">
             <div class="step-num">01</div>
             <div class="step-content">
@@ -764,7 +813,7 @@ footer{
           </div>
         </div>
       </div>
-      <div class="how-visual">
+      <div class="how-visual reveal">
         <div class="glass-strong how-card">
           <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:18px;">Your Tool Dashboard</div>
           <div class="tool-list">
@@ -801,10 +850,10 @@ footer{
 
   <!-- Pricing -->
   <section id="pricing">
-    <div class="section-eyebrow">Pricing</div>
+    <div class="reveal"><div class="section-eyebrow">Pricing</div>
     <h2 class="section-h2">Simple, transparent<br/>pricing.</h2>
-    <p class="section-sub">One-time setup fee + monthly retainer. No surprises, no hidden costs.</p>
-    <div class="pricing-grid">
+    <p class="section-sub">One-time setup fee + monthly retainer. No surprises, no hidden costs.</p></div>
+    <div class="pricing-grid reveal-group">
       <div class="glass price-card">
         <div class="price-name">Starter</div>
         <div class="price-amount">$750<span>/mo</span></div>
@@ -848,16 +897,19 @@ footer{
         <a href="#" class="price-cta price-cta-outline" onclick="openLogin(event)">Get Started</a>
       </div>
     </div>
+    <div style="text-align:center;margin-top:24px;font-size:13px;color:var(--faint);">
+      Have questions? <a href="/faq" style="color:var(--gold);text-decoration:none;">See our FAQ →</a>
+    </div>
   </section>
 
   <!-- CTA Banner -->
-  <div class="cta-banner glass">
+  <div class="cta-banner glass reveal">
     <div>
       <h2 class="cta-h2">Ready to see what<br/><em>your business</em> can do?</h2>
       <p style="font-size:14px;color:var(--dim);margin-top:12px;">Book a free 30-minute audit. We'll show you exactly what we'd build.</p>
     </div>
     <div style="display:flex;gap:12px;flex-wrap:wrap;flex-shrink:0;">
-      <a href="mailto:hello@streamlinedai.net" class="btn-primary">Book a Free Audit →</a>
+      <a href="/get-started.html" class="btn-primary">Book a Free Audit →</a>
       <a href="#" class="btn-ghost" onclick="openLogin(event)">Client Login</a>
     </div>
   </div>
@@ -872,11 +924,14 @@ footer{
       <a href="#services" class="footer-link">Services</a>
       <a href="#how" class="footer-link">How It Works</a>
       <a href="#pricing" class="footer-link">Pricing</a>
+      <a href="/terms" class="footer-link">Terms</a>
+      <a href="/privacy" class="footer-link">Privacy</a>
+      <a href="/faq" class="footer-link">FAQ</a>
       <a href="mailto:hello@streamlinedai.net" class="footer-link">Contact</a>
     </div>
     <div class="footer-copy">
       <span>© 2026 Streamline AI Consulting · streamlinedai.net</span>
-      <span>Sacramento, CA · hello@streamlinedai.net</span>
+      <span>Sacramento, CA · <a href="mailto:hello@streamlinedai.net" style="color:var(--dim);text-decoration:none;">hello@streamlinedai.net</a></span>
     </div>
   </footer>
 
@@ -889,13 +944,16 @@ footer{
     <div class="modal-logo">Streamline<span> AI</span></div>
     <div class="modal-sub">Sign in to your client portal</div>
     <label class="form-label">Email</label>
-    <input type="email" class="form-input" id="loginEmail" placeholder="you@yourbusiness.com" autocomplete="email"/>
+    <input type="email" class="form-input" id="loginEmail" placeholder="you@yourbusiness.com" autocomplete="email" onkeydown="if(event.key==='Enter')doLogin()"/>
     <label class="form-label">Password</label>
-    <input type="password" class="form-input" id="loginPass" placeholder="••••••••" autocomplete="current-password"/>
+    <input type="password" class="form-input" id="loginPass" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"/>
     <div class="login-error" id="loginError">Incorrect email or password. Please try again.</div>
     <button class="login-btn" onclick="doLogin()">Sign In →</button>
     <div class="modal-footer-text">
-      Not a client yet? <a href="mailto:hello@streamlinedai.net">Contact us to get started</a>
+      Not a client yet? <a href="/get-started.html">Contact us to get started</a>
+    </div>
+    <div class="modal-footer-text" style="margin-top:8px;font-size:11px;color:var(--faint);">
+      By signing in you agree to our <a href="/terms" style="color:var(--dim);">Terms</a> and <a href="/privacy" style="color:var(--dim);">Privacy Policy</a>
     </div>
   </div>
 </div>
@@ -928,6 +986,9 @@ footer{
 </div>
 
 <script>
+// ── Helpers ─────────────────────────────────────────────────────
+const el = id => document.getElementById(id);
+
 // ── Client Configuration ────────────────────────────────────────
 // Add new clients here. Each entry maps email → their portal config.
 const CLIENT_CONFIGS = {
@@ -1092,11 +1153,12 @@ function buildGenericConfig(name) {
 function showDashboard(config) {
   el("landingView").style.display = "none";
   el("dashView").style.display    = "block";
+  const ic = document.getElementById("industryCanvas"); if(ic) ic.style.display = "none";
 
   // Greeting
   const hour = new Date().getHours();
   const greeting = hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
-  el("dashWelcome").innerHTML = `${greeting}, <span id="dashName">${config.name}</span> <span class="plan-badge">${config.plan}</span>`;
+  el("dashWelcome").innerHTML = `${greeting}, <span class="dash-name">${config.name}</span> <span class="plan-badge">${config.plan}</span>`;
   el("dashDate").textContent = new Date().toLocaleDateString("en-US", {
     weekday:"long", month:"long", day:"numeric", year:"numeric"
   });
@@ -1152,6 +1214,7 @@ function showDashboard(config) {
 function showLanding() {
   el("landingView").style.display = "";
   el("dashView").style.display    = "none";
+  const ic = document.getElementById("industryCanvas"); if(ic) ic.style.display = "";
   currentUser = null;
   window.scrollTo(0, 0);
 }
@@ -1159,16 +1222,132 @@ function showLanding() {
 function doLogout() { showLanding(); }
 
 function comingSoon(name) {
-  // Placeholder for tools without a live URL yet
-  alert(`${name} is live — URL coming soon.\n\nContact hello@streamlinedai.net to access.`);
+  alert(`${name} — coming soon!`);
 }
 
-function el(id) { return document.getElementById(id); }
-
-// Enter key on login modal
-document.addEventListener("keydown", e => {
-  if (e.key === "Enter" && el("loginModal").classList.contains("show")) doLogin();
-});
 </script>
+
+<!-- ── SCROLL REVEAL ──────────────────────────────────────────── -->
+<script>
+(function(){
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target); // fire once, stay visible
+      }
+    });
+  }, {
+    threshold: 0.12,   // trigger when 12% of element is visible
+    rootMargin: '0px 0px -40px 0px' // slight offset from bottom edge
+  });
+
+  function attachObservers() {
+    document.querySelectorAll('.reveal, .reveal-group').forEach(el => {
+      observer.observe(el);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', attachObservers);
+  } else {
+    attachObservers();
+  }
+})();
+</script>
+
+<!-- ── INDUSTRY WORDS EFFECT ─────────────────────────────────── -->
+<script>
+(function(){
+
+  // Desktop only — hidden on mobile
+  if (('ontouchstart' in window) || navigator.maxTouchPoints > 0) return;
+
+  const WORDS = [
+    { text: 'Healthcare',     size: 80, x:  2, y:  4 },
+    { text: 'Real Estate',    size: 96, x: 30, y:  3 },
+    { text: 'Transport',      size: 68, x: 68, y:  6 },
+    { text: 'Restaurants',    size: 88, x:  1, y: 13 },
+    { text: 'Logistics',      size: 72, x: 48, y: 14 },
+    { text: 'Legal',          size: 60, x: 80, y: 12 },
+    { text: 'Retail',         size:104, x:  3, y: 22 },
+    { text: 'Construction',   size: 84, x: 38, y: 23 },
+    { text: 'Insurance',      size: 66, x: 76, y: 21 },
+    { text: 'Weddings',       size: 78, x:  2, y: 32 },
+    { text: 'Finance',        size: 90, x: 32, y: 33 },
+    { text: 'Automotive',     size: 74, x: 68, y: 31 },
+    { text: 'Hospitality',    size: 86, x:  1, y: 42 },
+    { text: 'Medical',        size: 92, x: 34, y: 43 },
+    { text: 'E-commerce',     size: 70, x: 74, y: 42 },
+    { text: 'NEMT',           size: 72, x:  4, y: 52 },
+    { text: 'Property Mgmt',  size: 80, x: 24, y: 53 },
+    { text: 'Dental',         size: 64, x: 62, y: 52 },
+    { text: 'Staffing',       size: 76, x: 82, y: 53 },
+    { text: 'Wholesale',      size: 84, x:  2, y: 62 },
+    { text: 'Catering',       size: 72, x: 36, y: 63 },
+    { text: 'Landscaping',    size: 78, x: 68, y: 62 },
+    { text: 'Photography',    size: 88, x:  1, y: 72 },
+    { text: 'Law Firms',      size: 66, x: 40, y: 73 },
+    { text: 'Home Services',  size: 80, x: 64, y: 71 },
+    { text: 'Event Planning', size: 76, x:  3, y: 82 },
+    { text: 'Accounting',     size: 84, x: 34, y: 83 },
+    { text: 'Fitness',        size: 70, x: 72, y: 82 },
+    { text: 'Trucking',       size: 78, x:  2, y: 91 },
+    { text: 'Beauty & Salons',size: 90, x: 28, y: 92 },
+    { text: 'Veterinary',     size: 68, x: 72, y: 91 },
+  ];
+
+  const BRUSH_RADIUS   = 260;
+  const MAX_OP_DESKTOP = 0.17;
+
+  const canvas = document.getElementById('industryCanvas');
+  let wordEls  = [];
+  let mouseX   = -9999, mouseY = -9999;
+
+  WORDS.forEach(w => {
+    const el       = document.createElement('span');
+    el.className   = 'ind-word';
+    el.textContent = w.text;
+    el.style.fontSize = w.size + 'px';
+    el.style.left     = w.x + 'vw';
+    el.style.top      = w.y + 'vh';
+    el.style.opacity  = '0';
+    el._cx = 0; el._cy = 0;
+    canvas.appendChild(el);
+    wordEls.push(el);
+  });
+
+  function measure() {
+    wordEls.forEach(el => {
+      const r = el.getBoundingClientRect();
+      el._cx  = r.left + r.width  / 2;
+      el._cy  = r.top  + r.height / 2;
+    });
+  }
+
+  function tick() {
+    wordEls.forEach(el => {
+      const dist = Math.hypot(mouseX - el._cx, mouseY - el._cy);
+      const t    = Math.max(0, 1 - dist / BRUSH_RADIUS);
+      el.style.opacity = (t * t * MAX_OP_DESKTOP).toFixed(4);
+    });
+    requestAnimationFrame(tick);
+  }
+
+  document.addEventListener('mousemove', e => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  });
+
+  window.addEventListener('resize', () => setTimeout(measure, 120));
+
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    measure();
+    tick();
+  }));
+
+})();
+</script>
+
 </body>
 </html>

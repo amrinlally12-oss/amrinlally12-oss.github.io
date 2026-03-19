@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>FAQ — Streamline AI</title>
+<meta name="description" content="Frequently asked questions about Streamline AI Consulting. Custom AI tools for NorCal small businesses."/>
+<meta name="theme-color" content="#04070f"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Figtree:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#04070f;--glass-bg:rgba(255,255,255,0.04);--glass-border:rgba(255,255,255,0.10);
+  --glass-highlight:rgba(255,255,255,0.08);
+  --gold:#C9973A;--gold-l:#E8C97A;--gold-d:#8a6522;
+  --white:#ffffff;--dim:rgba(255,255,255,0.55);--faint:rgba(255,255,255,0.22);
+  --orb1:#1a3a6e;--orb2:#6e1a4a;--orb3:#1a6e5a;--orb4:#4a1a6e;
+  --r:16px;
+}
+html{scroll-behavior:smooth;overflow-x:hidden;scroll-padding-top:72px;}
+body{font-family:'Figtree',sans-serif;background:var(--bg);color:var(--white);min-height:100vh;overflow-x:hidden;}
+::selection{background:rgba(201,151,58,0.3);}
+::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--gold-d);border-radius:2px;}
+.bg-canvas{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;}
+.orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.28;animation:float 20s infinite ease-in-out;}
+.orb1{width:600px;height:600px;background:var(--orb1);top:-100px;left:-150px;animation-delay:0s;}
+.orb2{width:500px;height:500px;background:var(--orb2);top:30%;right:-100px;animation-delay:-7s;}
+.orb3{width:400px;height:400px;background:var(--orb3);bottom:-50px;left:20%;animation-delay:-13s;}
+.orb4{width:350px;height:350px;background:var(--orb4);top:60%;left:55%;animation-delay:-4s;}
+@keyframes float{0%,100%{transform:translate(0,0) scale(1);}25%{transform:translate(40px,-60px) scale(1.08);}50%{transform:translate(-30px,40px) scale(0.95);}75%{transform:translate(60px,20px) scale(1.05);}}
+.noise{position:fixed;inset:0;z-index:1;opacity:0.03;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px 200px;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:58px;display:flex;align-items:center;justify-content:space-between;background:rgba(4,7,15,0.5);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);border-bottom:1px solid rgba(255,255,255,0.06);}
+.nav-logo{display:flex;align-items:center;gap:10px;font-family:'Syne',sans-serif;font-weight:800;font-size:17px;text-decoration:none;color:var(--white);letter-spacing:-0.3px;}
+.nav-logo span{color:var(--gold);}
+.nav-logo-mark{width:34px;height:34px;border-radius:8px;background:linear-gradient(135deg,rgba(201,151,58,0.2),rgba(201,151,58,0.05));border:1px solid rgba(201,151,58,0.3);display:flex;align-items:center;justify-content:center;}
+.nav-back{font-family:'Syne',sans-serif;font-size:13px;font-weight:600;color:var(--dim);text-decoration:none;display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;transition:all 0.2s;border:1px solid var(--glass-border);background:var(--glass-bg);}
+.nav-back:hover{color:var(--white);background:var(--glass-highlight);}
+/* Page layout */
+.page-wrap{position:relative;z-index:2;max-width:760px;margin:0 auto;padding:100px 28px 80px;}
+.page-eyebrow{font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.eyebrow-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0.3;}}
+.page-title{font-family:'Syne',sans-serif;font-size:clamp(32px,5vw,52px);font-weight:800;letter-spacing:-1.5px;line-height:1.05;margin-bottom:12px;}
+.page-meta{font-size:13px;color:var(--faint);margin-bottom:48px;padding-bottom:32px;border-bottom:1px solid var(--glass-border);}
+/* Doc content */
+.doc-section{margin-bottom:40px;}
+.doc-h2{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;letter-spacing:-0.3px;margin-bottom:12px;color:var(--white);padding-top:8px;}
+.doc-h3{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin-bottom:8px;color:var(--dim);}
+.doc-p{font-size:14px;line-height:1.8;color:var(--dim);margin-bottom:12px;}
+.doc-p:last-child{margin-bottom:0;}
+.doc-ul{list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:12px;}
+.doc-ul li{font-size:14px;line-height:1.7;color:var(--dim);padding-left:16px;position:relative;}
+.doc-ul li::before{content:'—';position:absolute;left:0;color:var(--gold);font-weight:600;}
+.doc-divider{height:1px;background:var(--glass-border);margin:40px 0;}
+.doc-highlight{background:rgba(201,151,58,0.06);border:1px solid rgba(201,151,58,0.15);border-radius:12px;padding:20px 24px;margin-bottom:16px;}
+.doc-highlight .doc-p{color:var(--dim);}
+.doc-link{color:var(--gold);text-decoration:none;}
+.doc-link:hover{text-decoration:underline;}
+/* TOC */
+.toc{background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--r);padding:24px 28px;margin-bottom:48px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);}
+.toc-title{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--faint);margin-bottom:14px;}
+.toc-list{list-style:none;display:flex;flex-direction:column;gap:6px;}
+.toc-list li a{font-size:13px;color:var(--dim);text-decoration:none;transition:color 0.2s;display:flex;align-items:center;gap:8px;}
+.toc-list li a::before{content:'';width:16px;height:1px;background:rgba(201,151,58,0.3);flex-shrink:0;}
+.toc-list li a:hover{color:var(--gold);}
+/* Footer */
+footer{position:relative;z-index:2;border-top:1px solid var(--glass-border);padding:32px 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
+.footer-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:15px;}
+.footer-logo span{color:var(--gold);}
+.footer-links{display:flex;gap:20px;flex-wrap:wrap;}
+.footer-link{font-size:13px;color:var(--faint);text-decoration:none;transition:color 0.2s;}
+.footer-link:hover{color:var(--white);}
+.footer-copy{width:100%;padding-top:20px;border-top:1px solid var(--glass-border);font-size:11px;color:var(--faint);}
+@media(max-width:600px){nav{padding:0 16px;height:52px;}.page-wrap{padding:80px 18px 60px;}footer{padding:28px 18px;}}
+
+.faq-group{margin-bottom:48px;}
+.faq-group-label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:20px;padding-bottom:10px;border-bottom:1px solid rgba(201,151,58,0.2);}
+.faq-item{border-bottom:1px solid var(--glass-border);}
+.faq-item:last-child{border-bottom:none;}
+.faq-q{
+  width:100%;background:none;border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:18px 0;text-align:left;
+  font-family:'Syne',sans-serif;font-size:15px;font-weight:700;
+  color:var(--white);transition:color 0.2s;
+}
+.faq-q:hover{color:var(--gold);}
+.faq-q.open{color:var(--gold);}
+.faq-chevron{
+  width:22px;height:22px;border-radius:50%;flex-shrink:0;
+  background:var(--glass-bg);border:1px solid var(--glass-border);
+  display:flex;align-items:center;justify-content:center;
+  transition:transform 0.25s,background 0.2s;
+}
+.faq-q.open .faq-chevron{transform:rotate(180deg);background:rgba(201,151,58,0.1);border-color:rgba(201,151,58,0.3);}
+.faq-a{
+  max-height:0;overflow:hidden;
+  transition:max-height 0.35s cubic-bezier(0.4,0,0.2,1);
+}
+.faq-a-inner{padding:0 0 18px;font-size:14px;line-height:1.8;color:var(--dim);}
+.faq-a-inner a{color:var(--gold);text-decoration:none;}
+.faq-a-inner a:hover{text-decoration:underline;}
+.faq-a-inner strong{color:var(--white);font-weight:600;}
+.faq-cta{
+  margin-top:48px;padding:32px;border-radius:var(--r);
+  background:linear-gradient(135deg,rgba(201,151,58,0.08),rgba(201,151,58,0.03));
+  border:1px solid rgba(201,151,58,0.2);text-align:center;
+}
+.faq-cta-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;letter-spacing:-0.5px;margin-bottom:8px;}
+.faq-cta-sub{font-size:14px;color:var(--dim);margin-bottom:20px;}
+.btn-gold{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'Syne',sans-serif;font-size:14px;font-weight:700;
+  color:var(--bg);background:linear-gradient(135deg,var(--gold),var(--gold-l));
+  padding:13px 28px;border-radius:10px;border:none;cursor:pointer;
+  text-decoration:none;transition:all 0.2s;
+  box-shadow:0 6px 20px rgba(201,151,58,0.25);
+}
+.btn-gold:hover{transform:translateY(-1px);box-shadow:0 10px 28px rgba(201,151,58,0.35);}
+
+</style>
+</head>
+<body>
+<div class="bg-canvas"><div class="orb orb1"></div><div class="orb orb2"></div><div class="orb orb3"></div><div class="orb orb4"></div></div>
+<div class="noise"></div>
+<nav>
+  <a href="https://streamlinedai.net" class="nav-logo">
+    <div class="nav-logo-mark"><svg width="16" height="16" viewBox="0 0 32 32" fill="none"><path d="M4 11 C7.5 7,12 17,16 11 C20 5,24.5 15,28 11" stroke="#C9973A" stroke-width="2.2" stroke-linecap="round" fill="none"/><path d="M4 17 C7.5 13,12 23,16 17 C20 11,24.5 21,28 17" stroke="#E8C97A" stroke-width="1.8" stroke-linecap="round" fill="none"/></svg></div>
+    Streamline<span> AI</span>
+  </a>
+  <a href="https://streamlinedai.net" class="nav-back">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 11L5 7l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Back to site
+  </a>
+</nav>
+<div class="page-wrap">
+  <div class="page-eyebrow"><span class="eyebrow-dot"></span> FAQ</div>
+  <h1 class="page-title">Frequently Asked Questions</h1>
+  <div class="page-meta">Everything you need to know about working with Streamline AI Consulting. Can't find what you're looking for? <a href="mailto:hello@streamlinedai.net" class="doc-link">Email us directly →</a></div>
+
+<div class="faq-group">
+<div class="faq-group-label">About Streamline AI</div>
+<div class="faq-item">
+  <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+    What exactly does Streamline AI do?
+    <span class="faq-chevron"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+  </button>
+  <div class="faq-a"><div class="faq-a-inner">We build and manage custom AI systems for small businesses. Think of us as a technical co-founder who specializes in automation — we figure out which parts of your operations can be handled by AI, build the tools, and keep them running month to month. You don't need to know anything about AI to work with us.</div></div>
+</div>
+<div class="faq-item">
+  <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+    Who is this built for?
+    <span class="faq-chevron"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+  </button>
+  <div class="faq-a"><div class="faq-a-inner">Our core focus is NorCal small business owners — particularly those running NEMT (medical transport), real estate investing, and retail operations. That said, we work with any business owner who has repetitive processes eating up their time: scheduling, billing, reporting, data entry, communication, and more.</div></div>
+</div>
+<div class="faq-item">
+  <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+    Is this just ChatGPT with a wrapper?
+    <span class="faq-chevron"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+  </button>
+  <div class="faq-a"><div class="faq-a-inner">No. While we do use AI models (including Anthropic's Claude) under the hood, what we build are complete automated systems connected to your actual data — your calendar, your email, your invoicing software, your spreadsheets. The AI isn't just answering questions; it's doing real work inside your business workflows.</div></div>
+</div>
+<div class="faq-item">
+  <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+    How is this different from hiring a virtual assistant?
+    <span class="faq-chevron"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+  </button>
+  <div class="faq-a"><div class="faq-a-inner">A VA works set hours and needs instruction for every task. Our AI systems run automatically, available 24/7, and get faster and more accurate over time. They also don't take sick days, forget things, or need onboarding each time something changes. For the right tasks, AI is significantly more cost-effective and consistent.</div></div>
+</div>
+</div>
+<div class="faq-group">
+<div class="faq-group-label">Pricing & Getting Started</div>
+<div class="faq-item">
+  <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+    How much does it cost?
+    <span class="faq-chevron"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+  </button>
+  <div class="faq-a"><div class="faq-a-inner">There's a one-time setup fee starting at $1,500 to build and deploy your first tool, then a monthly retainer starting at $750/month that covers maintenance, updates, and support. Most clients see ROI within the first 60–90 days through time savings alone. Check our <a href='https://streamlinedai.net#pricing'>pricing page</a> for full plan details.</div></div>
+</div>
+<div class="faq-item">
+  <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+    What happens during the free audit?
+    <span class="faq-chevron"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+  </button>
+  <div class="faq-a"><div class="faq-a-inner">It's a 30-minute call where we map out your biggest time drains and figure out which ones AI can solve. No sales pressure — if we can't build something that genuinely saves you time or money, we'll tell you upfront. You leave with a clear picture of what automation could look like for your business.</div></div>
+</div>
+<div class="faq-item">
+  <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+    How long does it take to get started?
+    <span class="faq-chevron"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+  </button>
+  <div class="faq-a"><div class="faq-a-inner">Most clients are fully up and running within 2 weeks. The first week is the business audit and planning. The second week is the build and deployment. We then spend the first month refining based on your real-world usage.</div></div>
+</div>
+<div class="faq-item">
+  <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+    Do I have to sign a long-term contract?
+    <span class="faq-chevron"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+  </button>
+  <div class="faq-a"><div class="faq-a-inner">No long-term contracts. The monthly retainer runs month-to-month with 30 days notice to cancel. The only non-refundable piece is the setup fee once work begins, which is standard for custom development.</div></div>
+</div>
+</div>
+<div class="faq-group">
+<div class="faq-group-label">The Tools & Technology</div>
+<div class="faq-item">
+  <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+    What tools can you build for me?
+    <span class="faq-chevron"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+  </button>
+  <div class="faq-a"><div class="faq-a-inner">Anything that involves repetitive data processing, scheduling, communication, or reporting. Our current live tools include a real estate flip analyzer, a morning executive briefing system, and a NEMT billing automation. We also build custom tools for retail price tracking, contractor expense management, email triage, and more — if the workflow is repetitive, there's usually a way to automate it.</div></div>
+</div>
+<div class="faq-item">
+  <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+    Do I need any technical knowledge to use the tools?
+    <span class="faq-chevron"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+  </button>
+  <div class="faq-a"><div class="faq-a-inner">None at all. We build for non-technical business owners. Your tools will work through familiar interfaces — email, a simple web portal, spreadsheets — no code, no command lines, no learning curve.</div></div>
+</div>
+<div class="faq-item">
+  <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+    What software and platforms do you integrate with?
+    <span class="faq-chevron"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+  </button>
+  <div class="faq-a"><div class="faq-a-inner">We work with Google Workspace (Gmail, Calendar, Drive), Notion, spreadsheets, Bambi (NEMT), and most web-based business software through APIs. If you use a specific platform, ask us and we'll tell you whether integration is possible.</div></div>
+</div>
+<div class="faq-item">
+  <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+    What AI models power the tools?
+    <span class="faq-chevron"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+  </button>
+  <div class="faq-a"><div class="faq-a-inner">We primarily use Anthropic's Claude for AI processing, which is one of the most capable and safety-focused models available. Depending on the task, we may also use other AI services. We always choose the right model for the job, not just the most well-known one.</div></div>
+</div>
+<div class="faq-item">
+  <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+    Can I see the outputs before committing?
+    <span class="faq-chevron"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+  </button>
+  <div class="faq-a"><div class="faq-a-inner">Yes. During the audit call we'll show you live examples of tools similar to what we'd build for you. For the Flip Analyzer specifically, you can try a demo at <a href='https://streamlinedai.net/flip-analyzer/'>streamlinedai.net/flip-analyzer</a>.</div></div>
+</div>
+</div>
+<div class="faq-group">
+<div class="faq-group-label">Data, Privacy & Security</div>
+<div class="faq-item">
+  <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+    Is my business data safe?
+    <span class="faq-chevron"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+  </button>
+  <div class="faq-a"><div class="faq-a-inner">We treat your data as strictly confidential. We never sell it, share it with third parties for marketing, or use it to train AI models. Data you share with us is only used to build and run your specific tools. See our full <a href='https://streamlinedai.net/privacy'>Privacy Policy</a> for details.</div></div>
+</div>
+<div class="faq-item">
+  <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+    Who has access to my business data?
+    <span class="faq-chevron"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+  </button>
+  <div class="faq-a"><div class="faq-a-inner">Only you and our team. We use access controls to ensure client data is siloed — your information is never visible to other clients. Where third-party services are involved (like Google or Anthropic), we only connect to what you explicitly authorize.</div></div>
+</div>
+<div class="faq-item">
+  <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+    Do AI outputs replace professional advice?
+    <span class="faq-chevron"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+  </button>
+  <div class="faq-a"><div class="faq-a-inner">No. Our tools are designed to save time and surface information — not to replace accountants, lawyers, financial advisors, or licensed professionals. A deal analysis from our Flip Analyzer is a starting point for your due diligence, not a substitute for it. Always verify important decisions with qualified professionals.</div></div>
+</div>
+<div class="faq-item">
+  <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+    What happens to my data if I cancel?
+    <span class="faq-chevron"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+  </button>
+  <div class="faq-a"><div class="faq-a-inner">We retain basic account information for up to 12 months after cancellation for billing and legal purposes, then delete it. Business operational data (emails, calendar entries, etc.) accessed to power your tools is not stored permanently on our systems.</div></div>
+</div>
+</div>
+<div class="faq-group">
+<div class="faq-group-label">Support & Ongoing Service</div>
+<div class="faq-item">
+  <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+    What support is included?
+    <span class="faq-chevron"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+  </button>
+  <div class="faq-a"><div class="faq-a-inner">All retainer plans include email support with a 24-hour response target on business days, plus two workflow updates per month. If something breaks, we prioritize it. For urgent issues outside business hours, email us and mark it urgent — we monitor for critical failures.</div></div>
+</div>
+<div class="faq-item">
+  <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+    What counts as a workflow update?
+    <span class="faq-chevron"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+  </button>
+  <div class="faq-a"><div class="faq-a-inner">A workflow update is a change or improvement to an existing tool — adjusting logic, adding a new data source, changing output format, or tuning AI prompts. Building an entirely new tool from scratch is quoted separately.</div></div>
+</div>
+<div class="faq-item">
+  <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+    What happens if an AI tool makes a mistake?
+    <span class="faq-chevron"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+  </button>
+  <div class="faq-a"><div class="faq-a-inner">AI tools can make errors — this is why we build them as assistance tools rather than fully autonomous decision-makers. If you catch an error or a tool behaves unexpectedly, email us and we'll investigate and fix it, typically within 24 hours. Critical errors affecting operations are treated as urgent.</div></div>
+</div>
+<div class="faq-item">
+  <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+    Can I request new tools mid-retainer?
+    <span class="faq-chevron"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+  </button>
+  <div class="faq-a"><div class="faq-a-inner">Absolutely. As your business grows, your AI stack can grow with it. New tools are priced based on complexity. Many clients start with one tool and expand over time as they see the value.</div></div>
+</div>
+</div>
+
+  <div class="faq-cta">
+    <div class="faq-cta-title">Still have questions?</div>
+    <div class="faq-cta-sub">Book a free 30-minute audit and we'll answer everything specific to your business.</div>
+    <a href="https://streamlinedai.net/get-started" class="btn-gold">Book a Free Audit →</a>
+  </div>
+
+</div>
+<footer>
+  <div class="footer-logo">Streamline<span> AI</span></div>
+  <div class="footer-links">
+    <a href="https://streamlinedai.net/terms" class="footer-link">Terms</a>
+    <a href="https://streamlinedai.net/privacy" class="footer-link">Privacy</a>
+    <a href="https://streamlinedai.net/faq" class="footer-link">FAQ</a>
+    <a href="mailto:hello@streamlinedai.net" class="footer-link">Contact</a>
+  </div>
+  <div class="footer-copy">© 2026 Streamline AI Consulting · Sacramento, CA · streamlinedai.net</div>
+</footer>
+<script>
+function toggleFaq(btn) {
+  const answer = btn.nextElementSibling;
+  const isOpen = btn.classList.contains('open');
+  // Close all
+  document.querySelectorAll('.faq-q.open').forEach(b => {
+    b.classList.remove('open');
+    b.setAttribute('aria-expanded','false');
+    b.nextElementSibling.style.maxHeight = '0';
+  });
+  // Open clicked if it was closed
+  if (!isOpen) {
+    btn.classList.add('open');
+    btn.setAttribute('aria-expanded','true');
+    answer.style.maxHeight = answer.scrollHeight + 'px';
+  }
+}
+</script>
+</body>
+</html>

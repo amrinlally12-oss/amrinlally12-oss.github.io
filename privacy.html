@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Privacy Policy — Streamline AI</title>
+<meta name="description" content="Privacy Policy for Streamline AI Consulting. Your data is never sold. Sacramento, CA."/>
+<meta name="theme-color" content="#04070f"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Figtree:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#04070f;--glass-bg:rgba(255,255,255,0.04);--glass-border:rgba(255,255,255,0.10);
+  --glass-highlight:rgba(255,255,255,0.08);
+  --gold:#C9973A;--gold-l:#E8C97A;--gold-d:#8a6522;
+  --white:#ffffff;--dim:rgba(255,255,255,0.55);--faint:rgba(255,255,255,0.22);
+  --orb1:#1a3a6e;--orb2:#6e1a4a;--orb3:#1a6e5a;--orb4:#4a1a6e;
+  --r:16px;
+}
+html{scroll-behavior:smooth;overflow-x:hidden;scroll-padding-top:72px;}
+body{font-family:'Figtree',sans-serif;background:var(--bg);color:var(--white);min-height:100vh;overflow-x:hidden;}
+::selection{background:rgba(201,151,58,0.3);}
+::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--gold-d);border-radius:2px;}
+.bg-canvas{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;}
+.orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.28;animation:float 20s infinite ease-in-out;}
+.orb1{width:600px;height:600px;background:var(--orb1);top:-100px;left:-150px;animation-delay:0s;}
+.orb2{width:500px;height:500px;background:var(--orb2);top:30%;right:-100px;animation-delay:-7s;}
+.orb3{width:400px;height:400px;background:var(--orb3);bottom:-50px;left:20%;animation-delay:-13s;}
+.orb4{width:350px;height:350px;background:var(--orb4);top:60%;left:55%;animation-delay:-4s;}
+@keyframes float{0%,100%{transform:translate(0,0) scale(1);}25%{transform:translate(40px,-60px) scale(1.08);}50%{transform:translate(-30px,40px) scale(0.95);}75%{transform:translate(60px,20px) scale(1.05);}}
+.noise{position:fixed;inset:0;z-index:1;opacity:0.03;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px 200px;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:58px;display:flex;align-items:center;justify-content:space-between;background:rgba(4,7,15,0.5);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);border-bottom:1px solid rgba(255,255,255,0.06);}
+.nav-logo{display:flex;align-items:center;gap:10px;font-family:'Syne',sans-serif;font-weight:800;font-size:17px;text-decoration:none;color:var(--white);letter-spacing:-0.3px;}
+.nav-logo span{color:var(--gold);}
+.nav-logo-mark{width:34px;height:34px;border-radius:8px;background:linear-gradient(135deg,rgba(201,151,58,0.2),rgba(201,151,58,0.05));border:1px solid rgba(201,151,58,0.3);display:flex;align-items:center;justify-content:center;}
+.nav-back{font-family:'Syne',sans-serif;font-size:13px;font-weight:600;color:var(--dim);text-decoration:none;display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;transition:all 0.2s;border:1px solid var(--glass-border);background:var(--glass-bg);}
+.nav-back:hover{color:var(--white);background:var(--glass-highlight);}
+/* Page layout */
+.page-wrap{position:relative;z-index:2;max-width:760px;margin:0 auto;padding:100px 28px 80px;}
+.page-eyebrow{font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.eyebrow-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0.3;}}
+.page-title{font-family:'Syne',sans-serif;font-size:clamp(32px,5vw,52px);font-weight:800;letter-spacing:-1.5px;line-height:1.05;margin-bottom:12px;}
+.page-meta{font-size:13px;color:var(--faint);margin-bottom:48px;padding-bottom:32px;border-bottom:1px solid var(--glass-border);}
+/* Doc content */
+.doc-section{margin-bottom:40px;}
+.doc-h2{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;letter-spacing:-0.3px;margin-bottom:12px;color:var(--white);padding-top:8px;}
+.doc-h3{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin-bottom:8px;color:var(--dim);}
+.doc-p{font-size:14px;line-height:1.8;color:var(--dim);margin-bottom:12px;}
+.doc-p:last-child{margin-bottom:0;}
+.doc-ul{list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:12px;}
+.doc-ul li{font-size:14px;line-height:1.7;color:var(--dim);padding-left:16px;position:relative;}
+.doc-ul li::before{content:'—';position:absolute;left:0;color:var(--gold);font-weight:600;}
+.doc-divider{height:1px;background:var(--glass-border);margin:40px 0;}
+.doc-highlight{background:rgba(201,151,58,0.06);border:1px solid rgba(201,151,58,0.15);border-radius:12px;padding:20px 24px;margin-bottom:16px;}
+.doc-highlight .doc-p{color:var(--dim);}
+.doc-link{color:var(--gold);text-decoration:none;}
+.doc-link:hover{text-decoration:underline;}
+/* TOC */
+.toc{background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--r);padding:24px 28px;margin-bottom:48px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);}
+.toc-title{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--faint);margin-bottom:14px;}
+.toc-list{list-style:none;display:flex;flex-direction:column;gap:6px;}
+.toc-list li a{font-size:13px;color:var(--dim);text-decoration:none;transition:color 0.2s;display:flex;align-items:center;gap:8px;}
+.toc-list li a::before{content:'';width:16px;height:1px;background:rgba(201,151,58,0.3);flex-shrink:0;}
+.toc-list li a:hover{color:var(--gold);}
+/* Footer */
+footer{position:relative;z-index:2;border-top:1px solid var(--glass-border);padding:32px 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
+.footer-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:15px;}
+.footer-logo span{color:var(--gold);}
+.footer-links{display:flex;gap:20px;flex-wrap:wrap;}
+.footer-link{font-size:13px;color:var(--faint);text-decoration:none;transition:color 0.2s;}
+.footer-link:hover{color:var(--white);}
+.footer-copy{width:100%;padding-top:20px;border-top:1px solid var(--glass-border);font-size:11px;color:var(--faint);}
+@media(max-width:600px){nav{padding:0 16px;height:52px;}.page-wrap{padding:80px 18px 60px;}footer{padding:28px 18px;}}
+
+</style>
+</head>
+<body>
+<div class="bg-canvas"><div class="orb orb1"></div><div class="orb orb2"></div><div class="orb orb3"></div><div class="orb orb4"></div></div>
+<div class="noise"></div>
+<nav>
+  <a href="https://streamlinedai.net" class="nav-logo">
+    <div class="nav-logo-mark"><svg width="16" height="16" viewBox="0 0 32 32" fill="none"><path d="M4 11 C7.5 7,12 17,16 11 C20 5,24.5 15,28 11" stroke="#C9973A" stroke-width="2.2" stroke-linecap="round" fill="none"/><path d="M4 17 C7.5 13,12 23,16 17 C20 11,24.5 21,28 17" stroke="#E8C97A" stroke-width="1.8" stroke-linecap="round" fill="none"/></svg></div>
+    Streamline<span> AI</span>
+  </a>
+  <a href="https://streamlinedai.net" class="nav-back">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 11L5 7l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Back to site
+  </a>
+</nav>
+<div class="page-wrap">
+  <div class="page-eyebrow"><span class="eyebrow-dot"></span> Legal</div>
+  <h1 class="page-title">Privacy Policy</h1>
+  <div class="page-meta">Effective date: January 1, 2026 &nbsp;·&nbsp; Streamline AI Consulting &nbsp;·&nbsp; Sacramento, CA</div>
+
+  <div class="toc">
+    <div class="toc-title">Contents</div>
+    <ul class="toc-list">
+      <li><a href="#collect">1. Information We Collect</a></li>
+      <li><a href="#use">2. How We Use Your Information</a></li>
+      <li><a href="#share">3. How We Share Your Information</a></li>
+      <li><a href="#third-party">4. Third-Party Services</a></li>
+      <li><a href="#retention">5. Data Retention</a></li>
+      <li><a href="#security">6. Security</a></li>
+      <li><a href="#rights">7. Your Rights</a></li>
+      <li><a href="#ccpa">8. California Privacy Rights (CCPA)</a></li>
+      <li><a href="#children">9. Children's Privacy</a></li>
+      <li><a href="#changes-pp">10. Changes to This Policy</a></li>
+      <li><a href="#contact-pp">11. Contact</a></li>
+    </ul>
+  </div>
+
+  <div class="doc-highlight">
+    <p class="doc-p">Your privacy matters to us. This policy explains what information Streamline AI Consulting collects, why we collect it, and how we protect it. We do not sell your personal information. Ever.</p>
+  </div>
+
+  <div class="doc-section" id="collect">
+    <div class="doc-h2">1. Information We Collect</div>
+    <div class="doc-h3">Information you provide directly</div>
+    <p class="doc-p">When you fill out our intake form, contact us, or sign up for our services, we collect:</p>
+    <ul class="doc-ul">
+      <li>Name and contact information (email address, phone number)</li>
+      <li>Business name(s) and industry</li>
+      <li>Details about your business operations you choose to share</li>
+      <li>Communications you send us via email or our contact form</li>
+    </ul>
+    <div class="doc-h3">Information collected automatically</div>
+    <p class="doc-p">When you visit our website, we may collect basic technical information including:</p>
+    <ul class="doc-ul">
+      <li>Browser type and version</li>
+      <li>Pages visited and time spent on the site</li>
+      <li>Referring website or source</li>
+      <li>General geographic location (city/region level, not precise)</li>
+    </ul>
+    <div class="doc-h3">Information from your business operations</div>
+    <p class="doc-p">As part of delivering our services, we may access or process business data you share with us — such as calendar entries, email content, invoices, or trip records — solely to build and operate your custom AI tools. This data is never used for any other purpose.</p>
+  </div>
+
+  <div class="doc-divider"></div>
+
+  <div class="doc-section" id="use">
+    <div class="doc-h2">2. How We Use Your Information</div>
+    <p class="doc-p">We use the information we collect to:</p>
+    <ul class="doc-ul">
+      <li>Respond to your inquiries and deliver our services</li>
+      <li>Build, configure, and maintain your custom AI tools</li>
+      <li>Send you service-related communications (invoices, updates, support)</li>
+      <li>Improve our website and service offerings</li>
+      <li>Comply with legal obligations</li>
+    </ul>
+    <p class="doc-p">We do not use your information for advertising, profiling, or any purpose unrelated to delivering services to you.</p>
+  </div>
+
+  <div class="doc-divider"></div>
+
+  <div class="doc-section" id="share">
+    <div class="doc-h2">3. How We Share Your Information</div>
+    <p class="doc-p">We do not sell, rent, or trade your personal information to third parties. We may share information only in the following limited circumstances:</p>
+    <ul class="doc-ul">
+      <li><strong style="color:var(--white);">Service providers:</strong> Trusted tools we use to deliver services (e.g. Google Workspace, Anthropic API, Notion). These providers have their own privacy policies and are only given access to information necessary to perform their function.</li>
+      <li><strong style="color:var(--white);">Legal requirements:</strong> If required by law, court order, or government authority.</li>
+      <li><strong style="color:var(--white);">Business transfer:</strong> In the unlikely event of a sale or merger, your information may transfer as part of that transaction. We will notify you before that occurs.</li>
+    </ul>
+  </div>
+
+  <div class="doc-divider"></div>
+
+  <div class="doc-section" id="third-party">
+    <div class="doc-h2">4. Third-Party Services</div>
+    <p class="doc-p">Our services integrate with and rely on third-party platforms to function. These may include:</p>
+    <ul class="doc-ul">
+      <li>Google (Calendar, Gmail, Drive) — for briefing and scheduling tools</li>
+      <li>Anthropic — for AI processing and analysis</li>
+      <li>Notion — for task and project management integrations</li>
+      <li>Bambi — for NEMT trip management</li>
+    </ul>
+    <p class="doc-p">Each of these services has its own privacy policy. By using our services, you acknowledge that data may be processed through these platforms. We only connect to services you explicitly authorize.</p>
+  </div>
+
+  <div class="doc-divider"></div>
+
+  <div class="doc-section" id="retention">
+    <div class="doc-h2">5. Data Retention</div>
+    <p class="doc-p">We retain your personal information for as long as your account is active or as needed to provide services. After termination of services, we retain basic account information for up to 12 months for billing and legal purposes, then securely delete it.</p>
+    <p class="doc-p">Business operational data (calendars, emails, trip records) accessed to power your tools is processed in real-time and is not stored permanently on our systems beyond what is required for the tool to function.</p>
+  </div>
+
+  <div class="doc-divider"></div>
+
+  <div class="doc-section" id="security">
+    <div class="doc-h2">6. Security</div>
+    <p class="doc-p">We take security seriously. We use HTTPS encryption for all data in transit, access controls to limit who can view client data, and follow industry-standard practices for credential management.</p>
+    <p class="doc-p">No method of transmission over the internet is 100% secure. While we strive to protect your information, we cannot guarantee absolute security. If you believe your account has been compromised, contact us immediately at <a href="mailto:hello@streamlinedai.net" class="doc-link">hello@streamlinedai.net</a>.</p>
+  </div>
+
+  <div class="doc-divider"></div>
+
+  <div class="doc-section" id="rights">
+    <div class="doc-h2">7. Your Rights</div>
+    <p class="doc-p">You have the right to:</p>
+    <ul class="doc-ul">
+      <li>Access the personal information we hold about you</li>
+      <li>Request correction of inaccurate information</li>
+      <li>Request deletion of your personal information</li>
+      <li>Opt out of non-essential communications at any time</li>
+    </ul>
+    <p class="doc-p">To exercise any of these rights, email us at <a href="mailto:hello@streamlinedai.net" class="doc-link">hello@streamlinedai.net</a>. We will respond within 30 days.</p>
+  </div>
+
+  <div class="doc-divider"></div>
+
+  <div class="doc-section" id="ccpa">
+    <div class="doc-h2">8. California Privacy Rights (CCPA)</div>
+    <p class="doc-p">As a California-based business serving California residents, we comply with the California Consumer Privacy Act (CCPA). California residents have the right to:</p>
+    <ul class="doc-ul">
+      <li>Know what personal information is collected and how it is used</li>
+      <li>Request deletion of personal information</li>
+      <li>Opt out of the sale of personal information (we do not sell personal information)</li>
+      <li>Not be discriminated against for exercising these rights</li>
+    </ul>
+    <p class="doc-p">To submit a CCPA request, email <a href="mailto:hello@streamlinedai.net" class="doc-link">hello@streamlinedai.net</a> with "CCPA Request" in the subject line.</p>
+  </div>
+
+  <div class="doc-divider"></div>
+
+  <div class="doc-section" id="children">
+    <div class="doc-h2">9. Children's Privacy</div>
+    <p class="doc-p">Our services are intended for business owners and professionals aged 18 and older. We do not knowingly collect personal information from anyone under 18. If we become aware that we have collected information from a minor, we will delete it promptly.</p>
+  </div>
+
+  <div class="doc-divider"></div>
+
+  <div class="doc-section" id="changes-pp">
+    <div class="doc-h2">10. Changes to This Policy</div>
+    <p class="doc-p">We may update this Privacy Policy periodically. We will notify active clients of material changes via email. The effective date at the top of this page reflects when the policy was last updated. We encourage you to review this page periodically.</p>
+  </div>
+
+  <div class="doc-divider"></div>
+
+  <div class="doc-section" id="contact-pp">
+    <div class="doc-h2">11. Contact</div>
+    <p class="doc-p">Questions, concerns, or requests about this Privacy Policy:</p>
+    <ul class="doc-ul">
+      <li>Email: <a href="mailto:hello@streamlinedai.net" class="doc-link">hello@streamlinedai.net</a></li>
+      <li>Website: <a href="https://streamlinedai.net" class="doc-link">streamlinedai.net</a></li>
+      <li>Location: Sacramento, CA</li>
+    </ul>
+  </div>
+
+</div>
+<footer>
+  <div class="footer-logo">Streamline<span> AI</span></div>
+  <div class="footer-links">
+    <a href="https://streamlinedai.net/terms" class="footer-link">Terms</a>
+    <a href="https://streamlinedai.net/privacy" class="footer-link">Privacy</a>
+    <a href="https://streamlinedai.net/faq" class="footer-link">FAQ</a>
+    <a href="mailto:hello@streamlinedai.net" class="footer-link">Contact</a>
+  </div>
+  <div class="footer-copy">© 2026 Streamline AI Consulting · Sacramento, CA · streamlinedai.net</div>
+</footer>
+</body>
+</html>

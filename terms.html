@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Terms of Service — Streamline AI</title>
+<meta name="description" content="Terms of Service for Streamline AI Consulting. Read before engaging our services."/>
+<meta name="theme-color" content="#04070f"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Figtree:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#04070f;--glass-bg:rgba(255,255,255,0.04);--glass-border:rgba(255,255,255,0.10);
+  --glass-highlight:rgba(255,255,255,0.08);
+  --gold:#C9973A;--gold-l:#E8C97A;--gold-d:#8a6522;
+  --white:#ffffff;--dim:rgba(255,255,255,0.55);--faint:rgba(255,255,255,0.22);
+  --orb1:#1a3a6e;--orb2:#6e1a4a;--orb3:#1a6e5a;--orb4:#4a1a6e;
+  --r:16px;
+}
+html{scroll-behavior:smooth;overflow-x:hidden;scroll-padding-top:72px;}
+body{font-family:'Figtree',sans-serif;background:var(--bg);color:var(--white);min-height:100vh;overflow-x:hidden;}
+::selection{background:rgba(201,151,58,0.3);}
+::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--gold-d);border-radius:2px;}
+.bg-canvas{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;}
+.orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.28;animation:float 20s infinite ease-in-out;}
+.orb1{width:600px;height:600px;background:var(--orb1);top:-100px;left:-150px;animation-delay:0s;}
+.orb2{width:500px;height:500px;background:var(--orb2);top:30%;right:-100px;animation-delay:-7s;}
+.orb3{width:400px;height:400px;background:var(--orb3);bottom:-50px;left:20%;animation-delay:-13s;}
+.orb4{width:350px;height:350px;background:var(--orb4);top:60%;left:55%;animation-delay:-4s;}
+@keyframes float{0%,100%{transform:translate(0,0) scale(1);}25%{transform:translate(40px,-60px) scale(1.08);}50%{transform:translate(-30px,40px) scale(0.95);}75%{transform:translate(60px,20px) scale(1.05);}}
+.noise{position:fixed;inset:0;z-index:1;opacity:0.03;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px 200px;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:58px;display:flex;align-items:center;justify-content:space-between;background:rgba(4,7,15,0.5);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);border-bottom:1px solid rgba(255,255,255,0.06);}
+.nav-logo{display:flex;align-items:center;gap:10px;font-family:'Syne',sans-serif;font-weight:800;font-size:17px;text-decoration:none;color:var(--white);letter-spacing:-0.3px;}
+.nav-logo span{color:var(--gold);}
+.nav-logo-mark{width:34px;height:34px;border-radius:8px;background:linear-gradient(135deg,rgba(201,151,58,0.2),rgba(201,151,58,0.05));border:1px solid rgba(201,151,58,0.3);display:flex;align-items:center;justify-content:center;}
+.nav-back{font-family:'Syne',sans-serif;font-size:13px;font-weight:600;color:var(--dim);text-decoration:none;display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;transition:all 0.2s;border:1px solid var(--glass-border);background:var(--glass-bg);}
+.nav-back:hover{color:var(--white);background:var(--glass-highlight);}
+/* Page layout */
+.page-wrap{position:relative;z-index:2;max-width:760px;margin:0 auto;padding:100px 28px 80px;}
+.page-eyebrow{font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.eyebrow-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0.3;}}
+.page-title{font-family:'Syne',sans-serif;font-size:clamp(32px,5vw,52px);font-weight:800;letter-spacing:-1.5px;line-height:1.05;margin-bottom:12px;}
+.page-meta{font-size:13px;color:var(--faint);margin-bottom:48px;padding-bottom:32px;border-bottom:1px solid var(--glass-border);}
+/* Doc content */
+.doc-section{margin-bottom:40px;}
+.doc-h2{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;letter-spacing:-0.3px;margin-bottom:12px;color:var(--white);padding-top:8px;}
+.doc-h3{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin-bottom:8px;color:var(--dim);}
+.doc-p{font-size:14px;line-height:1.8;color:var(--dim);margin-bottom:12px;}
+.doc-p:last-child{margin-bottom:0;}
+.doc-ul{list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:12px;}
+.doc-ul li{font-size:14px;line-height:1.7;color:var(--dim);padding-left:16px;position:relative;}
+.doc-ul li::before{content:'—';position:absolute;left:0;color:var(--gold);font-weight:600;}
+.doc-divider{height:1px;background:var(--glass-border);margin:40px 0;}
+.doc-highlight{background:rgba(201,151,58,0.06);border:1px solid rgba(201,151,58,0.15);border-radius:12px;padding:20px 24px;margin-bottom:16px;}
+.doc-highlight .doc-p{color:var(--dim);}
+.doc-link{color:var(--gold);text-decoration:none;}
+.doc-link:hover{text-decoration:underline;}
+/* TOC */
+.toc{background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--r);padding:24px 28px;margin-bottom:48px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);}
+.toc-title{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--faint);margin-bottom:14px;}
+.toc-list{list-style:none;display:flex;flex-direction:column;gap:6px;}
+.toc-list li a{font-size:13px;color:var(--dim);text-decoration:none;transition:color 0.2s;display:flex;align-items:center;gap:8px;}
+.toc-list li a::before{content:'';width:16px;height:1px;background:rgba(201,151,58,0.3);flex-shrink:0;}
+.toc-list li a:hover{color:var(--gold);}
+/* Footer */
+footer{position:relative;z-index:2;border-top:1px solid var(--glass-border);padding:32px 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
+.footer-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:15px;}
+.footer-logo span{color:var(--gold);}
+.footer-links{display:flex;gap:20px;flex-wrap:wrap;}
+.footer-link{font-size:13px;color:var(--faint);text-decoration:none;transition:color 0.2s;}
+.footer-link:hover{color:var(--white);}
+.footer-copy{width:100%;padding-top:20px;border-top:1px solid var(--glass-border);font-size:11px;color:var(--faint);}
+@media(max-width:600px){nav{padding:0 16px;height:52px;}.page-wrap{padding:80px 18px 60px;}footer{padding:28px 18px;}}
+
+</style>
+</head>
+<body>
+<div class="bg-canvas"><div class="orb orb1"></div><div class="orb orb2"></div><div class="orb orb3"></div><div class="orb orb4"></div></div>
+<div class="noise"></div>
+<nav>
+  <a href="https://streamlinedai.net" class="nav-logo">
+    <div class="nav-logo-mark"><svg width="16" height="16" viewBox="0 0 32 32" fill="none"><path d="M4 11 C7.5 7,12 17,16 11 C20 5,24.5 15,28 11" stroke="#C9973A" stroke-width="2.2" stroke-linecap="round" fill="none"/><path d="M4 17 C7.5 13,12 23,16 17 C20 11,24.5 21,28 17" stroke="#E8C97A" stroke-width="1.8" stroke-linecap="round" fill="none"/></svg></div>
+    Streamline<span> AI</span>
+  </a>
+  <a href="https://streamlinedai.net" class="nav-back">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 11L5 7l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Back to site
+  </a>
+</nav>
+<div class="page-wrap">
+  <div class="page-eyebrow"><span class="eyebrow-dot"></span> Legal</div>
+  <h1 class="page-title">Terms of Service</h1>
+  <div class="page-meta">
+    Effective date: January 1, 2026 &nbsp;&middot;&nbsp; Streamline AI Consulting &nbsp;&middot;&nbsp; Sacramento, CA<br/>
+    <span style="color:rgba(255,255,255,0.35);font-size:12px;display:block;margin-top:8px;">This document does not constitute legal advice. Streamline AI Consulting recommends all clients seek independent legal counsel before entering any service agreement.</span>
+  </div>
+
+  <div class="toc">
+    <div class="toc-title">Contents</div>
+    <ul class="toc-list">
+      <li><a href="#agreement">1. Agreement &amp; Acceptance</a></li>
+      <li><a href="#definitions">2. Definitions</a></li>
+      <li><a href="#services">3. Services &amp; Scope</a></li>
+      <li><a href="#payment">4. Payment &amp; Billing</a></li>
+      <li><a href="#pricing">5. Price Changes</a></li>
+      <li><a href="#ip">6. Intellectual Property &amp; Ownership</a></li>
+      <li><a href="#confidentiality">7. Mutual Confidentiality</a></li>
+      <li><a href="#restrictions">8. Restrictions on Use</a></li>
+      <li><a href="#noncircumvent">9. Non-Circumvention</a></li>
+      <li><a href="#acceptable">10. Acceptable Use</a></li>
+      <li><a href="#aioutput">11. AI Output Disclaimer &amp; Assumption of Risk</a></li>
+      <li><a href="#industry">12. Industry-Specific Disclaimers</a></li>
+      <li><a href="#availability">13. Availability, Downtime &amp; No SLA</a></li>
+      <li><a href="#thirdparty">14. Third-Party Dependencies</a></li>
+      <li><a href="#databreach">15. Data Security &amp; Breach Notification</a></li>
+      <li><a href="#termination">16. Termination &amp; Effect of Termination</a></li>
+      <li><a href="#warranty">17. Disclaimer of Warranties</a></li>
+      <li><a href="#liability">18. Limitation of Liability</a></li>
+      <li><a href="#indemnification">19. Indemnification</a></li>
+      <li><a href="#nondisparage">20. Non-Disparagement</a></li>
+      <li><a href="#force">21. Force Majeure</a></li>
+      <li><a href="#disputes">22. Disputes, Arbitration &amp; Governing Law</a></li>
+      <li><a href="#general">23. General Provisions</a></li>
+      <li><a href="#changes">24. Changes to These Terms</a></li>
+      <li><a href="#contact-tos">25. Contact</a></li>
+    </ul>
+  </div>
+
+  <div class="doc-highlight">
+    <p class="doc-p">Please read these Terms carefully and in full. By creating an account, checking the acceptance box, submitting an intake form, signing a Scope Agreement, accessing the client portal, or using any tool we build, you acknowledge you have read, understood, and agree to be legally bound by these Terms. Your electronic acceptance &mdash; including checking a checkbox at account creation &mdash; constitutes a valid, binding, and enforceable signature under the Electronic Signatures in Global and National Commerce Act (E-SIGN Act) and California law. If you do not agree, do not use our services.</p>
+  </div>
+
+
+  <!-- 1 -->
+  <div class="doc-section" id="agreement">
+    <div class="doc-h2">1. Agreement &amp; Acceptance</div>
+    <p class="doc-p">"Streamline AI Consulting," "we," "us," or "our" refers to Streamline AI Consulting, a consulting business based in Sacramento, California. "Client," "you," or "your" refers to the individual or business entity engaging our services.</p>
+    <p class="doc-p">These Terms of Service ("Terms"), together with any written Scope Agreement, constitute the entire legal agreement between you and Streamline AI Consulting. In the event of conflict between these Terms and a Scope Agreement, the Scope Agreement controls for that specific engagement only, and only to the extent of the conflict.</p>
+    <p class="doc-p">By engaging our services you represent and warrant that: (a) you are at least 18 years old; (b) you have full legal authority to enter into this agreement on behalf of yourself or your organization; (c) if entering on behalf of a business entity, you have the authority to bind that entity to these Terms; and (d) your use of our services will at all times comply with all applicable laws and regulations.</p>
+    <div class="doc-h3">Electronic Acceptance &amp; Record-Keeping</div>
+    <p class="doc-p">When you create an account with Streamline AI Consulting, you will be required to affirmatively check a box confirming your acceptance of these Terms before access is granted. This checkbox acceptance, together with the date, time, IP address, and account information associated with it, constitutes a legally binding electronic signature and is recorded by Streamline AI Consulting. You agree not to dispute the validity or enforceability of these Terms on the grounds that they were accepted electronically. We reserve the right to require a written re-confirmation of acceptance at any time. Our records of your acceptance shall be deemed conclusive evidence that you agreed to these Terms unless you can demonstrate a material technical error in our recording system.</p>
+    <div class="doc-h3">Scope Agreement</div>
+    <p class="doc-p">A "Scope Agreement" may take the form of a written proposal, a signed engagement letter, or a written email exchange in which both parties have confirmed the scope of services and applicable fees. Either party's written acknowledgment of scope and fees &mdash; including via email &mdash; constitutes a binding Scope Agreement incorporating these Terms by reference. No services will commence without a confirmed Scope Agreement. Verbal discussions, phone calls, or informal conversations do not constitute a Scope Agreement regardless of their content.</p>
+    <div class="doc-h3">Representations &amp; Warranties by Client</div>
+    <p class="doc-p">By accepting these Terms you further represent and warrant that: (a) you are not subject to any agreement, court order, or legal restriction that would prohibit you from entering into or performing under these Terms; (b) the information you provide to us in connection with your account and use of our services is and will remain accurate and complete; (c) you will promptly notify us of any change that makes any prior representation or warranty inaccurate; and (d) you understand that we are relying on your representations in providing services to you.</p>
+  </div>
+
+  <div class="doc-divider"></div>
+
+  <!-- 2 -->
+  <div class="doc-section" id="definitions">
+    <div class="doc-h2">2. Definitions</div>
+    <p class="doc-p">The following defined terms apply throughout these Terms:</p>
+    <ul class="doc-ul">
+      <li><strong style="color:var(--white);">"AI Outputs"</strong> means any analyses, reports, briefings, projections, recommendations, invoices, grades, summaries, or other content generated by our tools using artificial intelligence.</li>
+      <li><strong style="color:var(--white);">"Client Content"</strong> means all data, documents, records, and other information provided by you to us in connection with our services.</li>
+      <li><strong style="color:var(--white);">"Confidential Information"</strong> means any non-public information disclosed by one party to the other that is designated as confidential or that a reasonable party would understand to be confidential, including without limitation business processes, pricing, client lists, financial data, technical implementations, system architecture, prompt structures, and workflow designs.</li>
+      <li><strong style="color:var(--white);">"Force Majeure Event"</strong> means any circumstance beyond a party's reasonable control as described in Section 21.</li>
+      <li><strong style="color:var(--white);">"Scope Agreement"</strong> means the written confirmation of services and fees described in Section 1.</li>
+      <li><strong style="color:var(--white);">"Third-Party Services"</strong> means any external platforms, APIs, or services used to deliver our tools, including but not limited to Anthropic, Google, Notion, and Bambi.</li>
+      <li><strong style="color:var(--white);">"Tools"</strong> means the custom AI systems, automations, workflows, and portals built and operated by Streamline AI Consulting for Client.</li>
+      <li><strong style="color:var(--white);">"Work Product"</strong> means all tools, systems, code, scripts, prompts, workflows, automations, designs, methodologies, frameworks, templates, and deliverables created by Streamline AI Consulting, whether specifically for Client or as part of our general service offering.</li>
+    </ul>
+  </div>
+
+  <div class="doc-divider"></div>
+
+  <!-- 3 -->
+  <div class="doc-section" id="services">
+    <div class="doc-h2">3. Services &amp; Scope</div>
+    <p class="doc-p">Streamline AI Consulting provides custom AI system development, workflow automation, consulting, and related services. The specific scope of work for each engagement is defined in a written Scope Agreement confirmed before any work begins. Service descriptions on our website are illustrative only and do not constitute a binding commitment.</p>
+    <p class="doc-p">We reserve the right to decline or discontinue services to any client at our sole discretion, subject to the notice and refund provisions in Section 16. Streamline AI Consulting operates as an independent contractor. Nothing in these Terms creates any employment, partnership, joint venture, or agency relationship between the parties.</p>
+    <p class="doc-p">Any feature, capability, or outcome discussed in sales conversations, demos, emails, or marketing materials that is not expressly stated in a Scope Agreement is not a binding commitment and creates no obligation on our part. We are not liable for any client expectation arising from statements made outside of a written Scope Agreement, regardless of who made them or in what context.</p>
+    <p class="doc-p">We retain the right to subcontract portions of our services to qualified third parties without your consent, provided we remain responsible for the quality and confidentiality obligations applicable to any subcontracted work.</p>
+  </div>
+
+  <div class="doc-divider"></div>
+
+  <!-- 4 -->
+  <div class="doc-section" id="payment">
+    <div class="doc-h2">4. Payment &amp; Billing</div>
+    <div class="doc-h3">Setup Fees</div>
+    <p class="doc-p">A one-time setup fee is required before development begins. Setup fees are non-refundable once work has commenced, regardless of subsequent cancellation by either party for any reason, including dissatisfaction with work product or change of business circumstances.</p>
+    <div class="doc-h3">Monthly Retainer</div>
+    <p class="doc-p">Monthly retainer fees are billed on the 1st of each calendar month and are due within 7 calendar days, in advance of the upcoming service period. Retainer fees are earned upon billing and are not contingent on any particular level of service delivery, tool availability, or output quality during that period.</p>
+    <div class="doc-h3">No Refunds for Downtime or Non-Use</div>
+    <p class="doc-p">Retainer fees are not refundable, in whole or in part, due to: (a) tool unavailability, outages, or downtime of any duration or cause; (b) third-party API failures or service degradation; (c) your choice not to use the tools during a paid period; (d) dissatisfaction with AI output quality; or (e) any change in your business circumstances or needs. Downtime does not entitle you to fee credits, partial refunds, or service extensions under any circumstances, unless separately agreed to in a signed written amendment.</p>
+    <div class="doc-h3">Late Payments</div>
+    <p class="doc-p">Invoices not paid within 7 days of the due date are past due. We may: (a) suspend access to all tools and the client portal without further notice or liability; (b) charge a late fee of 1.5% per month (18% per annum) on outstanding balances, compounding monthly; and (c) require full payment of all overdue amounts, including accrued late fees, before restoring access. Suspension due to non-payment does not relieve you of any payment obligation, including for the full suspended period. We are not liable for any loss you suffer due to service suspension resulting from your failure to pay.</p>
+    <div class="doc-h3">Disputed Charges</div>
+    <p class="doc-p">Billing disputes must be submitted in writing within 10 days of the invoice date, specifically identifying the disputed amount and the basis for the dispute. Undisputed amounts remain due by the original deadline. Initiating a chargeback, payment reversal, or dispute with your payment provider without prior good-faith written notice to us constitutes a material breach of these Terms and entitles us to: immediately terminate your access without notice; recover all associated fees, costs, and our reasonable attorneys' fees; and pursue all available legal remedies.</p>
+    <div class="doc-h3">Taxes</div>
+    <p class="doc-p">All fees are exclusive of applicable taxes. You are responsible for any sales, use, GST, VAT, or similar taxes imposed on our services in your jurisdiction, excluding taxes on our net income. If we are required by law to collect such taxes, we will add them to your invoice.</p>
+    <div class="doc-h3">Cancellation</div>
+    <p class="doc-p">Either party may cancel the monthly retainer with 30 days written notice via email. You retain access through the end of the current paid billing period. No pro-rated refunds are issued for mid-period cancellations under any circumstances. For surviving provisions upon termination, see Section 23.</p>
+  </div>
+
+  <div class="doc-divider"></div>
+
+  <!-- 5 -->
+  <div class="doc-section" id="pricing">
+    <div class="doc-h2">5. Price Changes</div>
+    <p class="doc-p">Streamline AI Consulting reserves the right to adjust retainer pricing at any time with 30 days written notice delivered via email to your account address. Price adjustments may be made for any reason, including but not limited to increased costs of Third-Party Services, AI model pricing changes, expanded service scope, or general business reasons.</p>
+    <p class="doc-p">Continued use of our services after the effective date of a price change constitutes your acceptance of the new pricing. If you do not accept the new pricing, your sole remedy is to cancel your retainer in accordance with Section 4 before the new pricing takes effect. You will not be entitled to any refund of fees paid prior to a price change.</p>
+    <p class="doc-p">Setup fees for new tools or engagements are quoted separately and are not subject to the pricing change notice requirement above.</p>
+  </div>
+
+  <div class="doc-divider"></div>
+
+  <!-- 6 -->
+  <div class="doc-section" id="ip">
+    <div class="doc-h2">6. Intellectual Property &amp; Ownership</div>
+    <div class="doc-h3">Streamline AI Consulting owns all Work Product</div>
+    <p class="doc-p">All Work Product created by Streamline AI Consulting &mdash; whether built specifically for you or as part of our general service offering &mdash; is and remains the sole and exclusive intellectual property of Streamline AI Consulting from the moment of creation. This includes all versions, modifications, enhancements, and derivative works, regardless of who requested them, who provided input, or who paid for them. No transfer of ownership occurs at any point under any circumstances. Payment of fees does not transfer any intellectual property rights, title, or interest.</p>
+    <p class="doc-p">To the extent any Work Product could be construed as a "work made for hire" under applicable law, Client hereby irrevocably assigns to Streamline AI Consulting all right, title, and interest in and to such Work Product, including all intellectual property rights therein. Client agrees to execute any documents reasonably requested by Streamline AI Consulting to perfect or confirm such assignment.</p>
+    <div class="doc-h3">Our Systems Are Confidential</div>
+    <p class="doc-p">All information about how our tools operate &mdash; including but not limited to prompt structures, workflow logic, system architecture, integration configurations, data processing methods, and any technical details you observe or learn through using our tools &mdash; constitutes the Confidential Information and proprietary information of Streamline AI Consulting. You agree to protect all such information with no less than the same degree of care you use to protect your own most sensitive confidential information, and in no event with less than reasonable care. You may not disclose, document, photograph, screenshot, record, or otherwise capture or expose our system internals to any third party without our prior written consent.</p>
+    <div class="doc-h3">Limited License to Client</div>
+    <p class="doc-p">Subject to your continued compliance with these Terms and timely payment of all fees, Streamline AI Consulting grants you a limited, non-exclusive, non-transferable, non-sublicensable, revocable license to access and use the Tools for your internal business operations only. This license is personal to you and does not extend to any affiliate, subsidiary, successor, parent company, or related entity without our prior written consent in each instance.</p>
+    <p class="doc-p">This license automatically and immediately terminates, without notice, upon: (a) any breach of these Terms; (b) failure to pay fees when due; (c) cancellation or termination of services for any reason; or (d) our written notice of termination. Upon license termination, all rights revert to Streamline AI Consulting and you must immediately and permanently cease all use of the Tools and associated materials.</p>
+    <div class="doc-h3">Your Content</div>
+    <p class="doc-p">You retain full ownership of all Client Content you provide to us. You grant Streamline AI Consulting a limited, royalty-free, non-exclusive license to access, process, and use Client Content solely to deliver services to you. This license terminates upon termination of our engagement.</p>
+    <div class="doc-h3">Feedback</div>
+    <p class="doc-p">If you provide suggestions, feedback, or ideas regarding our services or tools, you hereby assign all rights in such feedback to Streamline AI Consulting. We may use such feedback without restriction or compensation to you.</p>
+    <div class="doc-h3">Portfolio Rights</div>
+    <p class="doc-p">We reserve the right to reference the general nature of our engagement in marketing materials, case studies, and portfolio presentations without disclosing confidential business information or identifying you by name. You may opt out of named attribution only by notifying us in writing.</p>
+  </div>
+
+  <div class="doc-divider"></div>
+
+  <!-- 7 -->
+  <div class="doc-section" id="confidentiality">
+    <div class="doc-h2">7. Mutual Confidentiality</div>
+    <p class="doc-p">Each party agrees to hold the other's Confidential Information in strict confidence and not to disclose it to any third party without prior written consent. Each party agrees to use the other's Confidential Information only as necessary to perform its obligations under these Terms.</p>
+    <div class="doc-h3">Our Confidential Information specifically includes</div>
+    <p class="doc-p">Without limiting the general definition above, all of the following constitute Confidential Information of Streamline AI Consulting regardless of whether marked as such: the design and logic of any Tool we build; the AI prompts and prompt chains we develop; our workflow and automation architectures; integration configurations and credentials; pricing, cost structures, and margin information; client lists and client data; and any non-public information about our methods, systems, or business operations that you learn through your engagement. Your obligation to protect this information is independent of and survives any termination of these Terms.</p>
+    <div class="doc-h3">Standard of care</div>
+    <p class="doc-p">You agree to protect our Confidential Information with no less than the same degree of care you use to protect your own most sensitive confidential information, and in no event with less than reasonable care. This standard applies to all employees, contractors, and agents who access our Confidential Information on your behalf.</p>
+    <div class="doc-h3">Permitted disclosures</div>
+    <p class="doc-p">Either party may disclose Confidential Information: (a) to its employees, contractors, or advisors who have a strict need to know and are bound by confidentiality obligations at least as protective as those in these Terms; or (b) as required by law, court order, or government authority, provided the disclosing party gives the other the maximum practicable advance written notice and cooperates in seeking a protective order or other limitation on disclosure.</p>
+    <div class="doc-h3">Injunctive relief</div>
+    <p class="doc-p">The parties acknowledge that any breach of confidentiality obligations would cause irreparable harm for which monetary damages would be an inadequate remedy. Either party may seek immediate injunctive relief without bond, without prior notice, and without exhausting arbitration for any actual or threatened breach of this Section.</p>
+    <div class="doc-h3">Duration</div>
+    <p class="doc-p">Confidentiality obligations survive termination of these Terms for five (5) years. Obligations with respect to trade secrets &mdash; including our prompt structures, workflow architectures, and proprietary methodologies &mdash; survive indefinitely for as long as such information qualifies as a trade secret under applicable law.</p>
+  </div>
+
+  <div class="doc-divider"></div>
+
+  <!-- 8 -->
+  <div class="doc-section" id="restrictions">
+    <div class="doc-h2">8. Restrictions on Use</div>
+    <p class="doc-p">Tools and Work Product are licensed for your internal business use only. You expressly agree not to, and not to permit, encourage, or facilitate any third party to:</p>
+    <ul class="doc-ul">
+      <li><strong style="color:var(--white);">Copy or reproduce</strong> any Tool, code, prompt, workflow, or system in whole or in part, by any means</li>
+      <li><strong style="color:var(--white);">Distribute or share access</strong> to any Tool or Work Product outside your immediate organization without our prior written consent</li>
+      <li><strong style="color:var(--white);">Sublicense, sell, resell, or transfer</strong> any rights in the Tools or Work Product to any third party</li>
+      <li><strong style="color:var(--white);">Reverse engineer, decompile, or disassemble</strong> any Tool, code, or system to understand its underlying logic, prompts, or architecture</li>
+      <li><strong style="color:var(--white);">Recreate or replicate</strong> any Tool, workflow, or system using knowledge gained through our engagement, directly or indirectly</li>
+      <li><strong style="color:var(--white);">Modify or create derivative works</strong> from any Tool or Work Product without our express prior written authorization</li>
+      <li><strong style="color:var(--white);">Remove or obscure</strong> any proprietary notices, branding, or attribution in any deliverable</li>
+      <li><strong style="color:var(--white);">Use the Tools</strong> to develop a competing product or service, or to assist any competitor of Streamline AI Consulting</li>
+      <li><strong style="color:var(--white);">Share credentials</strong> or grant portal access to individuals outside your immediate organization</li>
+      <li><strong style="color:var(--white);">Screenshot, document, record, or transmit</strong> any internal system logic, prompt behavior, or architectural details to any third party</li>
+      <li><strong style="color:var(--white);">Use automated means</strong> to access, scrape, or extract data from our tools, portal, or systems</li>
+    </ul>
+    <p class="doc-p">Any violation constitutes a material breach entitling Streamline AI Consulting to immediately terminate all licenses and pursue all available legal remedies including injunctive relief and monetary damages. We may seek damages and equitable relief without first providing notice or an opportunity to cure for any violation of this Section. We are entitled to seek liquidated damages of $50,000 per violation where actual damages are difficult to quantify, which the parties agree is a reasonable estimate and not a penalty.</p>
+  </div>
+
+  <div class="doc-divider"></div>
+
+  <!-- 9 -->
+  <div class="doc-section" id="noncircumvent">
+    <div class="doc-h2">9. Non-Circumvention</div>
+    <p class="doc-p">During the term of your engagement and for twenty-four (24) months following termination for any reason, you agree not to, directly or indirectly:</p>
+    <ul class="doc-ul">
+      <li>Engage, hire, solicit, or contract with any person or entity introduced to you by Streamline AI Consulting in connection with your project, without our prior written consent</li>
+      <li>Use knowledge of our Tools, systems, methodologies, or technical approaches to independently build, commission, or acquire a substantially similar system without our involvement</li>
+      <li>Attempt to access, retrieve, or reconstruct any proprietary prompt, workflow, or system architecture through any means, including observation, reverse engineering, testing, or third-party assistance</li>
+      <li>Assist, advise, fund, or enable any third party to do any of the above</li>
+      <li>Use any AI platform, developer, or consultant to replicate the functionality of our Tools without our prior written consent</li>
+    </ul>
+    <p class="doc-p">A violation of this Section constitutes a material breach for which monetary damages would be inadequate. Streamline AI Consulting is entitled to seek immediate equitable relief &mdash; including a temporary restraining order or preliminary injunction &mdash; without bond, without prior notice, and without first exhausting arbitration, in addition to all other available remedies including recovery of profits derived from the violation.</p>
+  </div>
+
+  <div class="doc-divider"></div>
+
+  <!-- 10 -->
+  <div class="doc-section" id="acceptable">
+    <div class="doc-h2">10. Acceptable Use</div>
+    <p class="doc-p">You agree to use our Tools only for lawful business purposes and in strict compliance with all applicable laws and regulations. You expressly agree not to use our services to:</p>
+    <ul class="doc-ul">
+      <li>Violate any applicable local, state, federal, or international law or regulation</li>
+      <li>Engage in fraud, misrepresentation, or deceptive practices against any party</li>
+      <li>Process or store data in violation of applicable privacy laws including HIPAA, CCPA, or GDPR</li>
+      <li>Harass, threaten, defame, or harm any individual or organization</li>
+      <li>Generate or distribute spam, unsolicited communications, or malicious content</li>
+      <li>Circumvent or attempt to circumvent any security feature of our systems</li>
+      <li>Interfere with or disrupt the integrity or performance of our services or the data of other clients</li>
+      <li>Submit false, fabricated, or misleading information to our tools with the intent of generating a particular output</li>
+      <li>Use our tools in any manner that could expose Streamline AI Consulting to regulatory investigation, legal liability, or reputational harm</li>
+    </ul>
+    <p class="doc-p">Violations constitute grounds for immediate termination without notice and without refund of any fees. We reserve the right to investigate suspected violations, cooperate with law enforcement authorities, and disclose information about your use of our services as required by law or as necessary to protect our rights. You agree to indemnify us fully for any consequences arising from your violation of this Section.</p>
+  </div>
+
+  <div class="doc-divider"></div>
+
+  <!-- 11 -->
+  <div class="doc-section" id="aioutput">
+    <div class="doc-h2">11. AI Output Disclaimer &amp; Assumption of Risk</div>
+    <div class="doc-highlight" style="margin-bottom:20px;">
+      <p class="doc-p" style="font-weight:600;color:rgba(255,255,255,0.85);">By using our Tools, you expressly acknowledge and accept all risks associated with AI-generated outputs. Read this section carefully &mdash; it directly affects your legal rights.</p>
+    </div>
+    <div class="doc-h3">Nature of AI Outputs</div>
+    <p class="doc-p">Our Tools use artificial intelligence to generate AI Outputs. AI Outputs are probabilistic and statistical in nature, generated by large language models and other AI systems that can produce incorrect, incomplete, outdated, biased, hallucinated, or misleading results &mdash; even when they appear confident, well-formatted, and internally consistent. The quality and accuracy of AI Outputs depend on the quality of input data, the capabilities of underlying AI models at any given time, and factors outside our control.</p>
+    <div class="doc-h3">Not professional advice</div>
+    <p class="doc-p">AI Outputs do not constitute and shall not be construed as professional financial, legal, real estate, medical, accounting, tax, investment, or regulatory advice of any kind. No AI Output should be relied upon as a substitute for consultation with a qualified, licensed professional. Streamline AI Consulting is not a licensed real estate broker, financial advisor, attorney, accountant, healthcare provider, or Medicaid billing specialist, and our Tools do not function as replacements for such professionals.</p>
+    <div class="doc-h3">No guarantee of accuracy, completeness, or results</div>
+    <p class="doc-p">We make no representation or warranty that any AI Output will be accurate, complete, current, free of error, or suitable for any particular purpose. Property analyses, financial projections, deal grades, billing outputs, and similar AI Outputs are estimates based on available data and model inference &mdash; they are not appraisals, certified valuations, audited statements, or professional assessments. Actual outcomes will differ, sometimes materially.</p>
+    <p class="doc-p">We make no guarantee that use of our Tools will produce any specific business outcome, revenue improvement, time saving, cost reduction, regulatory approval, or other result. Examples of outcomes referenced in our marketing are illustrative only and are not a representation or guarantee of similar results for you.</p>
+    <div class="doc-h3">Tool malfunction and errors</div>
+    <p class="doc-p">Our Tools may malfunction, produce errors, fail to execute, produce outputs based on stale or incorrect data, misinterpret inputs, or behave unexpectedly due to software bugs, infrastructure issues, changes in underlying AI models, or other technical causes. Streamline AI Consulting is not liable for any loss or harm arising from Tool malfunction, error, unexpected behavior, or complete failure to function, regardless of cause, duration, or frequency.</p>
+    <div class="doc-h3">Your responsibility to verify</div>
+    <p class="doc-p">You accept full and sole responsibility for independently verifying the accuracy, completeness, and appropriateness of any AI Output before relying on it or acting upon it. You must apply your own professional judgment to all AI Outputs and consult qualified professionals before making any significant business, financial, legal, regulatory, or investment decision. No AI Output should be acted upon without independent verification from qualified sources.</p>
+    <div class="doc-h3">Explicit assumption of risk</div>
+    <p class="doc-p">By using our Tools, you expressly and irrevocably assume all risks arising from: (a) errors, inaccuracies, hallucinations, or omissions in AI Outputs; (b) decisions or actions taken in reliance on AI Outputs; (c) failure of AI Outputs to meet your expectations or business needs; (d) Tool malfunctions, failures, or unexpected behavior of any kind; (e) changes in underlying data, market conditions, or third-party information that render an AI Output stale or incorrect; (f) any financial loss, missed opportunity, or adverse outcome of any kind connected to your use of or reliance on our Tools; and (g) any regulatory, legal, or compliance consequence arising from actions taken based on AI Outputs.</p>
+    <p class="doc-p">Streamline AI Consulting shall not be liable for any loss, damage, financial harm, missed opportunity, regulatory penalty, or adverse outcome of any kind arising from your use of or reliance on any AI Output or from any Tool malfunction or failure, regardless of whether we were advised of the possibility of such harm and regardless of the theory of liability asserted.</p>
+  </div>
+
+  <div class="doc-divider"></div>
+
+  <!-- 12 -->
+  <div class="doc-section" id="industry">
+    <div class="doc-h2">12. Industry-Specific Disclaimers</div>
+    <div class="doc-highlight" style="margin-bottom:20px;">
+      <p class="doc-p" style="font-weight:600;color:rgba(255,255,255,0.85);">By using any industry-specific Tool, you expressly acknowledge, accept, and agree to the disclaimers in this Section applicable to that Tool. These disclaimers are in addition to, and not in limitation of, the general disclaimers in Section 11.</p>
+    </div>
+    <div class="doc-h3">Real Estate</div>
+    <p class="doc-p">Our real estate analysis Tools &mdash; including the Flip Analyzer and any similar AI Outputs &mdash; generate property analyses, estimated ARVs (after-repair values), renovation cost estimates, deal grades, and projected profit figures. These are estimates only, based on publicly available data, comparable sales information, and AI model inference at the time of analysis. They are not licensed appraisals, professional property valuations, certified assessments, or opinions of value from a licensed appraiser. Streamline AI Consulting is not a licensed real estate broker, agent, appraiser, or investment advisor in California or any other jurisdiction.</p>
+    <p class="doc-p">You expressly acknowledge that: (a) no AI Output constitutes a professional property appraisal, licensed valuation, or investment recommendation; (b) property values, market conditions, renovation costs, and investment returns are inherently uncertain and may differ materially from any estimate; (c) you will independently verify all property data, comparable sales, and cost estimates with licensed professionals before making any purchase, investment, financing, or disposition decision; (d) Streamline AI Consulting is not liable for any financial loss, failed investment, lender claim, or missed opportunity arising from your use of or reliance on any real estate AI Output; and (e) you acknowledge that real estate investment involves substantial risk of loss and that our tools in no way reduce or mitigate that risk.</p>
+    <div class="doc-h3">NEMT &amp; Medical Transport</div>
+    <p class="doc-p">Our NEMT Tools &mdash; including billing automation, trip scheduling, invoice generation, and related features &mdash; are operational assistance tools only. They are not certified Medicaid billing systems, are not designed or warranted for compliance with any federal or state regulatory requirement, and do not constitute legal, compliance, or billing advice of any kind.</p>
+    <p class="doc-p">You expressly acknowledge that: (a) you are solely and entirely responsible for ensuring that all trip records, billing submissions, claims, and operational practices comply with applicable Medicaid regulations, CMS requirements, state NEMT program rules, broker contracts, and all other applicable regulatory and contractual obligations; (b) no AI Output constitutes a certified Medicaid claim, a guarantee of reimbursement, or a compliance determination; (c) billing errors, rejected claims, recoupment demands, compliance violations, or audit findings arising from your use of our NEMT Tools are solely your responsibility; (d) you will independently verify all billing outputs with a qualified Medicaid billing specialist before submission to any payer; (e) Streamline AI Consulting is not liable for any regulatory penalty, claim denial, recoupment demand, audit finding, exclusion, or compliance failure arising from your use of our NEMT Tools; and (f) you hold all required licenses, certifications, and authorizations to operate as an NEMT provider and to submit Medicaid claims.</p>
+    <div class="doc-h3">Financial &amp; Retail</div>
+    <p class="doc-p">Our retail intelligence, invoice analysis, margin tracking, and financial reporting Tools generate data summaries, estimates, and trend analyses for informational and operational purposes only. These outputs are not audited financial statements, certified accountant reports, tax advice, or opinions from a licensed CPA or financial advisor. You are solely responsible for independently verifying all financial data and for all business decisions, tax filings, and financial obligations arising from or related to your use of our outputs. Streamline AI Consulting is not liable for any financial loss, tax liability, IRS or state tax authority assessment, audit finding, or compliance issue arising from use of these Tools.</p>
+  </div>
+
+  <div class="doc-divider"></div>
+
+  <!-- 13 -->
+  <div class="doc-section" id="availability">
+    <div class="doc-h2">13. Availability, Downtime &amp; No SLA</div>
+    <div class="doc-h3">No uptime guarantee and no SLA</div>
+    <p class="doc-p">Streamline AI Consulting does not guarantee any specific level of Tool availability, uptime percentage, response time, or service continuity. We provide no Service Level Agreement (SLA) of any kind. Our Tools are provided on a best-effort basis. You acknowledge and unconditionally accept that interruptions, degradation, and periods of complete unavailability may occur at any time, for any duration, and for any reason.</p>
+    <div class="doc-h3">No liability for downtime of any duration</div>
+    <p class="doc-p">Streamline AI Consulting shall not be liable for any loss, damage, cost, expense, missed opportunity, lost profit, or business impact of any kind arising from Tool unavailability, outages, errors, slow performance, or degraded functionality &mdash; regardless of cause, duration, or frequency. This includes without limitation:</p>
+    <ul class="doc-ul">
+      <li>Planned or unplanned maintenance by Streamline AI Consulting</li>
+      <li>Outages, rate limits, or service changes by any Third-Party Service including Anthropic, Google, Notion, Bambi, or any other integrated service</li>
+      <li>Internet or telecommunications failures</li>
+      <li>Cyberattacks, unauthorized access, or data breaches affecting third-party infrastructure</li>
+      <li>Changes to third-party APIs, AI models, or terms of service that render our Tools non-functional</li>
+      <li>Data loss or corruption at any infrastructure level</li>
+      <li>Any other cause whether within or outside our reasonable control</li>
+    </ul>
+    <div class="doc-h3">Extended downtime &mdash; no automatic right to relief</div>
+    <p class="doc-p">Even in the event of extended or permanent Tool unavailability &mdash; for any reason &mdash; you have no automatic right to refunds, credits, service extensions, or termination without penalty. In the event of an outage of more than thirty (30) consecutive days caused solely by Streamline AI Consulting's own proprietary infrastructure (expressly and completely excluding all Third-Party Service dependencies, AI model changes, and API failures), you may submit a written request to pause retainer billing for the excess period only. Such requests are evaluated entirely at our sole discretion and create no obligation on our part. Denial of such a request is final and not subject to appeal or arbitration.</p>
+    <div class="doc-h3">No refunds for downtime</div>
+    <p class="doc-p">Tool unavailability of any duration and for any cause &mdash; including permanent discontinuation of a Third-Party Service powering your Tools &mdash; does not entitle you to a refund, partial refund, fee credit, service extension, damages, or any other compensation or remedy whatsoever. Your obligation to pay retainer fees continues uninterrupted regardless of Tool availability.</p>
+    <div class="doc-h3">Support response</div>
+    <p class="doc-p">We target a 24-hour email response time on business days (Monday through Friday, excluding U.S. federal holidays). This target is aspirational, not a guarantee, and does not create any contractual obligation. Failure to respond within this timeframe does not give rise to any claim, right of action, fee credit, or other remedy against Streamline AI Consulting.</p>
+    <div class="doc-h3">Scope of retainer updates</div>
+    <p class="doc-p">Workflow updates in retainer plans cover modifications to existing Tools only. New Tools, new integrations, or features outside the agreed scope require a separate written Scope Agreement and may involve additional fees. We retain sole discretion to determine what constitutes an in-scope versus out-of-scope request, and our determination is final.</p>
+  </div>
+
+  <div class="doc-divider"></div>
+
+  <!-- 14 -->
+  <div class="doc-section" id="thirdparty">
+    <div class="doc-h2">14. Third-Party Dependencies</div>
+    <p class="doc-p">Our Tools depend upon Third-Party Services. We have no control over Third-Party Services and are not responsible for their availability, accuracy, pricing, security, terms, or continued existence. Your use of our Tools constitutes your acknowledgment and acceptance of this dependency and all associated risks.</p>
+    <div class="doc-h3">Third-party outages and changes</div>
+    <p class="doc-p">If any Third-Party Service experiences an outage, rate limit, API change, pricing change, feature removal, terms of service change, security incident, or permanent discontinuation that affects your Tools, Streamline AI Consulting shall not be liable for any resulting unavailability, degraded performance, data loss, or loss of functionality &mdash; regardless of duration. We will make commercially reasonable efforts to implement workarounds or alternatives but cannot guarantee restoration within any timeframe or at all, and we have no obligation to replace a discontinued Third-Party Service with an equivalent.</p>
+    <div class="doc-h3">AI model changes and deprecation</div>
+    <p class="doc-p">The AI models powering our Tools may be updated, modified, repriced, rate-limited, or permanently deprecated by their providers at any time without notice to us. Such changes may materially alter or eliminate the functionality, accuracy, cost, or availability of your Tools. Streamline AI Consulting is not liable for any impact, including complete loss of Tool functionality, resulting from AI model changes or deprecation by third-party providers. If rebuilding is required, we will quote the work separately; you are not obligated to proceed, and we are not obligated to rebuild at our cost.</p>
+    <div class="doc-h3">Third-party terms compliance</div>
+    <p class="doc-p">Your use of our Tools is subject to the applicable terms and privacy policies of all Third-Party Services. We are not responsible for any violation by you of third-party terms, nor for any consequence to your account, data, or business resulting from a third-party provider's enforcement of their terms against you.</p>
+    <div class="doc-h3">No endorsement</div>
+    <p class="doc-p">Reference to any Third-Party Service in these Terms or our services does not constitute an endorsement, warranty, or guarantee of that service. We make no representations about the reliability, security, or continued availability of any Third-Party Service.</p>
+  </div>
+
+  <div class="doc-divider"></div>
+
+  <!-- 15 -->
+  <div class="doc-section" id="databreach">
+    <div class="doc-h2">15. Data Security &amp; Breach Notification</div>
+    <p class="doc-p">We implement industry-standard security practices including HTTPS encryption for data in transit, access controls, and secure credential management. However, no security system is impenetrable. We cannot and do not guarantee absolute security of any data transmitted over the internet or processed by Third-Party Services.</p>
+    <div class="doc-h3">Breach notification</div>
+    <p class="doc-p">In the event of a confirmed security breach affecting your personal data that triggers notification obligations under applicable law (including California Civil Code Section 1798.82 and the CCPA), we will notify you as required by law and, where practicable, within seventy-two (72) hours of our discovery of the confirmed breach. Notification will be made via email to the address associated with your account. We are not liable for any delay in notification caused by ongoing law enforcement investigations or other legally required delays.</p>
+    <div class="doc-h3">Your security obligations</div>
+    <p class="doc-p">You are responsible for maintaining the confidentiality of your login credentials and for all activity that occurs under your account, whether or not authorized by you. You must notify us immediately at <a href="mailto:hello@streamlinedai.net" class="doc-link">hello@streamlinedai.net</a> if you suspect unauthorized access. We are not liable for any loss or damage arising from unauthorized access resulting from your failure to maintain credential security, your sharing of credentials, or your failure to notify us promptly of suspected unauthorized access.</p>
+    <div class="doc-h3">Third-party breach limitation</div>
+    <p class="doc-p">Streamline AI Consulting is not liable for any security breach, data loss, or unauthorized access occurring within or through any Third-Party Service, regardless of the impact on your data or operations. Your remedies for such incidents are solely against the applicable Third-Party Service provider. Our total liability for any breach of our own security obligations is limited to the cap set forth in Section 18.</p>
+  </div>
+
+  <div class="doc-divider"></div>
+
+  <!-- 16 -->
+  <div class="doc-section" id="termination">
+    <div class="doc-h2">16. Termination &amp; Effect of Termination</div>
+    <div class="doc-h3">Termination by Client</div>
+    <p class="doc-p">You may cancel the monthly retainer by providing 30 days written notice via email to <a href="mailto:hello@streamlinedai.net" class="doc-link">hello@streamlinedai.net</a>. You retain access through the end of your current paid billing period only. No partial-month refunds are issued under any circumstances.</p>
+    <div class="doc-h3">Termination by Streamline AI Consulting for Cause</div>
+    <p class="doc-p">We may suspend or permanently terminate your access immediately and without prior notice, and without liability to you, if you: (a) fail to pay any amount due within 7 days of the due date; (b) breach any provision of these Terms, whether or not the breach is capable of cure; (c) use our Tools for any unlawful, harmful, or unauthorized purpose; (d) initiate a chargeback or payment reversal without prior good-faith written notice to us; (e) engage in conduct that could expose Streamline AI Consulting to legal liability, regulatory investigation, or reputational harm; (f) become insolvent, make a general assignment for the benefit of creditors, file for or have filed against you any bankruptcy or insolvency proceeding; or (g) violate Sections 8 or 9 of these Terms.</p>
+    <div class="doc-h3">Termination for Convenience</div>
+    <p class="doc-p">We may also terminate for any reason or no reason with 30 days written notice, in which case we will provide a pro-rated refund of prepaid retainer fees for the unused portion of the current billing period only. This is your sole remedy upon termination for convenience by us.</p>
+    <div class="doc-h3">Effect of Termination</div>
+    <p class="doc-p">Upon termination for any reason: (a) all licenses granted to you immediately and automatically terminate without further action; (b) your access to the client portal and all Tools will be disabled; (c) you must immediately and permanently cease all use of the Tools and any associated materials; (d) all outstanding fees become immediately due and payable; (e) each party must return or certifiably destroy the other's Confidential Information upon written request; and (f) any accrued payment obligations and all sections listed in Section 23 survive termination. Streamline AI Consulting reserves the right to disable, modify, repurpose, or permanently delete any Tool or system upon termination, with absolutely no obligation to provide code, prompts, configurations, training data, or any other technical or non-technical materials to the client.</p>
+    <div class="doc-h3">No liability upon termination</div>
+    <p class="doc-p">Termination of these Terms, whether by either party and for any reason, does not give rise to any liability on the part of Streamline AI Consulting to you, except as expressly provided in these Terms. You waive any claim for damages arising from termination of services in accordance with these Terms.</p>
+  </div>
+
+  <div class="doc-divider"></div>
+
+  <!-- 17 -->
+  <div class="doc-section" id="warranty">
+    <div class="doc-h2">17. Disclaimer of Warranties</div>
+    <p class="doc-p" style="text-transform:uppercase;font-size:13px;letter-spacing:0.3px;font-weight:600;color:rgba(255,255,255,0.75);line-height:1.9;">THE SERVICES, TOOLS, AND ALL WORK PRODUCT PROVIDED BY STREAMLINE AI CONSULTING ARE PROVIDED "AS IS" AND "AS AVAILABLE," WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED. TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, STREAMLINE AI CONSULTING EXPRESSLY DISCLAIMS ALL WARRANTIES, INCLUDING BUT NOT LIMITED TO IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, AND NON-INFRINGEMENT, AND ANY WARRANTIES ARISING FROM COURSE OF DEALING, COURSE OF PERFORMANCE, OR USAGE OF TRADE.</p>
+    <p class="doc-p" style="text-transform:uppercase;font-size:13px;letter-spacing:0.3px;font-weight:600;color:rgba(255,255,255,0.75);line-height:1.9;">STREAMLINE AI CONSULTING DOES NOT WARRANT THAT: (A) THE SERVICES WILL BE UNINTERRUPTED, ERROR-FREE, TIMELY, OR SECURE; (B) ANY AI OUTPUT WILL BE ACCURATE, COMPLETE, RELIABLE, CURRENT, OR SUITABLE FOR ANY PURPOSE; (C) ANY DEFECTS OR ERRORS WILL BE CORRECTED WITHIN ANY SPECIFIC TIMEFRAME OR AT ALL; (D) THE TOOLS WILL MEET YOUR BUSINESS REQUIREMENTS OR EXPECTATIONS; (E) ANY SPECIFIC BUSINESS OUTCOME, RESULT, REVENUE, TIME SAVING, OR REGULATORY APPROVAL WILL BE ACHIEVED; OR (F) THE TOOLS WILL FUNCTION CORRECTLY FOLLOWING CHANGES TO ANY THIRD-PARTY SERVICE, AI MODEL, OR INFRASTRUCTURE.</p>
+    <p class="doc-p" style="text-transform:uppercase;font-size:13px;letter-spacing:0.3px;font-weight:600;color:rgba(255,255,255,0.75);line-height:1.9;">NO ORAL OR WRITTEN ADVICE, STATEMENT, DEMONSTRATION, OR INFORMATION OBTAINED FROM STREAMLINE AI CONSULTING OR ITS REPRESENTATIVES SHALL CREATE ANY WARRANTY NOT EXPRESSLY STATED IN THESE TERMS. ANY RELIANCE ON SUCH STATEMENTS IS SOLELY AT YOUR OWN RISK.</p>
+    <p class="doc-p">Some jurisdictions do not permit exclusion of certain implied warranties. In such jurisdictions, our warranties are limited to the minimum warranty protections required by applicable law, and our liability for breach of any such required warranty is limited to the cap set forth in Section 18.</p>
+  </div>
+
+  <div class="doc-divider"></div>
+
+  <!-- 18 -->
+  <div class="doc-section" id="liability">
+    <div class="doc-h2">18. Limitation of Liability</div>
+    <p class="doc-p" style="text-transform:uppercase;font-size:13px;letter-spacing:0.3px;font-weight:600;color:rgba(255,255,255,0.75);line-height:1.9;">TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL STREAMLINE AI CONSULTING, ITS OWNER, EMPLOYEES, CONTRACTORS, OR AGENTS BE LIABLE TO YOU OR ANY THIRD PARTY FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, PUNITIVE, OR EXEMPLARY DAMAGES WHATSOEVER, INCLUDING WITHOUT LIMITATION: LOST PROFITS, LOST REVENUE, LOST BUSINESS OPPORTUNITIES, LOSS OF DATA, LOSS OF GOODWILL, BUSINESS INTERRUPTION, COST OF SUBSTITUTE SERVICES, PERSONAL INJURY, PROPERTY DAMAGE, OR ANY OTHER LOSS OF ANY KIND &mdash; EVEN IF STREAMLINE AI CONSULTING HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES, AND EVEN IF A LIMITED REMEDY FAILS OF ITS ESSENTIAL PURPOSE.</p>
+    <p class="doc-p" style="text-transform:uppercase;font-size:13px;letter-spacing:0.3px;font-weight:600;color:rgba(255,255,255,0.75);line-height:1.9;">THIS EXCLUSION APPLIES WITHOUT LIMITATION TO ALL CLAIMS ARISING FROM: (A) ERRORS, INACCURACIES, HALLUCINATIONS, OR OMISSIONS IN AI OUTPUTS; (B) DECISIONS OR ACTIONS TAKEN IN RELIANCE ON AI OUTPUTS; (C) TOOL UNAVAILABILITY, DOWNTIME, OR OUTAGES OF ANY DURATION OR CAUSE; (D) THIRD-PARTY SERVICE FAILURES, CHANGES, OR PERMANENT DISCONTINUATION; (E) AI MODEL UPDATES, REPRICING, MODIFICATION, OR DEPRECATION; (F) DATA LOSS OR CORRUPTION AT ANY LEVEL; (G) SECURITY BREACHES OR UNAUTHORIZED ACCESS; (H) TOOL MALFUNCTIONS, BUGS, OR FAILURE TO PERFORM AS EXPECTED OR AT ALL; (I) REGULATORY PENALTIES, CLAIM DENIALS, OR COMPLIANCE FAILURES; (J) REAL ESTATE INVESTMENT LOSSES; (K) MEDICAID RECOUPMENT OR AUDIT FINDINGS; OR (L) ANY OTHER CAUSE RELATED TO YOUR USE OF OR INABILITY TO USE OUR SERVICES.</p>
+    <p class="doc-p">Streamline AI Consulting's total cumulative liability to you for all claims arising from or related to these Terms &mdash; whether in contract, tort, strict liability, negligence, or any other theory &mdash; shall not exceed the lesser of: (a) the total retainer fees actually paid by you to Streamline AI Consulting in the three (3) calendar months immediately preceding the event giving rise to the claim; or (b) five hundred dollars ($500). Setup fees are excluded from this calculation.</p>
+    <p class="doc-p">The parties acknowledge and agree that: (a) this limitation of liability reflects a fully informed, reasonable, and negotiated allocation of risk between sophisticated parties; (b) it is a fundamental, material, and essential element of the basis of the bargain between the parties, without which Streamline AI Consulting would not have entered into these Terms or provided services; (c) Client had a full and equal opportunity to negotiate or reject this limitation and chose to proceed on these terms; (d) the fees charged by Streamline AI Consulting reflect and are conditioned upon this limitation; and (e) Client is in the best position to purchase insurance or otherwise protect itself against the risks for which liability is limited or excluded herein.</p>
+    <p class="doc-p">Some jurisdictions do not allow the exclusion or limitation of certain damages. To the extent such exclusions or limitations are not enforceable under applicable law, our liability is limited to the maximum extent permitted.</p>
+  </div>
+
+  <div class="doc-divider"></div>
+
+  <!-- 19 -->
+  <div class="doc-section" id="indemnification">
+    <div class="doc-h2">19. Indemnification</div>
+    <p class="doc-p">You agree to indemnify, defend, and hold harmless Streamline AI Consulting and its owner, employees, contractors, and agents (each an "Indemnified Party") from and against any and all third-party claims, demands, actions, damages, losses, liabilities, costs, and expenses (including reasonable attorneys' fees and court costs) arising out of or relating to:</p>
+    <ul class="doc-ul">
+      <li>Your use of our Tools or services in violation of these Terms or any applicable law or regulation</li>
+      <li>Any business decision, financial transaction, investment, or action you take based on any AI Output</li>
+      <li>Your breach of any representation, warranty, covenant, or obligation under these Terms</li>
+      <li>Any claim by a third party arising from your use of or reliance on our Tools or services</li>
+      <li>Your violation of any third party's intellectual property, privacy, or other rights</li>
+      <li>Unauthorized access to or use of our systems facilitated by your failure to maintain credential security</li>
+      <li>Any loss or harm suffered by your clients, customers, patients, or business partners arising from your use of our Tools</li>
+      <li>Your violation of any Third-Party Service's terms of service or applicable privacy law</li>
+      <li>Any Medicaid, CMS, state NEMT program, or other regulatory violation arising from your use of our NEMT billing Tools</li>
+      <li>Any real estate investment loss, lender claim, or related financial loss arising from reliance on our property analysis Tools</li>
+      <li>Any tax liability, IRS or state tax authority action, or financial penalty arising from your use of our financial or retail Tools</li>
+      <li>Any misrepresentation you make to a third party regarding the capabilities, certifications, or regulatory status of our Tools</li>
+    </ul>
+    <p class="doc-p">Your indemnification obligation covers each Indemnified Party's reasonable attorneys' fees and all direct, documented defense costs from the date a claim is first tendered. It shall not apply to claims arising solely and directly from Streamline AI Consulting's own gross negligence or willful misconduct, as finally determined by a court or arbitrator. We reserve the right to assume exclusive control of any indemnified matter at your expense, and you agree to cooperate fully and promptly with our defense. You shall not settle any indemnified claim in a manner that imposes any obligation on, or adversely affects the rights of, any Indemnified Party without our prior written consent.</p>
+  </div>
+
+  <div class="doc-divider"></div>
+
+  <!-- 20 -->
+  <div class="doc-section" id="nondisparage">
+    <div class="doc-h2">20. Non-Disparagement</div>
+    <p class="doc-p">During the term of your engagement and for twenty-four (24) months following termination for any reason, both parties agree not to make, publish, authorize, or encourage any statement &mdash; whether oral, written, or electronic, including on social media platforms, review sites, forums, industry groups, or in direct communications with third parties &mdash; that is false, misleading, defamatory, or disparaging of the other party's business, services, tools, products, reputation, employees, contractors, or owners.</p>
+    <p class="doc-p">If you have a concern, complaint, or dispute regarding our services, you agree to first raise it directly with us in writing at <a href="mailto:hello@streamlinedai.net" class="doc-link">hello@streamlinedai.net</a> and allow a minimum of 14 days for us to respond and attempt resolution before making any public statement about the matter. This obligation does not apply where the other party has materially breached these Terms and the statement is both truthful and limited to a factual description of the confirmed breach. This provision does not prohibit either party from: (a) making truthful statements compelled in legal proceedings or government investigations; (b) providing truthful information when required by applicable law; or (c) making confidential disclosures to their own legal counsel.</p>
+    <p class="doc-p">A violation of this Section shall constitute a material breach entitling the non-breaching party to seek immediate injunctive relief and monetary damages, including damages for reputational harm, without first exhausting arbitration and without bond.</p>
+  </div>
+
+  <div class="doc-divider"></div>
+
+  <!-- 21 -->
+  <div class="doc-section" id="force">
+    <div class="doc-h2">21. Force Majeure</div>
+    <p class="doc-p">Streamline AI Consulting shall not be liable for any delay or failure to perform our obligations to the extent caused by circumstances beyond our reasonable control, including but not limited to: acts of God, natural disasters, pandemics, government actions or regulations, changes to or discontinuation of any Third-Party Service or AI API (including any action by Anthropic, Google, Notion, Bambi, or any other provider), internet or telecommunications failures, power failures, cyberattacks, labor disputes, or other extraordinary events ("Force Majeure Event"). The occurrence of a Force Majeure Event does not constitute a breach of these Terms by Streamline AI Consulting.</p>
+    <p class="doc-p">Your obligation to pay retainer fees continues fully and unaffected during any Force Majeure Event, regardless of duration, as the inability to deliver services during such events does not constitute a failure of consideration or a breach on our part.</p>
+    <p class="doc-p">If a Force Majeure Event attributable solely to Streamline AI Consulting's own proprietary infrastructure &mdash; expressly and completely excluding all Third-Party Service dependencies, AI provider actions, API changes, and internet or telecommunications issues &mdash; continues for more than ninety (90) consecutive calendar days, either party may terminate the agreement by written notice, after which we will provide a pro-rated refund of prepaid but unearned retainer fees for the period beyond day ninety only. Third-party Force Majeure Events of any duration do not trigger any right to termination, refund, fee credit, or other relief. Termination under this Section does not affect any accrued payment obligations or the survival of sections listed in Section 23.</p>
+  </div>
+
+  <div class="doc-divider"></div>
+
+  <!-- 22 -->
+  <div class="doc-section" id="disputes">
+    <div class="doc-h2">22. Disputes, Arbitration &amp; Governing Law</div>
+    <div class="doc-h3">Governing Law</div>
+    <p class="doc-p">These Terms and all disputes arising from or related to them are governed exclusively by the laws of the State of California, without regard to conflict of law principles. The United Nations Convention on Contracts for the International Sale of Goods does not apply. The parties consent to exclusive jurisdiction and venue in Sacramento County, California for any matter that must be resolved in court (including injunctive relief proceedings).</p>
+    <div class="doc-h3">Informal Resolution Required</div>
+    <p class="doc-p">Before initiating any formal proceeding, the aggrieved party must deliver written notice specifically describing the dispute in reasonable detail and the relief sought, and allow 30 calendar days for good-faith negotiation. This informal resolution requirement does not apply to: (a) claims for injunctive or equitable relief to prevent irreparable harm; (b) disputes involving intellectual property; (c) violations of Sections 8, 9, or 20; or (d) collection of undisputed amounts due. Failure to satisfy this requirement before filing is grounds for immediate dismissal of the proceeding.</p>
+    <div class="doc-h3">Binding Arbitration</div>
+    <p class="doc-p">If informal resolution fails, any dispute, claim, or controversy arising out of or relating to these Terms &mdash; including questions about the validity, enforceability, or scope of this arbitration clause &mdash; shall be resolved exclusively through binding arbitration administered by the American Arbitration Association ("AAA") under its Commercial Arbitration Rules, conducted in Sacramento County, California before a single arbitrator. The arbitrator's decision is final, binding, and non-appealable except on grounds recognized by the Federal Arbitration Act, and may be entered as a judgment in any court of competent jurisdiction. The arbitrator may award only individual relief and may not consolidate claims.</p>
+    <div class="doc-h3">Arbitration Costs</div>
+    <p class="doc-p">Each party shall bear its own arbitration filing fees and costs unless the arbitrator determines that a claim was frivolous or brought in bad faith, in which case the arbitrator may require the filing party to bear all costs. For claims under $10,000, the party initiating arbitration shall advance the AAA filing fee, subject to reallocation by the arbitrator in the final award. The foregoing does not affect the attorneys' fees provision below.</p>
+    <div class="doc-h3">Statute of Limitations</div>
+    <p class="doc-p">Any claim arising out of or related to these Terms must be brought within one (1) year of the date the claimant knew or reasonably should have known of the facts giving rise to the claim, regardless of any longer period permitted by applicable law. All claims not brought within this period are permanently and irrevocably barred. The parties agree this shortened limitations period is a material term and reasonable given the nature of the services.</p>
+    <div class="doc-h3">Waiver of Class Action &amp; Jury Trial</div>
+    <p class="doc-p" style="font-weight:600;color:rgba(255,255,255,0.78);text-transform:uppercase;font-size:13px;letter-spacing:0.3px;line-height:1.9;">YOU EXPRESSLY AND IRREVOCABLY WAIVE ANY RIGHT TO PARTICIPATE IN A CLASS ACTION LAWSUIT, CLASS-WIDE ARBITRATION, PRIVATE ATTORNEY GENERAL ACTION, OR ANY OTHER REPRESENTATIVE PROCEEDING. ALL CLAIMS MUST BE BROUGHT IN YOUR INDIVIDUAL CAPACITY ONLY. NO ARBITRATION OR PROCEEDING SHALL BE JOINED OR CONSOLIDATED WITH ANOTHER WITHOUT THE PRIOR WRITTEN CONSENT OF ALL PARTIES. YOU FURTHER WAIVE ANY RIGHT TO A TRIAL BY JURY FOR ANY CLAIM ARISING UNDER OR RELATED TO THESE TERMS.</p>
+    <div class="doc-h3">Attorneys' Fees</div>
+    <p class="doc-p">The prevailing party in any dispute, arbitration, or legal proceeding arising from these Terms shall be entitled to recover its reasonable attorneys' fees, arbitration costs, expert fees, and all other legal expenses from the non-prevailing party. A party that prevails on some but not all claims may be awarded partial fees at the arbitrator's or court's discretion.</p>
+    <div class="doc-h3">Injunctive Relief</div>
+    <p class="doc-p">Notwithstanding the arbitration requirement, either party may seek emergency or preliminary injunctive relief from a court of competent jurisdiction in Sacramento County, California, without bond, without prior notice to the other party, and without first exhausting the informal resolution process or arbitration, to prevent irreparable harm. This right applies particularly to: intellectual property infringement; violations of Sections 8 or 9; non-disparagement violations under Section 20; and confidentiality breaches under Section 7. Seeking injunctive relief does not waive the right to arbitrate the underlying dispute.</p>
+  </div>
+
+  <div class="doc-divider"></div>
+
+  <!-- 23 -->
+  <div class="doc-section" id="general">
+    <div class="doc-h2">23. General Provisions</div>
+    <div class="doc-h3">Entire Agreement</div>
+    <p class="doc-p">These Terms, together with any applicable Scope Agreement, constitute the entire agreement between the parties with respect to the subject matter herein, and supersede all prior and contemporaneous negotiations, representations, warranties, agreements, and understandings &mdash; whether written or oral &mdash; between the parties. No verbal statements, email discussions outside of a formal Scope Agreement, demonstrations, or promises made by any representative of Streamline AI Consulting shall modify these Terms or create any additional obligation, unless reduced to a signed written amendment executed by authorized representatives of both parties.</p>
+    <div class="doc-h3">Amendment</div>
+    <p class="doc-p">Except for updates made pursuant to Section 24 (Changes to These Terms), no amendment or modification of these Terms shall be effective unless it is in writing and signed by authorized representatives of both parties. No course of dealing, course of performance, or trade usage shall be construed to modify these Terms.</p>
+    <div class="doc-h3">Severability</div>
+    <p class="doc-p">If any provision of these Terms is found unenforceable, invalid, or contrary to applicable law by a court or arbitrator, that provision shall be modified to the minimum extent necessary to make it enforceable, or severed entirely if modification is not possible. The remaining provisions continue in full force and effect without interruption. The invalidity of one provision shall not affect the validity of any other provision.</p>
+    <div class="doc-h3">No Waiver</div>
+    <p class="doc-p">Our failure or delay in exercising any right or remedy at any time does not constitute a waiver of that right or remedy, nor does it preclude us from exercising it at any later time. Any waiver of a breach does not constitute a waiver of any subsequent breach of the same or any other provision. All waivers must be express and in writing, signed by an authorized representative of Streamline AI Consulting.</p>
+    <div class="doc-h3">Assignment</div>
+    <p class="doc-p">You may not assign, delegate, transfer, or otherwise dispose of your rights or obligations under these Terms, in whole or in part, by operation of law or otherwise, without our prior written consent in each instance. Any purported assignment without consent is void and of no legal effect. We may freely assign our rights and obligations under these Terms without your consent, including in connection with a merger, acquisition, corporate reorganization, or sale of all or substantially all of our assets.</p>
+    <div class="doc-h3">Notices</div>
+    <p class="doc-p">All legal notices required or permitted under these Terms must be in writing and delivered via email to <a href="mailto:hello@streamlinedai.net" class="doc-link">hello@streamlinedai.net</a> (for notices to Streamline AI Consulting) or to the email address associated with your account (for notices to you). Notices are deemed received when transmitted, provided no automated delivery failure notification is received within 24 hours. Either party may update its notice address by providing written notice in accordance with this Section.</p>
+    <div class="doc-h3">Independent Contractor</div>
+    <p class="doc-p">Streamline AI Consulting is and shall at all times be an independent contractor. Nothing in these Terms creates or shall be construed to create any employment, partnership, joint venture, franchise, or agency relationship between the parties. Neither party has authority to enter into any agreement, incur any obligation, or make any representation on behalf of the other party.</p>
+    <div class="doc-h3">Insurance</div>
+    <p class="doc-p">Client is solely responsible for obtaining and maintaining any insurance coverage it deems appropriate for its business operations, including coverage for any losses that might arise from Client's use of or reliance on our Tools or AI Outputs. Streamline AI Consulting makes no representation that our services include or substitute for any form of professional liability, errors and omissions, or other insurance coverage for Client's benefit.</p>
+    <div class="doc-h3">No Third-Party Beneficiaries</div>
+    <p class="doc-p">These Terms are for the sole benefit of the parties and their respective permitted successors and assigns. Nothing in these Terms, express or implied, is intended to or shall confer any rights, benefits, or remedies upon any other person or entity.</p>
+    <div class="doc-h3">Cumulative Remedies</div>
+    <p class="doc-p">Except as expressly provided in these Terms, all rights and remedies of Streamline AI Consulting under these Terms are cumulative and not exclusive of any other rights or remedies that may be available at law or in equity.</p>
+    <div class="doc-h3">Surviving Sections</div>
+    <p class="doc-p">The following Sections survive termination or expiration of these Terms for any reason and shall remain in full force and effect indefinitely: 2 (Definitions), 4 (Payment, to the extent of accrued obligations), 6 (Intellectual Property), 7 (Mutual Confidentiality), 8 (Restrictions on Use), 9 (Non-Circumvention), 11 (AI Output Disclaimer), 12 (Industry-Specific Disclaimers), 14 (Third-Party Dependencies), 17 (Disclaimer of Warranties), 18 (Limitation of Liability), 19 (Indemnification), 20 (Non-Disparagement), 22 (Disputes), and 23 (General Provisions).</p>
+    <div class="doc-h3">Headings</div>
+    <p class="doc-p">Section headings and the table of contents are for organizational convenience only and have no legal effect on the interpretation of these Terms.</p>
+    <div class="doc-h3">Counterparts &amp; Electronic Execution</div>
+    <p class="doc-p">These Terms and any Scope Agreement may be accepted electronically, and electronic records of acceptance shall be given the same legal effect as original signatures. Electronic acceptance records maintained by Streamline AI Consulting shall constitute prima facie evidence of agreement.</p>
+  </div>
+
+  <div class="doc-divider"></div>
+
+  <!-- 24 -->
+  <div class="doc-section" id="changes">
+    <div class="doc-h2">24. Changes to These Terms</div>
+    <p class="doc-p">We reserve the right to update or modify these Terms at any time. We will notify active clients of material changes via email at least 14 days before they take effect. We reserve the right to make non-material changes (including clarifications, formatting updates, and additions that expand rather than restrict your rights) at any time without prior notice.</p>
+    <p class="doc-p">Continued use of our services after the effective date of any updated Terms constitutes your irrevocable acceptance of the changes. If you do not agree to updated Terms, your sole remedy is to notify us in writing and discontinue use of our services before the effective date. We are not liable for any consequences arising from your failure to review updated Terms.</p>
+    <p class="doc-p">We maintain a record of prior versions of these Terms. You may request a prior version by contacting us at <a href="mailto:hello@streamlinedai.net" class="doc-link">hello@streamlinedai.net</a>.</p>
+  </div>
+
+  <div class="doc-divider"></div>
+
+  <!-- 25 -->
+  <div class="doc-section" id="contact-tos">
+    <div class="doc-h2">25. Contact</div>
+    <p class="doc-p">For questions or concerns regarding these Terms:</p>
+    <ul class="doc-ul">
+      <li>Email: <a href="mailto:hello@streamlinedai.net" class="doc-link">hello@streamlinedai.net</a></li>
+      <li>Website: <a href="https://streamlinedai.net" class="doc-link">streamlinedai.net</a></li>
+      <li>Business: Streamline AI Consulting</li>
+      <li>Location: Sacramento, CA</li>
+    </ul>
+    <p class="doc-p" style="margin-top:20px;font-size:12px;color:var(--faint);">This Terms of Service is provided for informational purposes only. Streamline AI Consulting strongly recommends that all clients retain independent legal counsel before entering any service agreement. These Terms do not constitute legal advice.</p>
+  </div>
+
+</div>
+<footer>
+  <div class="footer-logo">Streamline<span> AI</span></div>
+  <div class="footer-links">
+    <a href="https://streamlinedai.net/terms" class="footer-link">Terms</a>
+    <a href="https://streamlinedai.net/privacy" class="footer-link">Privacy</a>
+    <a href="https://streamlinedai.net/faq" class="footer-link">FAQ</a>
+    <a href="mailto:hello@streamlinedai.net" class="footer-link">Contact</a>
+  </div>
+  <div class="footer-copy">&copy; 2026 Streamline AI Consulting &middot; Sacramento, CA &middot; streamlinedai.net</div>
+</footer>
+</body>
+</html>
