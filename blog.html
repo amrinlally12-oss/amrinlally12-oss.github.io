@@ -4,6 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Blog — Streamline AI Consulting</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <meta name="description" content="Practical guides on AI automation for small business owners. Real estate, NEMT, retail, and more."/>
 <meta property="og:title" content="Blog — Streamline AI Consulting"/>
 <meta property="og:description" content="Practical guides on AI automation for small business owners."/>
@@ -21,6 +22,7 @@
   --white:#ffffff;--dim:rgba(255,255,255,0.55);--faint:rgba(255,255,255,0.22);
   --orb1:#1a3a6e;--orb2:#6e1a4a;--orb3:#1a6e5a;--orb4:#4a1a6e;
   --green:#8fda3a;--r:16px;
+  --amber:#f0b840;--amber-bg:rgba(240,184,64,0.12);--amber-b:rgba(240,184,64,0.3);
 }
 html{scroll-behavior:smooth;overflow-x:hidden;scroll-padding-top:72px;}
 body{font-family:'Figtree',sans-serif;background:var(--bg);color:var(--white);min-height:100vh;overflow-x:hidden;}
@@ -139,6 +141,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:58px;d
 /* COMING SOON CARD */
 .post-card-soon{opacity:0.45;pointer-events:none;}
 .soon-badge{position:absolute;top:12px;right:12px;background:rgba(255,255,255,0.06);border:1px solid var(--glass-border);font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--faint);padding:3px 8px;border-radius:4px;}
+.coming-soon-badge{display:inline-block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--amber);background:var(--amber-bg);border:1px solid var(--amber-b);padding:3px 10px;border-radius:6px;}
 
 /* CTA STRIP */
 .blog-cta{
@@ -231,7 +234,7 @@ footer{position:relative;z-index:2;border-top:1px solid var(--glass-border);padd
   </div>
 
   <!-- Featured Post -->
-  <a href="/blog/how-we-automated-nemt-billing" class="featured-post reveal" data-category="nemt">
+  <div class="featured-post reveal" data-category="nemt" style="cursor:default;">
     <div class="fp-content">
       <div>
         <div class="fp-tag">&#9679; Featured &nbsp;&middot;&nbsp; NEMT</div>
@@ -244,17 +247,18 @@ footer{position:relative;z-index:2;border-top:1px solid var(--glass-border);padd
         <span>8 min read</span>
         <span class="fp-meta-dot"></span>
         <span>Jan 2026</span>
-        <span class="fp-badge" style="margin-left:auto;">Case Study</span>
+        <span class="coming-soon-badge" style="margin-left:auto;">Coming Soon</span>
       </div>
     </div>
     <div class="fp-visual">&#128652;</div>
-  </a>
+  </div>
 
   <!-- Post Grid -->
   <div class="posts-grid" id="postsGrid">
 
     <!-- Real Estate -->
-    <a href="/blog/flip-analyzer-how-it-works" class="post-card reveal" data-category="real-estate">
+    <div class="post-card reveal" data-category="real-estate" style="cursor:default;">
+      <span class="coming-soon-badge" style="position:absolute;top:12px;right:12px;">Coming Soon</span>
       <div class="pc-thumb pc-thumb-re">&#127968;</div>
       <div class="pc-body">
         <div class="pc-tag pc-tag-re">Real Estate</div>
@@ -262,12 +266,13 @@ footer{position:relative;z-index:2;border-top:1px solid var(--glass-border);padd
         <p class="pc-excerpt">A behind-the-scenes look at how our real estate tool pulls live comps, assesses photos, checks public records, and builds a full Excel analysis automatically.</p>
         <div class="pc-meta">
           <span>6 min read</span>
-          <span class="pc-read">Read <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H4M8 2v4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span>
+          <span class="coming-soon-badge" style="margin-left:auto;">Coming Soon</span>
         </div>
       </div>
-    </a>
+    </div>
 
-    <a href="/blog/pre-foreclosure-title-checklist" class="post-card reveal" data-category="real-estate">
+    <div class="post-card reveal" data-category="real-estate" style="cursor:default;">
+      <span class="coming-soon-badge" style="position:absolute;top:12px;right:12px;">Coming Soon</span>
       <div class="pc-thumb pc-thumb-re">&#128196;</div>
       <div class="pc-body">
         <div class="pc-tag pc-tag-re">Real Estate</div>
@@ -275,12 +280,13 @@ footer{position:relative;z-index:2;border-top:1px solid var(--glass-border);padd
         <p class="pc-excerpt">Lis pendens, corporate ownership, unresolved encumbrances &mdash; we ran into all of these on a San Jose deal. Here&rsquo;s the checklist we use before every offer.</p>
         <div class="pc-meta">
           <span>5 min read</span>
-          <span class="pc-read">Read <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H4M8 2v4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span>
+          <span class="coming-soon-badge" style="margin-left:auto;">Coming Soon</span>
         </div>
       </div>
-    </a>
+    </div>
 
-    <a href="/blog/arv-estimation-mistakes" class="post-card reveal" data-category="real-estate">
+    <div class="post-card reveal" data-category="real-estate" style="cursor:default;">
+      <span class="coming-soon-badge" style="position:absolute;top:12px;right:12px;">Coming Soon</span>
       <div class="pc-thumb pc-thumb-re">&#128200;</div>
       <div class="pc-body">
         <div class="pc-tag pc-tag-re">Real Estate</div>
@@ -288,13 +294,14 @@ footer{position:relative;z-index:2;border-top:1px solid var(--glass-border);padd
         <p class="pc-excerpt">Most flip losses happen before the first nail goes in. Bad comps, wrong sq ft adjustments, and ignoring days-on-market are the biggest culprits.</p>
         <div class="pc-meta">
           <span>7 min read</span>
-          <span class="pc-read">Read <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H4M8 2v4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span>
+          <span class="coming-soon-badge" style="margin-left:auto;">Coming Soon</span>
         </div>
       </div>
-    </a>
+    </div>
 
     <!-- NEMT -->
-    <a href="/blog/medicaid-nemt-compliance-guide" class="post-card reveal" data-category="nemt">
+    <div class="post-card reveal" data-category="nemt" style="cursor:default;">
+      <span class="coming-soon-badge" style="position:absolute;top:12px;right:12px;">Coming Soon</span>
       <div class="pc-thumb pc-thumb-nemt">&#9877;&#65039;</div>
       <div class="pc-body">
         <div class="pc-tag pc-tag-nemt">NEMT</div>
@@ -302,12 +309,13 @@ footer{position:relative;z-index:2;border-top:1px solid var(--glass-border);padd
         <p class="pc-excerpt">Medicaid audits are up. Documentation requirements changed. Here&rsquo;s what your trips, billing records, and driver files need to have to stay clean.</p>
         <div class="pc-meta">
           <span>9 min read</span>
-          <span class="pc-read">Read <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H4M8 2v4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span>
+          <span class="coming-soon-badge" style="margin-left:auto;">Coming Soon</span>
         </div>
       </div>
-    </a>
+    </div>
 
-    <a href="/blog/nemt-invoice-automation" class="post-card reveal" data-category="nemt">
+    <div class="post-card reveal" data-category="nemt" style="cursor:default;">
+      <span class="coming-soon-badge" style="position:absolute;top:12px;right:12px;">Coming Soon</span>
       <div class="pc-thumb pc-thumb-nemt">&#128203;</div>
       <div class="pc-body">
         <div class="pc-tag pc-tag-nemt">NEMT</div>
@@ -315,13 +323,14 @@ footer{position:relative;z-index:2;border-top:1px solid var(--glass-border);padd
         <p class="pc-excerpt">If you&rsquo;re manually building invoices from your Bambi export, you&rsquo;re leaving time and accuracy on the table. Here&rsquo;s the workflow we built to fix it.</p>
         <div class="pc-meta">
           <span>6 min read</span>
-          <span class="pc-read">Read <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H4M8 2v4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span>
+          <span class="coming-soon-badge" style="margin-left:auto;">Coming Soon</span>
         </div>
       </div>
-    </a>
+    </div>
 
     <!-- Retail -->
-    <a href="/blog/gas-station-margin-optimization" class="post-card reveal" data-category="retail">
+    <div class="post-card reveal" data-category="retail" style="cursor:default;">
+      <span class="coming-soon-badge" style="position:absolute;top:12px;right:12px;">Coming Soon</span>
       <div class="pc-thumb pc-thumb-retail">&#9981;&#65039;</div>
       <div class="pc-body">
         <div class="pc-tag pc-tag-retail">Retail</div>
@@ -329,13 +338,14 @@ footer{position:relative;z-index:2;border-top:1px solid var(--glass-border);padd
         <p class="pc-excerpt">Harbor Wholesale price creep, DSD vendor inconsistencies, and tobacco margin compression &mdash; we tracked it all and found the leaks automatically.</p>
         <div class="pc-meta">
           <span>7 min read</span>
-          <span class="pc-read">Read <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H4M8 2v4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span>
+          <span class="coming-soon-badge" style="margin-left:auto;">Coming Soon</span>
         </div>
       </div>
-    </a>
+    </div>
 
     <!-- AI & Automation -->
-    <a href="/blog/morning-briefing-system" class="post-card reveal" data-category="ai">
+    <div class="post-card reveal" data-category="ai" style="cursor:default;">
+      <span class="coming-soon-badge" style="position:absolute;top:12px;right:12px;">Coming Soon</span>
       <div class="pc-thumb pc-thumb-ai">&#127775;</div>
       <div class="pc-body">
         <div class="pc-tag pc-tag-ai">AI &amp; Automation</div>
@@ -343,12 +353,13 @@ footer{position:relative;z-index:2;border-top:1px solid var(--glass-border);padd
         <p class="pc-excerpt">Calendar, email, tasks, and open invoices &mdash; every morning before 7am, everything that matters is waiting. Here&rsquo;s how the system works and what it pulls from.</p>
         <div class="pc-meta">
           <span>8 min read</span>
-          <span class="pc-read">Read <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H4M8 2v4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span>
+          <span class="coming-soon-badge" style="margin-left:auto;">Coming Soon</span>
         </div>
       </div>
-    </a>
+    </div>
 
-    <a href="/blog/ai-for-small-business-getting-started" class="post-card reveal" data-category="ai">
+    <div class="post-card reveal" data-category="ai" style="cursor:default;">
+      <span class="coming-soon-badge" style="position:absolute;top:12px;right:12px;">Coming Soon</span>
       <div class="pc-thumb pc-thumb-ai">&#129302;</div>
       <div class="pc-body">
         <div class="pc-tag pc-tag-ai">AI &amp; Automation</div>
@@ -356,13 +367,14 @@ footer{position:relative;z-index:2;border-top:1px solid var(--glass-border);padd
         <p class="pc-excerpt">No code, no technical background required. If you have a repetitive process that eats time, there&rsquo;s probably an AI solution. Here&rsquo;s how to think about it.</p>
         <div class="pc-meta">
           <span>5 min read</span>
-          <span class="pc-read">Read <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H4M8 2v4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span>
+          <span class="coming-soon-badge" style="margin-left:auto;">Coming Soon</span>
         </div>
       </div>
-    </a>
+    </div>
 
     <!-- Operations -->
-    <a href="/blog/contractor-expense-tracking" class="post-card reveal" data-category="ops">
+    <div class="post-card reveal" data-category="ops" style="cursor:default;">
+      <span class="coming-soon-badge" style="position:absolute;top:12px;right:12px;">Coming Soon</span>
       <div class="pc-thumb pc-thumb-ops">&#127959;&#65039;</div>
       <div class="pc-body">
         <div class="pc-tag pc-tag-ops">Operations</div>
@@ -370,10 +382,10 @@ footer{position:relative;z-index:2;border-top:1px solid var(--glass-border);padd
         <p class="pc-excerpt">Chasing receipts from three contractors across email, text, and paper &mdash; then manually reconciling against bank statements. We built the tool that fixes this.</p>
         <div class="pc-meta">
           <span>6 min read</span>
-          <span class="pc-read">Read <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H4M8 2v4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span>
+          <span class="coming-soon-badge" style="margin-left:auto;">Coming Soon</span>
         </div>
       </div>
-    </a>
+    </div>
 
     <!-- Coming soon placeholders -->
     <div class="post-card post-card-soon">

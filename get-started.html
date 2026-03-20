@@ -4,6 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Get Started — Streamline AI</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <meta name="description" content="Tell us about your business. We'll build you a custom AI system that saves hours every week."/>
 <link rel="canonical" href="https://streamlinedai.net/get-started"/>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Figtree:wght@300;400;500;600&display=swap" rel="stylesheet"/>
@@ -443,10 +444,13 @@ nav{
     </div>
     Streamline<span>AI</span>
   </a>
-  <a href="/" class="nav-back">
-    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 11L5 7l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    Back to site
-  </a>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <a href="/blog.html" class="nav-back">Blog</a>
+    <a href="/" class="nav-back">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 11L5 7l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Back to site
+    </a>
+  </div>
 </nav>
 
 <!-- MAIN -->
@@ -927,6 +931,27 @@ function submitForm() {
     'email-automation':'Email Automation','custom':'Custom Build'
   };
   var svcList = Array.from(selectedServices).map(function(s) { return svcLabels[s] || s; }).join(', ');
+
+  var timeline = document.getElementById('timeline').value;
+  var notes = document.getElementById('extraNotes').value.trim();
+
+  // Send form data to FormSubmit.co (fire-and-forget)
+  var formData = new FormData();
+  formData.append('First Name', fn);
+  formData.append('Last Name', ln);
+  formData.append('Email', em);
+  formData.append('Phone', ph);
+  formData.append('Businesses', bizNames.join(', '));
+  formData.append('Services', svcList);
+  formData.append('Timeline', timeline || 'Not specified');
+  formData.append('Notes', notes || 'None');
+  formData.append('_subject', 'New Lead from Streamline AI Website');
+  formData.append('_captcha', 'false');
+
+  fetch('https://formsubmit.co/ajax/hello@streamlinedai.net', {
+    method: 'POST',
+    body: formData
+  }).catch(function(){});
 
   // Populate success screen
   document.getElementById('successName').textContent = fn;

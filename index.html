@@ -4,6 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Streamline AI — AI That Works For Your Business</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <meta name="description" content="Streamline AI builds custom AI systems for NorCal small businesses — NEMT, real estate, retail. Starting at $500/month."/>
 <meta property="og:title" content="Streamline AI — AI That Works For Your Business"/>
 <meta property="og:description" content="Custom AI tools built for your business. Real estate analysis, NEMT operations, retail intelligence."/>
@@ -683,6 +684,7 @@ footer{
     <a href="#services" class="nav-link" onclick="closeMobileNav()">Services</a>
     <a href="#how" class="nav-link" onclick="closeMobileNav()">How It Works</a>
     <a href="#pricing" class="nav-link" onclick="closeMobileNav()">Pricing</a>
+    <a href="/blog.html" class="nav-link" onclick="closeMobileNav()">Blog</a>
     <a href="#" class="nav-cta" onclick="openLogin(event);closeMobileNav();">Client Login →</a>
   </div>
 </nav>
@@ -1158,16 +1160,18 @@ function doLogin() {
   if (config) {
     // Known client — accept any password for demo mode
     currentUser = { email, config };
+    sessionStorage.setItem('sl_user', JSON.stringify({name: config.name, email: email, biz: config.plan || ''}));
     closeLogin();
-    showDashboard(config);
+    window.location.href = '/dashboard.html';
   } else if (email.includes("@") && pass.length >= 3) {
     // Unknown client — show generic starter dashboard
     const genericName = email.split("@")[0];
     const name = genericName.charAt(0).toUpperCase() + genericName.slice(1);
     const genericConfig = buildGenericConfig(name);
     currentUser = { email, config: genericConfig };
+    sessionStorage.setItem('sl_user', JSON.stringify({name: genericConfig.name, email: email, biz: genericConfig.plan || ''}));
     closeLogin();
-    showDashboard(genericConfig);
+    window.location.href = '/dashboard.html';
   } else {
     showLoginError();
   }
@@ -1278,9 +1282,22 @@ function showLanding() {
 
 function doLogout() { showLanding(); }
 
-function comingSoon(name) {
-  alert(`${name} — coming soon!`);
+function showToast(msg) {
+  var t = document.createElement('div');
+  t.textContent = msg;
+  Object.assign(t.style, {position:'fixed',bottom:'32px',left:'50%',transform:'translateX(-50%)',background:'rgba(201,151,58,0.95)',color:'#fff',padding:'12px 28px',borderRadius:'10px',fontSize:'15px',fontFamily:'Figtree,sans-serif',zIndex:'99999',opacity:'0',transition:'opacity 0.3s'});
+  document.body.appendChild(t);
+  requestAnimationFrame(function(){t.style.opacity='1';});
+  setTimeout(function(){t.style.opacity='0';setTimeout(function(){t.remove();},300);},2500);
 }
+
+function comingSoon(name) {
+  showToast(name + ' is coming soon!');
+}
+
+// ── Hash listener for #login ──
+if (location.hash === '#login') openLogin();
+window.addEventListener('hashchange', function() { if (location.hash === '#login') openLogin(); });
 
 </script>
 
