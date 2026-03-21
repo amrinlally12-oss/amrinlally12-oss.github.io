@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Transaction Reconciler — Streamline AI</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Figtree:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+/* ── RESET & VARS ─────────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#04070f;
+  --glass-bg:rgba(255,255,255,0.04);
+  --glass-border:rgba(255,255,255,0.10);
+  --glass-highlight:rgba(255,255,255,0.08);
+  --gold:#C9973A;--gold-l:#E8C97A;--gold-d:#8a6522;
+  --white:#ffffff;--dim:rgba(255,255,255,0.55);--faint:rgba(255,255,255,0.22);
+  --orb1:#1a3a6e;--orb2:#6e1a4a;--orb3:#1a6e5a;--orb4:#4a1a6e;
+  --green:#8fda3a;--green-bg:rgba(99,153,34,0.15);--green-b:rgba(99,153,34,0.3);
+  --red:#f07a5a;--red-bg:rgba(226,75,74,0.12);--red-b:rgba(226,75,74,0.3);
+  --amber:#f0b840;--amber-bg:rgba(240,184,64,0.12);--amber-b:rgba(240,184,64,0.3);
+  --blue:#5ab4f0;--blue-bg:rgba(90,180,240,0.12);
+  --r:16px;
+}
+html{scroll-behavior:smooth;overflow-x:hidden;}
+body{
+  font-family:'Figtree',sans-serif;
+  background:var(--bg);
+  color:var(--white);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+::selection{background:rgba(201,151,58,0.3);}
+::-webkit-scrollbar{width:8px;height:8px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:rgba(201,151,58,0.3);border-radius:99px;border:2px solid transparent;background-clip:padding-box;}
+::-webkit-scrollbar-thumb:hover{background:rgba(201,151,58,0.5);border:2px solid transparent;background-clip:padding-box;}
+
+/* ── BACKGROUND ──────────────────────────────────────────────── */
+.bg-canvas{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;}
+.orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.3;animation:orbFloat 20s infinite ease-in-out;}
+.orb1{width:600px;height:600px;background:var(--orb1);top:-100px;left:-150px;animation-delay:0s;}
+.orb2{width:500px;height:500px;background:var(--orb2);top:30%;right:-100px;animation-delay:-7s;}
+.orb3{width:400px;height:400px;background:var(--orb3);bottom:-50px;left:20%;animation-delay:-13s;}
+.orb4{width:350px;height:350px;background:var(--orb4);top:60%;left:55%;animation-delay:-4s;}
+@keyframes orbFloat{
+  0%,100%{transform:translate(0,0) scale(1);}
+  25%{transform:translate(40px,-60px) scale(1.08);}
+  50%{transform:translate(-30px,40px) scale(0.95);}
+  75%{transform:translate(60px,20px) scale(1.05);}
+}
+.noise{
+  position:fixed;inset:0;z-index:1;opacity:0.025;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:200px 200px;
+}
+
+/* ── NAV ─────────────────────────────────────────────────────── */
+nav{
+  position:sticky;top:0;z-index:100;
+  padding:0 40px;height:58px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(4,7,15,0.6);
+  backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);
+  border-bottom:1px solid rgba(201,151,58,0.3);
+}
+.nav-logo{
+  display:flex;align-items:center;gap:10px;
+  font-family:'Syne',sans-serif;font-weight:800;font-size:17px;
+  text-decoration:none;color:var(--white);letter-spacing:-0.3px;
+}
+.nav-logo span{color:var(--gold);}
+.nav-logo-mark{
+  width:34px;height:34px;border-radius:8px;
+  background:linear-gradient(135deg,rgba(201,151,58,0.2),rgba(201,151,58,0.05));
+  border:1px solid rgba(201,151,58,0.3);
+  display:flex;align-items:center;justify-content:center;
+}
+.nav-links{display:flex;align-items:center;gap:8px;}
+.nav-link{
+  font-size:13px;font-weight:500;color:var(--dim);
+  text-decoration:none;padding:7px 14px;border-radius:8px;
+  transition:all 0.2s;
+}
+.nav-link:hover{color:var(--white);background:var(--glass-highlight);}
+.nav-right{display:flex;align-items:center;gap:12px;}
+.nav-user{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--dim);}
+.nav-avatar{
+  width:34px;height:34px;border-radius:50%;
+  background:linear-gradient(135deg,var(--gold),var(--gold-l));
+  color:var(--bg);font-family:'Syne',sans-serif;font-weight:800;font-size:12px;
+  display:flex;align-items:center;justify-content:center;
+  letter-spacing:0.5px;cursor:default;
+}
+.nav-logout{
+  font-family:'Syne',sans-serif;font-size:12px;font-weight:600;
+  color:var(--faint);background:var(--glass-bg);
+  padding:7px 14px;border-radius:8px;border:1px solid var(--glass-border);
+  cursor:pointer;transition:all 0.2s;
+}
+.nav-logout:hover{color:var(--white);border-color:rgba(255,255,255,0.2);}
+
+/* ── MOBILE NAV ──────────────────────────────────────────────── */
+.nav-toggle{
+  display:none;
+  background:none;border:none;cursor:pointer;
+  width:36px;height:36px;
+  flex-direction:column;align-items:center;justify-content:center;gap:5px;
+  padding:0;z-index:110;
+}
+.nav-toggle span{
+  display:block;width:22px;height:2px;background:var(--white);
+  border-radius:2px;transition:all 0.3s;
+}
+.nav-toggle.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px);}
+.nav-toggle.open span:nth-child(2){opacity:0;}
+.nav-toggle.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px);}
+
+@media(max-width:768px){
+  nav{padding:0 20px;}
+  .nav-toggle{display:flex;}
+  .nav-links{
+    position:fixed;top:0;left:0;width:100%;height:100vh;
+    flex-direction:column;align-items:center;justify-content:center;gap:28px;
+    background:rgba(4,7,15,0.97);
+    backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);
+    z-index:105;opacity:0;pointer-events:none;
+    transition:opacity 0.3s ease;
+  }
+  .nav-links.open{opacity:1;pointer-events:auto;}
+  .nav-links .nav-link{font-size:20px;padding:14px 28px;color:var(--white);}
+  .nav-right{display:none;}
+}
+
+/* ── LAYOUT ──────────────────────────────────────────────────── */
+.page-wrap{
+  position:relative;z-index:2;
+  max-width:1080px;margin:0 auto;
+  padding:48px 32px 60px;
+}
+
+/* ── HEADER ──────────────────────────────────────────────────── */
+.tool-header{
+  text-align:center;margin-bottom:40px;
+  animation:fadeUp 0.5s ease both;
+}
+.tool-header h1{
+  font-family:'Syne',sans-serif;font-size:32px;font-weight:800;
+  letter-spacing:-0.5px;margin-bottom:8px;
+}
+.tool-header p{
+  font-size:15px;color:var(--dim);max-width:480px;margin:0 auto;
+}
+
+/* ── GLASS CARD ──────────────────────────────────────────────── */
+.glass{
+  background:var(--glass-bg);
+  backdrop-filter:blur(24px) saturate(180%);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);
+  border:1px solid var(--glass-border);
+  border-radius:var(--r);
+}
+
+/* ── UPLOAD ZONES ────────────────────────────────────────────── */
+.upload-row{
+  display:grid;grid-template-columns:1fr 1fr;gap:20px;
+  margin-bottom:32px;
+  animation:fadeUp 0.5s ease 0.1s both;
+}
+@media(max-width:768px){.upload-row{grid-template-columns:1fr;}}
+
+.upload-zone{padding:28px;position:relative;}
+.upload-zone-label{
+  font-family:'Syne',sans-serif;font-size:14px;font-weight:700;
+  letter-spacing:1px;text-transform:uppercase;color:var(--faint);
+  margin-bottom:16px;
+}
+.drop-area{
+  border:2px dashed rgba(201,151,58,0.35);
+  border-radius:12px;padding:40px 24px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:10px;cursor:pointer;transition:all 0.25s;
+  min-height:180px;
+}
+.drop-area:hover{border-color:var(--gold);background:rgba(201,151,58,0.04);}
+.drop-area.dragover{
+  border-color:var(--gold);border-style:solid;
+  background:rgba(201,151,58,0.08);
+}
+.drop-area svg{opacity:0.5;transition:opacity 0.2s;}
+.drop-area:hover svg{opacity:0.8;}
+.drop-area-text{font-size:14px;font-weight:500;color:var(--dim);text-align:center;}
+.drop-area-sub{font-size:11px;color:var(--faint);text-align:center;}
+
+/* ── FILE PILLS ──────────────────────────────────────────────── */
+.file-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;}
+.file-pill{
+  display:flex;align-items:center;gap:6px;
+  font-size:12px;font-weight:500;color:var(--gold-l);
+  background:rgba(201,151,58,0.08);
+  border:1px solid rgba(201,151,58,0.25);
+  border-radius:20px;padding:5px 10px 5px 12px;
+  max-width:220px;
+}
+.file-pill-name{
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.file-pill-x{
+  width:16px;height:16px;border-radius:50%;border:none;
+  background:rgba(255,255,255,0.08);color:var(--dim);
+  font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all 0.15s;flex-shrink:0;line-height:1;
+}
+.file-pill-x:hover{background:rgba(240,122,90,0.3);color:var(--red);}
+
+/* ── ACTION BUTTON ───────────────────────────────────────────── */
+.action-row{
+  text-align:center;margin-bottom:36px;
+  animation:fadeUp 0.5s ease 0.2s both;
+}
+.btn-reconcile{
+  font-family:'Syne',sans-serif;font-size:16px;font-weight:700;
+  color:var(--bg);background:linear-gradient(135deg,var(--gold),var(--gold-l));
+  border:none;border-radius:10px;padding:14px 40px;
+  cursor:pointer;transition:all 0.25s;
+  display:inline-flex;align-items:center;gap:10px;
+}
+.btn-reconcile:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 30px rgba(201,151,58,0.3);}
+.btn-reconcile:disabled{opacity:0.35;cursor:not-allowed;transform:none;box-shadow:none;}
+.btn-reconcile .spinner{
+  width:18px;height:18px;border:2px solid rgba(4,7,15,0.2);
+  border-top-color:var(--bg);border-radius:50%;
+  animation:spin 0.6s linear infinite;display:none;
+}
+.btn-reconcile.loading .spinner{display:block;}
+.btn-reconcile.loading .btn-text{display:none;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* ── PROGRESS ────────────────────────────────────────────────── */
+.progress-section{
+  display:none;margin-bottom:36px;
+  animation:fadeUp 0.4s ease both;
+}
+.progress-section.visible{display:block;}
+.progress-card{padding:28px 32px;}
+.progress-card h3{
+  font-family:'Syne',sans-serif;font-size:16px;font-weight:700;
+  margin-bottom:20px;color:var(--dim);
+}
+.step-list{display:flex;flex-direction:column;gap:14px;}
+.step{display:flex;align-items:center;gap:12px;font-size:14px;color:var(--faint);transition:color 0.3s;}
+.step.active{color:var(--white);}
+.step.done{color:var(--green);}
+.step-icon{
+  width:24px;height:24px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;transition:all 0.3s;
+  border:2px solid var(--faint);
+}
+.step.active .step-icon{border-color:var(--gold);background:rgba(201,151,58,0.15);}
+.step.done .step-icon{border-color:var(--green);background:rgba(99,153,34,0.2);}
+.step-spinner{
+  width:12px;height:12px;border:2px solid rgba(201,151,58,0.25);
+  border-top-color:var(--gold);border-radius:50%;
+  animation:spin 0.6s linear infinite;display:none;
+}
+.step.active .step-spinner{display:block;}
+.step-check{display:none;color:var(--green);font-size:13px;font-weight:700;}
+.step.done .step-check{display:block;}
+
+/* ── RESULTS ─────────────────────────────────────────────────── */
+.results-section{display:none;animation:fadeUp 0.5s ease both;}
+.results-section.visible{display:block;}
+
+/* Summary bar */
+.summary-bar{
+  display:grid;grid-template-columns:repeat(5,1fr);
+  gap:1px;margin-bottom:28px;overflow:hidden;
+  border-radius:var(--r);border:1px solid var(--glass-border);
+  background:var(--glass-border);
+}
+@media(max-width:600px){.summary-bar{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:400px){.summary-bar{grid-template-columns:1fr 1fr;}}
+.summary-stat{
+  background:var(--glass-bg);
+  backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);
+  padding:20px 16px;text-align:center;
+}
+.summary-stat-label{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--faint);margin-bottom:6px;}
+.summary-stat-val{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums;}
+.summary-stat-val.matched{color:var(--green);}
+.summary-stat-val.unmatched{color:var(--red);}
+.summary-stat-val.rate{color:var(--gold);}
+
+/* Section headers */
+.result-heading{
+  font-family:'Syne',sans-serif;font-size:16px;font-weight:700;
+  margin-bottom:14px;display:flex;align-items:center;gap:8px;
+}
+.result-heading .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.result-heading .dot.green{background:var(--green);}
+.result-heading .dot.red{background:var(--red);}
+.result-heading .dot.amber{background:var(--amber);}
+
+/* Tables */
+.table-wrap{
+  overflow-x:auto;margin-bottom:28px;
+  border-radius:var(--r);
+}
+.table-wrap table{
+  width:100%;border-collapse:collapse;font-size:13px;
+}
+.table-wrap th{
+  font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  color:var(--faint);text-align:left;
+  padding:14px 16px;border-bottom:1px solid var(--glass-border);
+  white-space:nowrap;
+}
+.table-wrap td{
+  padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.04);
+  color:var(--dim);vertical-align:middle;
+}
+.table-wrap tr:hover td{background:rgba(255,255,255,0.02);}
+.table-wrap .amount{font-variant-numeric:tabular-nums;font-weight:600;color:var(--white);}
+
+/* Confidence badges */
+.badge{
+  font-size:10px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;
+  padding:3px 10px;border-radius:20px;white-space:nowrap;
+}
+.badge-high{background:var(--green-bg);color:var(--green);border:1px solid var(--green-b);}
+.badge-medium{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-b);}
+.badge-low{background:var(--red-bg);color:var(--red);border:1px solid var(--red-b);}
+
+/* Flag pills */
+.flag-pill{
+  font-size:10px;font-weight:600;
+  padding:2px 8px;border-radius:12px;
+  display:inline-block;margin:1px 2px;
+}
+.flag-pill.red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-b);}
+.flag-pill.amber{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-b);}
+
+/* Unmatched sections */
+.unmatched-header{
+  padding:14px 20px;border-radius:var(--r) var(--r) 0 0;
+  font-family:'Syne',sans-serif;font-size:14px;font-weight:700;
+}
+.unmatched-header.red-tint{
+  background:var(--red-bg);border:1px solid var(--red-b);
+  border-bottom:none;color:var(--red);
+}
+.unmatched-header.amber-tint{
+  background:var(--amber-bg);border:1px solid var(--amber-b);
+  border-bottom:none;color:var(--amber);
+}
+.unmatched-table{
+  border-radius:0 0 var(--r) var(--r);
+  border-top:none;
+}
+
+/* ── DOWNLOAD BUTTON ─────────────────────────────────────────── */
+.download-row{text-align:center;margin-top:8px;margin-bottom:40px;}
+.btn-download{
+  font-family:'Syne',sans-serif;font-size:14px;font-weight:700;
+  color:var(--gold);background:transparent;
+  border:2px solid var(--gold);border-radius:10px;
+  padding:12px 32px;cursor:pointer;transition:all 0.25s;
+  display:inline-flex;align-items:center;gap:8px;
+}
+.btn-download:hover{background:var(--gold);color:var(--bg);transform:translateY(-1px);}
+.btn-download svg{width:16px;height:16px;}
+
+/* ── TOAST ───────────────────────────────────────────────────── */
+.toast-container{
+  position:fixed;top:72px;right:20px;z-index:200;
+  display:flex;flex-direction:column;gap:8px;
+}
+.toast{
+  padding:14px 20px;border-radius:10px;font-size:13px;font-weight:500;
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  animation:toastIn 0.3s ease;max-width:360px;
+  display:flex;align-items:center;gap:10px;
+}
+.toast.error{
+  background:rgba(226,75,74,0.15);border:1px solid var(--red-b);color:var(--red);
+}
+.toast.success{
+  background:var(--green-bg);border:1px solid var(--green-b);color:var(--green);
+}
+.toast.warn{
+  background:var(--amber-bg);border:1px solid var(--amber-b);color:var(--amber);
+}
+@keyframes toastIn{from{opacity:0;transform:translateX(30px);}to{opacity:1;transform:translateX(0);}}
+
+/* ── FOOTER ──────────────────────────────────────────────────── */
+footer{
+  position:relative;z-index:2;
+  border-top:1px solid var(--glass-border);
+  padding:48px 40px 32px;
+  display:flex;align-items:flex-start;justify-content:space-between;
+  flex-wrap:wrap;gap:32px;
+}
+.footer-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:16px;margin-bottom:8px;}
+.footer-logo span{color:var(--gold);}
+.footer-tag{font-size:12px;color:var(--faint);}
+.footer-links{display:flex;gap:20px;flex-wrap:wrap;}
+.footer-link{font-size:13px;color:var(--faint);text-decoration:none;transition:color 0.2s;}
+.footer-link:hover{color:var(--white);}
+.footer-copy{width:100%;padding-top:24px;border-top:1px solid var(--glass-border);font-size:11px;color:var(--faint);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+
+/* ── GATE ────────────────────────────────────────────────────── */
+.gate{
+  position:relative;z-index:2;
+  text-align:center;padding:120px 32px;
+}
+.gate-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;margin-bottom:8px;}
+.gate-sub{font-size:14px;color:var(--dim);margin-bottom:24px;}
+.gate-btn{
+  font-family:'Syne',sans-serif;font-size:14px;font-weight:700;
+  color:var(--bg);background:var(--gold);
+  padding:12px 28px;border-radius:8px;text-decoration:none;
+  display:inline-block;transition:all 0.2s;
+}
+.gate-btn:hover{background:var(--gold-l);transform:translateY(-1px);}
+
+/* ── ANIMATIONS ──────────────────────────────────────────────── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+
+/* ── RESPONSIVE ──────────────────────────────────────────────── */
+@media(max-width:768px){
+  .page-wrap{padding:32px 16px 48px;}
+  .tool-header h1{font-size:24px;}
+  .summary-bar{grid-template-columns:repeat(3,1fr);}
+  footer{padding:32px 20px 24px;flex-direction:column;gap:20px;}
+}
+@media(max-width:480px){
+  .summary-bar{grid-template-columns:1fr 1fr;}
+  .summary-stat{padding:14px 10px;}
+  .summary-stat-val{font-size:18px;}
+}
+</style>
+</head>
+<body>
+
+<!-- Background -->
+<div class="bg-canvas">
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+  <div class="orb orb4"></div>
+</div>
+<div class="noise"></div>
+
+<!-- Toast container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- Nav -->
+<nav>
+  <a href="/" class="nav-logo">
+    <div class="nav-logo-mark">
+      <svg width="20" height="20" viewBox="0 0 32 32" fill="none">
+        <path d="M4 11 C7.5 7,12 17,16 11 C20 5,24.5 15,28 11" stroke="#C9973A" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+        <path d="M4 17 C7.5 13,12 23,16 17 C20 11,24.5 21,28 17" stroke="#E8C97A" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+        <path d="M4 23 C7.5 19,12 29,16 23 C20 17,24.5 27,28 23" stroke="rgba(255,255,255,0.25)" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+      </svg>
+    </div>
+    Streamline<span> AI</span>
+  </a>
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" onclick="toggleMobileNav()">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="nav-links" id="navLinks">
+    <a href="/" class="nav-link" onclick="closeMobileNav()">Home</a>
+    <a href="/dashboard.html" class="nav-link" onclick="closeMobileNav()">Dashboard</a>
+    <a href="#" class="nav-link" onclick="closeMobileNav()" style="color:var(--gold);">Tools</a>
+  </div>
+  <div class="nav-right" id="navRight">
+    <div class="nav-user">
+      <div class="nav-avatar" id="navAvatar">S</div>
+      <span id="navName">User</span>
+    </div>
+    <button class="nav-logout" onclick="handleLogout()">Sign out</button>
+  </div>
+</nav>
+
+<!-- Gate (not signed in) -->
+<div class="gate" id="gateView" style="display:none;">
+  <div class="gate-title">Sign in to access the Transaction Reconciler</div>
+  <div class="gate-sub">Match your receipts to bank transactions automatically.</div>
+  <a href="/" class="gate-btn">Sign In at Streamline AI</a>
+</div>
+
+<!-- Main Tool -->
+<div class="page-wrap" id="toolPage" style="display:none;">
+
+  <!-- Header -->
+  <div class="tool-header">
+    <h1>Transaction Reconciler</h1>
+    <p>Reconcile bank transactions with receipts automatically.</p>
+  </div>
+
+  <!-- Upload Zones -->
+  <div class="upload-row">
+
+    <!-- Receipts -->
+    <div class="upload-zone glass">
+      <div class="upload-zone-label">Receipts</div>
+      <div class="drop-area" id="receiptDrop" data-target="receipt">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--gold);">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+          <polyline points="10 9 9 9 8 9"/>
+        </svg>
+        <div class="drop-area-text">Drop receipt images, PDFs, or photos</div>
+        <div class="drop-area-sub">Supports JPG, PNG, PDF — up to 20 files</div>
+        <input type="file" id="receiptInput" multiple accept="image/jpeg,image/png,image/webp,image/gif,application/pdf" hidden>
+      </div>
+      <div class="file-list" id="receiptFileList"></div>
+    </div>
+
+    <!-- Bank Transactions -->
+    <div class="upload-zone glass">
+      <div class="upload-zone-label">Bank Transactions</div>
+      <div class="drop-area" id="transactionDrop" data-target="transaction">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--gold);">
+          <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+          <line x1="1" y1="10" x2="23" y2="10"/>
+        </svg>
+        <div class="drop-area-text">Drop bank statements or CSV exports</div>
+        <div class="drop-area-sub">Supports JPG, PNG, CSV — up to 15 files</div>
+        <input type="file" id="transactionInput" multiple accept="image/jpeg,image/png,image/webp,image/gif,text/csv,.csv" hidden>
+      </div>
+      <div class="file-list" id="transactionFileList"></div>
+    </div>
+
+  </div>
+
+  <!-- Action Button -->
+  <div class="action-row">
+    <button class="btn-reconcile" id="btnReconcile" disabled onclick="startReconciliation()">
+      <span class="btn-text">Reconcile Transactions</span>
+      <div class="spinner"></div>
+    </button>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-section" id="progressSection">
+    <div class="progress-card glass">
+      <h3>Processing</h3>
+      <div class="step-list">
+        <div class="step" id="step1">
+          <div class="step-icon">
+            <div class="step-spinner"></div>
+            <span class="step-check">&#10003;</span>
+          </div>
+          <span>Reading receipts...</span>
+        </div>
+        <div class="step" id="step2">
+          <div class="step-icon">
+            <div class="step-spinner"></div>
+            <span class="step-check">&#10003;</span>
+          </div>
+          <span>Reading bank transactions...</span>
+        </div>
+        <div class="step" id="step3">
+          <div class="step-icon">
+            <div class="step-spinner"></div>
+            <span class="step-check">&#10003;</span>
+          </div>
+          <span>Matching transactions...</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div class="results-section" id="resultsSection">
+
+    <!-- Summary -->
+    <div class="summary-bar" id="summaryBar"></div>
+
+    <!-- Matched -->
+    <div id="matchedSection" style="display:none;">
+      <div class="result-heading"><span class="dot green"></span> Matched Transactions</div>
+      <div class="table-wrap glass">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Vendor</th>
+              <th>Amount</th>
+              <th>Receipt</th>
+              <th>Confidence</th>
+              <th>Flags</th>
+            </tr>
+          </thead>
+          <tbody id="matchedBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Unmatched Transactions -->
+    <div id="unmatchedTxSection" style="display:none;">
+      <div class="result-heading"><span class="dot red"></span> Unmatched Transactions</div>
+      <div class="unmatched-header red-tint">Transactions with no matching receipt</div>
+      <div class="table-wrap glass unmatched-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Vendor</th>
+              <th>Amount</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody id="unmatchedTxBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Unmatched Receipts -->
+    <div id="unmatchedRcSection" style="display:none;">
+      <div class="result-heading"><span class="dot amber"></span> Unmatched Receipts</div>
+      <div class="unmatched-header amber-tint">Receipts with no matching transaction</div>
+      <div class="table-wrap glass unmatched-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Vendor</th>
+              <th>Amount</th>
+              <th>File</th>
+            </tr>
+          </thead>
+          <tbody id="unmatchedRcBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Download -->
+    <div class="download-row">
+      <button class="btn-download" onclick="downloadExcel()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download Excel Report
+      </button>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- Footer -->
+<footer>
+  <div>
+    <div class="footer-logo">Streamline<span> AI</span></div>
+    <div class="footer-tag">AI that works for your business.</div>
+  </div>
+  <div class="footer-links">
+    <a href="/" class="footer-link">Home</a>
+    <a href="/dashboard.html" class="footer-link">Dashboard</a>
+    <a href="/terms" class="footer-link">Terms</a>
+    <a href="/privacy" class="footer-link">Privacy</a>
+    <a href="mailto:hello@streamlinedai.net" class="footer-link">Contact</a>
+  </div>
+  <div class="footer-copy">
+    <span>&copy; 2026 Streamline AI Consulting &middot; streamlinedai.net</span>
+    <span>Sacramento, CA &middot; <a href="mailto:hello@streamlinedai.net" class="footer-link">hello@streamlinedai.net</a></span>
+  </div>
+</footer>
+
+<script>
+/* ══════════════════════════════════════════════════════════════
+   CONFIG
+   ══════════════════════════════════════════════════════════════ */
+const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? 'http://localhost:3001'
+  : 'https://flip-analyzer-server-production.up.railway.app';
+const ACCESS_TOKEN = 'streamline2025';
+
+/* ══════════════════════════════════════════════════════════════
+   STATE
+   ══════════════════════════════════════════════════════════════ */
+let receiptFiles = [];
+let transactionFiles = [];
+let resultData = null;
+
+/* ══════════════════════════════════════════════════════════════
+   SESSION / AUTH
+   ══════════════════════════════════════════════════════════════ */
+(function initSession() {
+  const raw = sessionStorage.getItem('sl_user');
+  if (!raw) {
+    document.getElementById('gateView').style.display = '';
+    document.getElementById('toolPage').style.display = 'none';
+    document.getElementById('navRight').style.display = 'none';
+    return;
+  }
+  try {
+    const u = JSON.parse(raw);
+    document.getElementById('gateView').style.display = 'none';
+    document.getElementById('toolPage').style.display = '';
+    document.getElementById('navRight').style.display = '';
+    const initials = (u.name || u.email || 'U').split(' ').map(w => w[0]).join('').toUpperCase().slice(0,2);
+    document.getElementById('navAvatar').textContent = initials;
+    document.getElementById('navName').textContent = (u.name || u.email || '').split(' ')[0];
+  } catch(e) {
+    document.getElementById('gateView').style.display = '';
+    document.getElementById('toolPage').style.display = 'none';
+  }
+})();
+
+function handleLogout() {
+  sessionStorage.removeItem('sl_user');
+  window.location.href = '/';
+}
+
+/* ══════════════════════════════════════════════════════════════
+   MOBILE NAV
+   ══════════════════════════════════════════════════════════════ */
+function toggleMobileNav() {
+  document.getElementById('navToggle').classList.toggle('open');
+  document.getElementById('navLinks').classList.toggle('open');
+}
+function closeMobileNav() {
+  document.getElementById('navToggle').classList.remove('open');
+  document.getElementById('navLinks').classList.remove('open');
+}
+
+/* ══════════════════════════════════════════════════════════════
+   TOAST
+   ══════════════════════════════════════════════════════════════ */
+function showToast(msg, type) {
+  type = type || 'error';
+  const container = document.getElementById('toastContainer');
+  const t = document.createElement('div');
+  t.className = 'toast ' + type;
+  t.textContent = msg;
+  container.appendChild(t);
+  setTimeout(function() { t.style.opacity = '0'; t.style.transition = 'opacity 0.3s'; }, 3500);
+  setTimeout(function() { t.remove(); }, 3900);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   FILE UPLOAD
+   ══════════════════════════════════════════════════════════════ */
+const receiptDrop = document.getElementById('receiptDrop');
+const transactionDrop = document.getElementById('transactionDrop');
+const receiptInput = document.getElementById('receiptInput');
+const transactionInput = document.getElementById('transactionInput');
+
+function setupDropZone(dropEl, inputEl, fileArr, listId, maxFiles) {
+  function addFiles(newFiles) {
+    const remaining = maxFiles - fileArr.length;
+    if (remaining <= 0) { showToast('Maximum ' + maxFiles + ' files allowed', 'warn'); return; }
+    const toAdd = Array.from(newFiles).slice(0, remaining);
+    toAdd.forEach(function(f) { fileArr.push(f); });
+    renderFileList(fileArr, listId);
+    updateReconcileButton();
+    if (newFiles.length > toAdd.length) {
+      showToast('Only ' + maxFiles + ' files allowed — some were skipped', 'warn');
+    }
+  }
+
+  dropEl.addEventListener('click', function() { inputEl.click(); });
+  inputEl.addEventListener('change', function() { addFiles(inputEl.files); inputEl.value = ''; });
+
+  dropEl.addEventListener('dragover', function(e) { e.preventDefault(); dropEl.classList.add('dragover'); });
+  dropEl.addEventListener('dragleave', function(e) { e.preventDefault(); dropEl.classList.remove('dragover'); });
+  dropEl.addEventListener('drop', function(e) {
+    e.preventDefault();
+    dropEl.classList.remove('dragover');
+    addFiles(e.dataTransfer.files);
+  });
+}
+
+setupDropZone(receiptDrop, receiptInput, receiptFiles, 'receiptFileList', 20);
+setupDropZone(transactionDrop, transactionInput, transactionFiles, 'transactionFileList', 15);
+
+function renderFileList(fileArr, listId) {
+  const container = document.getElementById(listId);
+  container.innerHTML = '';
+  fileArr.forEach(function(f, i) {
+    const pill = document.createElement('div');
+    pill.className = 'file-pill';
+    pill.innerHTML = '<span class="file-pill-name">' + escapeHtml(f.name) + '</span>';
+    const x = document.createElement('button');
+    x.className = 'file-pill-x';
+    x.textContent = '\u00D7';
+    x.onclick = function() {
+      fileArr.splice(i, 1);
+      renderFileList(fileArr, listId);
+      updateReconcileButton();
+    };
+    pill.appendChild(x);
+    container.appendChild(pill);
+  });
+}
+
+function updateReconcileButton() {
+  document.getElementById('btnReconcile').disabled = !(receiptFiles.length > 0 && transactionFiles.length > 0);
+}
+
+function escapeHtml(str) {
+  var d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   RECONCILIATION
+   ══════════════════════════════════════════════════════════════ */
+async function startReconciliation() {
+  var btn = document.getElementById('btnReconcile');
+  btn.disabled = true;
+  btn.classList.add('loading');
+
+  var progressSection = document.getElementById('progressSection');
+  progressSection.classList.add('visible');
+  document.getElementById('resultsSection').classList.remove('visible');
+  resetSteps();
+
+  try {
+    // Step 1: Extract receipts
+    setStep('step1', 'active');
+    var receiptFormData = new FormData();
+    receiptFiles.forEach(function(f) { receiptFormData.append('receipts', f); });
+
+    var res1 = await fetch(API_BASE + '/api/reconcile/extract-receipts', {
+      method: 'POST',
+      headers: { 'x-access-token': ACCESS_TOKEN },
+      body: receiptFormData
+    });
+    if (!res1.ok) throw new Error('Failed to extract receipts (HTTP ' + res1.status + ')');
+    var receiptData = await res1.json();
+    setStep('step1', 'done');
+
+    if (receiptData.errors && receiptData.errors.length > 0) {
+      showToast(receiptData.errors.length + ' file(s) could not be read', 'warn');
+    }
+
+    // Step 2: Extract transactions
+    setStep('step2', 'active');
+    var txFormData = new FormData();
+    transactionFiles.forEach(function(f) { txFormData.append('transactions', f); });
+
+    var res2 = await fetch(API_BASE + '/api/reconcile/extract-transactions', {
+      method: 'POST',
+      headers: { 'x-access-token': ACCESS_TOKEN },
+      body: txFormData
+    });
+    if (!res2.ok) throw new Error('Failed to extract transactions (HTTP ' + res2.status + ')');
+    var txData = await res2.json();
+    setStep('step2', 'done');
+
+    if (txData.errors && txData.errors.length > 0) {
+      showToast(txData.errors.length + ' file(s) could not be read', 'warn');
+    }
+
+    // Step 3: Match
+    setStep('step3', 'active');
+    var res3 = await fetch(API_BASE + '/api/reconcile/match', {
+      method: 'POST',
+      headers: { 'x-access-token': ACCESS_TOKEN, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        receipts: receiptData.receipts || receiptData,
+        transactions: txData.transactions || txData,
+        rules: {}
+      })
+    });
+    if (!res3.ok) throw new Error('Failed to match transactions (HTTP ' + res3.status + ')');
+    resultData = await res3.json();
+    setStep('step3', 'done');
+
+    renderResults(resultData);
+  } catch(err) {
+    showToast(err.message || 'Something went wrong. Please try again.', 'error');
+  } finally {
+    btn.classList.remove('loading');
+    updateReconcileButton();
+  }
+}
+
+/* ── Progress Steps ──────────────────────────────────────────── */
+function resetSteps() {
+  ['step1','step2','step3'].forEach(function(id) {
+    var el = document.getElementById(id);
+    el.className = 'step';
+  });
+}
+function setStep(id, state) {
+  var el = document.getElementById(id);
+  el.className = 'step ' + state;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   RENDER RESULTS
+   ══════════════════════════════════════════════════════════════ */
+function renderResults(data) {
+  var matched = data.matched || [];
+  var unmatchedTx = data.unmatchedTransactions || data.unmatched_transactions || [];
+  var unmatchedRc = data.unmatchedReceipts || data.unmatched_receipts || [];
+  var totalTx = (data.totalTransactions || data.total_transactions || matched.length + unmatchedTx.length);
+  var totalRc = (data.totalReceipts || data.total_receipts || matched.length + unmatchedRc.length);
+  var matchRate = totalTx > 0 ? Math.round((matched.length / totalTx) * 100) : 0;
+
+  // Summary bar
+  var summaryHtml = '';
+  summaryHtml += '<div class="summary-stat"><div class="summary-stat-label">Transactions</div><div class="summary-stat-val">' + totalTx + '</div></div>';
+  summaryHtml += '<div class="summary-stat"><div class="summary-stat-label">Receipts</div><div class="summary-stat-val">' + totalRc + '</div></div>';
+  summaryHtml += '<div class="summary-stat"><div class="summary-stat-label">Matched</div><div class="summary-stat-val matched">' + matched.length + '</div></div>';
+  summaryHtml += '<div class="summary-stat"><div class="summary-stat-label">Unmatched</div><div class="summary-stat-val unmatched">' + (unmatchedTx.length + unmatchedRc.length) + '</div></div>';
+  summaryHtml += '<div class="summary-stat"><div class="summary-stat-label">Match Rate</div><div class="summary-stat-val rate">' + matchRate + '%</div></div>';
+  document.getElementById('summaryBar').innerHTML = summaryHtml;
+
+  // Matched table
+  var matchedSection = document.getElementById('matchedSection');
+  var matchedBody = document.getElementById('matchedBody');
+  matchedBody.innerHTML = '';
+  if (matched.length > 0) {
+    matchedSection.style.display = '';
+    matched.forEach(function(m) {
+      var conf = (m.confidence || '').toLowerCase();
+      var badgeClass = conf === 'high' ? 'badge-high' : conf === 'medium' ? 'badge-medium' : 'badge-low';
+      var flagsHtml = '';
+      if (m.flags && m.flags.length > 0) {
+        m.flags.forEach(function(flag) {
+          var fc = flag.toLowerCase().includes('amount') ? 'red' : 'amber';
+          flagsHtml += '<span class="flag-pill ' + fc + '">' + escapeHtml(flag) + '</span>';
+        });
+      }
+      var row = '<tr>';
+      row += '<td>' + escapeHtml(m.date || '-') + '</td>';
+      row += '<td>' + escapeHtml(m.vendor || m.merchant || '-') + '</td>';
+      row += '<td class="amount">' + formatCurrency(m.amount) + '</td>';
+      row += '<td>' + escapeHtml(m.receipt || m.receiptFile || m.receipt_file || '-') + '</td>';
+      row += '<td><span class="badge ' + badgeClass + '">' + escapeHtml(m.confidence || 'N/A') + '</span></td>';
+      row += '<td>' + (flagsHtml || '<span style="color:var(--faint);">None</span>') + '</td>';
+      row += '</tr>';
+      matchedBody.innerHTML += row;
+    });
+  } else {
+    matchedSection.style.display = 'none';
+  }
+
+  // Unmatched transactions
+  var unmatchedTxSection = document.getElementById('unmatchedTxSection');
+  var unmatchedTxBody = document.getElementById('unmatchedTxBody');
+  unmatchedTxBody.innerHTML = '';
+  if (unmatchedTx.length > 0) {
+    unmatchedTxSection.style.display = '';
+    unmatchedTx.forEach(function(t) {
+      var row = '<tr>';
+      row += '<td>' + escapeHtml(t.date || '-') + '</td>';
+      row += '<td>' + escapeHtml(t.vendor || t.merchant || '-') + '</td>';
+      row += '<td class="amount">' + formatCurrency(t.amount) + '</td>';
+      row += '<td>' + escapeHtml(t.notes || t.description || '-') + '</td>';
+      row += '</tr>';
+      unmatchedTxBody.innerHTML += row;
+    });
+  } else {
+    unmatchedTxSection.style.display = 'none';
+  }
+
+  // Unmatched receipts
+  var unmatchedRcSection = document.getElementById('unmatchedRcSection');
+  var unmatchedRcBody = document.getElementById('unmatchedRcBody');
+  unmatchedRcBody.innerHTML = '';
+  if (unmatchedRc.length > 0) {
+    unmatchedRcSection.style.display = '';
+    unmatchedRc.forEach(function(r) {
+      var row = '<tr>';
+      row += '<td>' + escapeHtml(r.date || '-') + '</td>';
+      row += '<td>' + escapeHtml(r.vendor || r.merchant || '-') + '</td>';
+      row += '<td class="amount">' + formatCurrency(r.amount) + '</td>';
+      row += '<td>' + escapeHtml(r.file || r.filename || '-') + '</td>';
+      row += '</tr>';
+      unmatchedRcBody.innerHTML += row;
+    });
+  } else {
+    unmatchedRcSection.style.display = 'none';
+  }
+
+  document.getElementById('resultsSection').classList.add('visible');
+  document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function formatCurrency(val) {
+  if (val === null || val === undefined || val === '') return '-';
+  var num = parseFloat(val);
+  if (isNaN(num)) return escapeHtml(String(val));
+  return '$' + num.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
+/* ══════════════════════════════════════════════════════════════
+   EXCEL DOWNLOAD
+   ══════════════════════════════════════════════════════════════ */
+function downloadExcel() {
+  if (!resultData) return;
+  var matched = resultData.matched || [];
+  var unmatchedTx = resultData.unmatchedTransactions || resultData.unmatched_transactions || [];
+  var unmatchedRc = resultData.unmatchedReceipts || resultData.unmatched_receipts || [];
+  var totalTx = resultData.totalTransactions || resultData.total_transactions || (matched.length + unmatchedTx.length);
+  var totalRc = resultData.totalReceipts || resultData.total_receipts || (matched.length + unmatchedRc.length);
+  var matchRate = totalTx > 0 ? Math.round((matched.length / totalTx) * 100) + '%' : '0%';
+
+  var wb = XLSX.utils.book_new();
+
+  // Summary sheet
+  var summaryData = [
+    ['Transaction Reconciliation Report'],
+    ['Generated', new Date().toLocaleDateString()],
+    [],
+    ['Total Transactions', totalTx],
+    ['Total Receipts', totalRc],
+    ['Matched', matched.length],
+    ['Unmatched Transactions', unmatchedTx.length],
+    ['Unmatched Receipts', unmatchedRc.length],
+    ['Match Rate', matchRate]
+  ];
+  var wsSummary = XLSX.utils.aoa_to_sheet(summaryData);
+  XLSX.utils.book_append_sheet(wb, wsSummary, 'Summary');
+
+  // Matched sheet
+  var matchedRows = [['Date', 'Vendor', 'Amount', 'Receipt', 'Confidence', 'Flags']];
+  matched.forEach(function(m) {
+    matchedRows.push([
+      m.date || '', m.vendor || m.merchant || '', m.amount || '',
+      m.receipt || m.receiptFile || m.receipt_file || '',
+      m.confidence || '', (m.flags || []).join(', ')
+    ]);
+  });
+  var wsMatched = XLSX.utils.aoa_to_sheet(matchedRows);
+  XLSX.utils.book_append_sheet(wb, wsMatched, 'Matched');
+
+  // Unmatched Transactions sheet
+  var utxRows = [['Date', 'Vendor', 'Amount', 'Notes']];
+  unmatchedTx.forEach(function(t) {
+    utxRows.push([t.date || '', t.vendor || t.merchant || '', t.amount || '', t.notes || t.description || '']);
+  });
+  var wsUtx = XLSX.utils.aoa_to_sheet(utxRows);
+  XLSX.utils.book_append_sheet(wb, wsUtx, 'Unmatched Transactions');
+
+  // Unmatched Receipts sheet
+  var urcRows = [['Date', 'Vendor', 'Amount', 'File']];
+  unmatchedRc.forEach(function(r) {
+    urcRows.push([r.date || '', r.vendor || r.merchant || '', r.amount || '', r.file || r.filename || '']);
+  });
+  var wsUrc = XLSX.utils.aoa_to_sheet(urcRows);
+  XLSX.utils.book_append_sheet(wb, wsUrc, 'Unmatched Receipts');
+
+  var today = new Date().toISOString().slice(0, 10);
+  XLSX.writeFile(wb, 'reconciliation_' + today + '.xlsx');
+}
+</script>
+</body>
+</html>
