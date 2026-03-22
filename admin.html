@@ -8,6 +8,7 @@
 <meta name="robots" content="noindex,nofollow"/>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Figtree:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -292,6 +293,25 @@ nav{
     <tbody id="analyticsBody"></tbody>
   </table>
 
+  <div class="section-label">
+    Flip Analyzer Requests
+    <span style="font-size:10px;font-weight:400;letter-spacing:0;text-transform:none;color:var(--dim);">14-day retention</span>
+  </div>
+  <table class="analytics-table" id="flipTable">
+    <thead>
+      <tr>
+        <th>User</th>
+        <th>Address</th>
+        <th>Price</th>
+        <th>ARV</th>
+        <th>Grade</th>
+        <th>Date</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="flipBody"></tbody>
+  </table>
+
 </div>
 
 <div class="toast" id="toast">
@@ -313,7 +333,7 @@ const TOOL_NAMES = {
   expense_categorizer: 'Expense Categorizer',
 };
 
-let _clients = [], _users = [], _tools = [], _jobs = [];
+let _clients = [], _users = [], _tools = [], _jobs = [], _flipRequests = [];
 let _period = 'mtd';
 
 function esc(s) { const d = document.createElement('div'); d.textContent = String(s||''); return d.innerHTML; }
@@ -345,23 +365,31 @@ function daysSince(d) {
     document.getElementById('gateView').classList.add('show'); return;
   }
 
+  // Clean up expired flip requests
+  await _sb.from('flip_requests').delete().lt('expires_at', new Date().toISOString());
+
   const [
     { data: clients },
     { data: users },
     { data: tools },
     { data: jobs },
+    { data: flipRequests },
   ] = await Promise.all([
     _sb.from('clients').select('id, name, owner_email, plan, created_at').order('created_at'),
     _sb.from('users').select('id, email, name, role, client_id, created_at').order('created_at'),
     _sb.from('client_tools').select('id, client_id, tool_type, enabled, config, created_at').order('created_at'),
     _sb.from('jobs').select('id, client_id, tool_type, status, token_usage, created_at')
        .order('created_at', { ascending: false }).limit(2000),
+    _sb.from('flip_requests')
+       .select('id, client_id, user_email, address, purchase_price, arv, arv_source, deal_grade, deal_json, created_at, expires_at')
+       .order('created_at', { ascending: false }).limit(100),
   ]);
 
   _clients = clients || [];
   _users   = users   || [];
   _tools   = tools   || [];
   _jobs    = jobs    || [];
+  _flipRequests = flipRequests || [];
 
   const initials = (profile.name || 'A').split(' ').map(p => p[0]).join('').slice(0,2).toUpperCase();
   document.getElementById('navAvatar').textContent = initials;
@@ -373,6 +401,7 @@ function daysSince(d) {
   renderOverview();
   renderClients();
   renderAnalytics(_period);
+  renderFlipRequests();
 
   document.getElementById('adminPage').style.display = '';
 })();
@@ -557,6 +586,131 @@ function renderAnalytics(p) {
 async function handleLogout() {
   await _sb.auth.signOut();
   window.location.href = '/';
+}
+
+// ─── FLIP REQUESTS ──────────────────────────────────────────────
+function renderFlipRequests() {
+  const tbody = document.getElementById('flipBody');
+  if (!_flipRequests.length) {
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="7">No flip analyzer requests in the last 14 days.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = _flipRequests.map(r => {
+    const date = new Date(r.created_at).toLocaleDateString('en-US', { month:'short', day:'numeric', hour:'numeric', minute:'2-digit' });
+    const price = r.purchase_price ? '$' + Number(r.purchase_price).toLocaleString() : '\u2014';
+    const arv = r.arv ? '$' + Number(r.arv).toLocaleString() : '\u2014';
+    const gc = { 'A+':'green','A':'green','B+':'gold','B':'gold','C':'red','D':'red' }[r.deal_grade] || 'faint';
+    return `<tr>
+      <td>${esc(r.user_email)}</td>
+      <td>${esc(r.address || '\u2014')}</td>
+      <td class="num">${price}</td>
+      <td class="num">${arv}</td>
+      <td style="color:var(--${gc});font-weight:700;">${esc(r.deal_grade || '\u2014')}</td>
+      <td>${date}</td>
+      <td><button class="reset-btn" onclick="downloadFlipXLSX('${r.id}')">XLSX \u2193</button></td>
+    </tr>`;
+  }).join('');
+}
+
+function downloadFlipXLSX(requestId) {
+  const req = _flipRequests.find(r => r.id === requestId);
+  if (!req?.deal_json) { showToast('Deal data not available', 'red'); return; }
+  const d = req.deal_json;
+  const wb = XLSX.utils.book_new();
+  const $ = v => (v === null || v === undefined) ? '' : v;
+
+  // Tab 1: Deal Summary
+  const summary = [
+    ['DEAL SUMMARY',''],
+    ['Address', $(d.address)],
+    ['Purchase Price', $(d.purchasePrice)],
+    ['ARV (After Repair Value)', $(d.arv)],
+    ['ARV Source', $(d.arvSource)],
+    ['Condition Score', $(d.conditionScore)],
+    [''],
+    ['COSTS',''],
+    ['Rehab Budget', $(d.rehabBudget)],
+    ['Rehab Contingency', $(d.rehabContingency)],
+    ['Total Rehab', $(d.totalRehab)],
+    ['Purchase Closing', $(d.purchaseClosing)],
+    ['Holding Costs', d.holdingCosts?.total || ''],
+    ['Sale Costs', d.saleCosts?.total || ''],
+    ['All-In Cost', $(d.allInCost)],
+    [''],
+    ['RETURNS',''],
+    ['Net Profit', $(d.netProfit)],
+    ['Cash Invested', $(d.cashInvested)],
+    ['ROI', d.roi ? d.roi + '%' : ''],
+    ['Annualized ROI', d.annualizedRoi ? d.annualizedRoi + '%' : ''],
+    ['Deal Grade', $(d.dealGrade)],
+    ['Hold Months', $(d.holdMonths)],
+  ];
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(summary), 'Deal Summary');
+
+  // Tab 2: Reno Budget
+  const renoRows = [['ITEM','LABOR','MATERIAL','TOTAL','INCLUDE']];
+  (d.rehabLineItems || []).forEach(li => {
+    renoRows.push([li.item || '', li.labor || 0, li.material || 0, li.total || 0, li.include !== false ? 'Yes' : 'No']);
+  });
+  renoRows.push(['', '', '', '']);
+  renoRows.push(['Subtotal', '', '', $(d.rehabBudget)]);
+  renoRows.push(['Contingency (' + Math.round((d.rehabContingencyPct || 0.15) * 100) + '%)', '', '', $(d.rehabContingency)]);
+  renoRows.push(['Total Rehab', '', '', $(d.totalRehab)]);
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(renoRows), 'Reno Budget');
+
+  // Tab 3: Financing
+  const fin = d.financing || {};
+  const finRows = [
+    ['FINANCING',''],
+    ['Type', $(fin.type)],
+    [''],
+    ['HARD MONEY (HML)',''],
+    ['Loan Amount', fin.hml?.amount || ''],
+    ['Rate', fin.hml?.rate ? fin.hml.rate + '%' : ''],
+    ['Points', fin.hml?.points || ''],
+    ['Monthly Payment', fin.hml?.monthly || ''],
+    [''],
+    ['PRIVATE MONEY (PML)',''],
+    ['Loan Amount', fin.pml?.amount || ''],
+    ['Rate', fin.pml?.rate ? fin.pml.rate + '%' : ''],
+    ['Monthly Payment', fin.pml?.monthly || ''],
+    [''],
+    ['Max Offer (Conservative)', d.maxOffer?.conservative || ''],
+    ['Max Offer (Moderate)', d.maxOffer?.moderate || ''],
+    ['Max Offer (Aggressive)', d.maxOffer?.aggressive || ''],
+  ];
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(finRows), 'Financing');
+
+  // Tab 4: Exit Comparison
+  const brrrr = d.brrrr || {};
+  const exitRows = [
+    ['EXIT STRATEGY COMPARISON','FLIP','BRRRR'],
+    ['Net Profit', $(d.netProfit), ''],
+    ['ROI', d.roi ? d.roi + '%' : '', ''],
+    [''],
+    ['BRRRR DETAILS',''],
+    ['Estimated Rent', '', $(brrrr.estimatedRent)],
+    ['Monthly Cash Flow', '', $(brrrr.monthlyCashFlow)],
+    ['Annual Cash Flow', '', $(brrrr.annualCashFlow)],
+    ['Cap Rate', '', brrrr.capRate ? brrrr.capRate + '%' : ''],
+    ['Cash-on-Cash Return', '', brrrr.cashOnCash ? brrrr.cashOnCash + '%' : ''],
+    ['Refinance LTV', '', brrrr.refinanceLtv ? brrrr.refinanceLtv + '%' : ''],
+    ['Cash Left In', '', $(brrrr.cashLeftIn)],
+  ];
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(exitRows), 'Exit Comparison');
+
+  // Tab 5: Condition
+  const condRows = [['AREA','SCORE','NOTES']];
+  const rooms = d.conditionRoomBreakdown || {};
+  Object.entries(rooms).forEach(([area, data]) => {
+    if (typeof data === 'object') condRows.push([area, data.score || '', data.notes || '']);
+    else condRows.push([area, data, '']);
+  });
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(condRows), 'Condition');
+
+  const safeName = (d.address || 'deal').replace(/[^a-z0-9]/gi, '_').slice(0, 30);
+  XLSX.writeFile(wb, 'FlipAnalysis_' + safeName + '.xlsx');
+  showToast('XLSX downloaded', 'green');
 }
 
 let _toastTimer;
