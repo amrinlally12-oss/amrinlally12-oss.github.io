@@ -494,110 +494,12 @@ footer{
 }
 .login-error.show{display:block;}
 
-/* ── DASHBOARD ───────────────────────────────────────────────── */
-#dashView{display:none;min-height:100vh;padding:80px 0 0;}
-.dash-wrap{max-width:960px;margin:0 auto;padding:32px 40px;}
-.dash-header{
-  display:flex;align-items:center;justify-content:space-between;
-  margin-bottom:28px;flex-wrap:wrap;gap:16px;
-}
-.dash-welcome{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;}
-.dash-welcome span{color:var(--gold);}
-.dash-meta{font-size:13px;color:var(--faint);margin-top:3px;}
-.dash-logout{
-  font-family:'Syne',sans-serif;font-size:12px;font-weight:600;
-  color:var(--faint);background:var(--glass-bg);
-  padding:8px 16px;border-radius:7px;border:1px solid var(--glass-border);
-  cursor:pointer;transition:all 0.2s;
-}
-.dash-logout:hover{color:var(--white);border-color:rgba(255,255,255,0.2);}
-.dash-stats-grid{
-  display:grid;grid-template-columns:repeat(4,1fr);
-  gap:12px;margin-bottom:20px;
-}
-@media(max-width:700px){.dash-stats-grid{grid-template-columns:1fr 1fr;}}
-.dash-stat-box{padding:16px 18px;}
-.dsb-label{font-size:11px;color:var(--faint);margin-bottom:6px;font-weight:500;}
-.dsb-value{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;}
-.dsb-value.gold{color:var(--gold);}
-.dsb-value.green{color:var(--green);}
-.dsb-value.plan{font-size:16px;margin-top:4px;}
-.dash-section-label{
-  font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;
-  color:var(--faint);margin-bottom:12px;
-}
-.dash-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px;}
-@media(max-width:800px){.dash-grid{grid-template-columns:1fr 1fr;}}
-@media(max-width:500px){.dash-grid{grid-template-columns:1fr;}}
-.dash-tool{
-  padding:22px;cursor:pointer;
-  transition:all 0.3s;position:relative;overflow:hidden;
-  text-decoration:none;color:inherit;display:block;
-}
-.dash-tool.inactive{opacity:0.55;cursor:default;pointer-events:none;}
-.dash-tool::before{
-  content:'';position:absolute;inset:0;border-radius:var(--r);
-  background:radial-gradient(circle at 50% 0%,rgba(201,151,58,0.07),transparent 70%);
-  opacity:0;transition:opacity 0.3s;
-}
-.dash-tool:not(.inactive):hover{transform:translateY(-3px);border-color:rgba(201,151,58,0.25);}
-.dash-tool:not(.inactive):hover::before{opacity:1;}
-.dt-icon{font-size:26px;margin-bottom:14px;}
-.dt-name{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:5px;}
-.dt-desc{font-size:12px;color:var(--dim);line-height:1.5;}
-.dt-status{
-  display:inline-flex;align-items:center;gap:5px;
-  font-size:10px;font-weight:700;letter-spacing:0.5px;
-  padding:3px 9px;border-radius:4px;margin-top:12px;
-}
-.dt-live{background:rgba(99,153,34,0.15);color:var(--green);border:1px solid rgba(99,153,34,0.2);}
-.dt-soon{background:rgba(255,255,255,0.04);color:var(--faint);border:1px solid var(--glass-border);}
-.tool-launch-btn{
-  display:inline-flex;align-items:center;gap:8px;
-  font-family:'Syne',sans-serif;font-size:13px;font-weight:700;
-  color:var(--bg);background:linear-gradient(135deg,var(--gold),var(--gold-l));
-  padding:10px 20px;border-radius:8px;border:none;cursor:pointer;
-  transition:all 0.2s;margin-top:14px;
-  box-shadow:0 4px 16px rgba(201,151,58,0.2);
-  text-decoration:none;
-}
-.tool-launch-btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(201,151,58,0.3);}
-.dash-activity{padding:22px;}
-.da-item{
-  display:flex;align-items:center;gap:12px;
-  padding:10px 0;border-bottom:1px solid var(--glass-border);
-  font-size:13px;
-}
-.da-item:last-child{border-bottom:none;}
-.da-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
-.da-gold{background:var(--gold);}
-.da-green{background:var(--green);}
-.da-blue{background:var(--blue);}
-.da-text{color:var(--dim);flex:1;}
-.da-time{font-size:11px;color:var(--faint);}
-.dash-footer-note{
-  font-size:12px;color:var(--faint);text-align:center;
-  margin-top:28px;padding-top:20px;border-top:1px solid var(--glass-border);
-}
-.dash-footer-note a{color:var(--gold);text-decoration:none;}
-
-/* Plan badge */
-.plan-badge{
-  display:inline-flex;align-items:center;gap:6px;
-  font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
-  padding:4px 10px;border-radius:20px;margin-left:10px;
-  background:rgba(201,151,58,0.15);color:var(--gold);
-  border:1px solid rgba(201,151,58,0.25);
-  vertical-align:middle;
-}
-
 @media(max-width:600px){
   nav{padding:0 20px;height:52px;}
   .hero{padding:100px 20px 60px;}
   section{padding:70px 20px;}
   .cta-banner{margin:0 20px 60px;padding:40px 28px;}
   footer{padding:40px 20px 24px;}
-  .dash-wrap{padding:24px 20px;}
 }
 
 /* ── INDUSTRY WORDS EFFECT ───────────────────────────────────── */
@@ -667,7 +569,7 @@ footer{
 
 <!-- ── NAV ── -->
 <nav>
-  <div class="nav-logo" onclick="showLanding()">
+  <div class="nav-logo" onclick="window.scrollTo(0,0)">
     <div class="nav-logo-mark">
       <svg width="18" height="18" viewBox="0 0 32 32" fill="none">
         <path d="M4 11 C7.5 7,12 17,16 11 C20 5,24.5 15,28 11" stroke="#C9973A" stroke-width="2.2" stroke-linecap="round" fill="none"/>
@@ -1005,32 +907,6 @@ footer{
   </div>
 </div>
 
-<!-- ══ CLIENT DASHBOARD ═══════════════════════════════════════════ -->
-<div id="dashView">
-  <div class="dash-wrap">
-
-    <div class="dash-header">
-      <div>
-        <div class="dash-welcome" id="dashWelcome">Good morning, <span id="dashName">—</span></div>
-        <div class="dash-meta" id="dashDate">—</div>
-      </div>
-      <button class="dash-logout" onclick="doLogout()">← Sign Out</button>
-    </div>
-
-    <!-- Quick stats — populated by JS -->
-    <div class="dash-stats-grid" id="dashStats"></div>
-
-    <!-- Tool cards — populated by JS -->
-    <div class="dash-section-label" style="margin-top:4px;">Your Tools</div>
-    <div class="dash-grid" id="dashToolGrid"></div>
-
-    <!-- Recent activity — populated by JS -->
-    <div class="dash-section-label" style="margin-top:8px;">Recent Activity</div>
-    <div class="glass dash-activity" id="dashActivity"></div>
-
-    <div class="dash-footer-note" id="dashFooterNote"></div>
-  </div>
-</div>
 
 <script>
 // ── Helpers ─────────────────────────────────────────────────────
@@ -1048,89 +924,7 @@ function closeMobileNav(){
   document.body.style.overflow = '';
 }
 
-// ── Client Configuration ────────────────────────────────────────
-// Add new clients here. Each entry maps email → their portal config.
-const CLIENT_CONFIGS = {
-
-  "amrin@guardianms.org": {
-    name: "Amrin",
-    plan: "Full Stack",
-    stats: [
-      { label: "Tools Active",    value: "3",       cls: "" },
-      { label: "Deals Analyzed",  value: "47",      cls: "gold" },
-      { label: "Hours Saved / Mo",value: "~28",     cls: "green" },
-      { label: "Plan",            value: "Full Stack", cls: "plan" }
-    ],
-    tools: [
-      {
-        icon: "🏠", name: "Flip Analyzer v3", status: "live",
-        desc: "6-agent deal analysis. Auto-comps, photo AI, public records, Excel output.",
-        url:  "https://streamlinedai.net/flip-analyzer/",
-        btn:  "Launch Tool →"
-      },
-      {
-        icon: "☀️", name: "Morning Briefing", status: "live",
-        desc: "AI executive briefing pulling from your calendar, email, and task list. Every morning.",
-        url:  "",
-        btn:  "View Today's Briefing →"
-      },
-      {
-        icon: "🚐", name: "NEMT Billing Agent", status: "live",
-        desc: "Automates Guardian Medical invoicing — trip completion to facility invoice in seconds.",
-        url:  "",
-        btn:  "Open Billing →"
-      },
-      {
-        icon: "📊", name: "Harbor Invoice Tracker", status: "soon",
-        desc: "Price trend analysis across Harbor Wholesale invoices. Track margins and ordering patterns."
-      },
-      {
-        icon: "🏗️", name: "Contractor Expense AI", status: "soon",
-        desc: "Extract receipts from Gmail, match bank transactions, log to Excel with anomaly alerts."
-      },
-      {
-        icon: "🛒", name: "Plumas Retail Intelligence", status: "soon",
-        desc: "Margin optimization and DSD price tracking for Plumas Stop N Shop."
-      }
-    ],
-    activity: [
-      { color: "gold",  text: "Flip analysis completed — 1898 White Oak Dr, Yuba City · Grade B+ · $56K profit projected", time: "2h ago" },
-      { color: "green", text: "Morning briefing delivered — 3 calendar items, 2 Guardian invoices pending", time: "7:02 AM" },
-      { color: "blue",  text: "NEMT billing — The Fountains invoices sent · 4 trips · $892", time: "Yesterday" },
-      { color: "gold",  text: "Flip analysis completed — 470 Porter Lane, San Jose · Title flags detected — PRT Corp lien", time: "2 days ago" }
-    ],
-    footerMsg: "Need a new tool built? <a href='mailto:hello@streamlinedai.net'>Message Amrin →</a>"
-  },
-
-  "demo@streamlinedai.net": {
-    name: "Demo",
-    plan: "Starter",
-    stats: [
-      { label: "Tools Active",    value: "1",     cls: "" },
-      { label: "Deals Analyzed",  value: "5",     cls: "gold" },
-      { label: "Hours Saved / Mo",value: "~8",    cls: "green" },
-      { label: "Plan",            value: "Starter", cls: "plan" }
-    ],
-    tools: [
-      {
-        icon: "🏠", name: "Flip Analyzer v3", status: "live",
-        desc: "6-agent deal analysis. Auto-comps, photo AI, public records, Excel output.",
-        url:  "https://streamlinedai.net/flip-analyzer/",
-        btn:  "Launch Tool →"
-      }
-    ],
-    activity: [
-      { color: "gold",  text: "Flip analysis completed — Sample property · Grade A · $72K profit projected", time: "1h ago" },
-      { color: "green", text: "Account activated — Welcome to Streamline AI!", time: "Today" }
-    ],
-    footerMsg: "Want more tools? <a href='mailto:hello@streamlinedai.net'>Upgrade your plan →</a>"
-  }
-
-  // To add a new client, copy one of the blocks above and change the email key + data.
-};
-
 // ── Auth ────────────────────────────────────────────────────────
-let currentUser = null;
 
 function openLogin(e) {
   if (e) e.preventDefault();
@@ -1150,31 +944,16 @@ function doLogin() {
   const email = el("loginEmail").value.trim().toLowerCase();
   const pass  = el("loginPass").value;
 
-  if (!email || !pass) {
+  if (!email || !pass || !email.includes("@") || pass.length < 3) {
     showLoginError();
     return;
   }
 
-  const config = CLIENT_CONFIGS[email];
-
-  if (config) {
-    // Known client — accept any password for demo mode
-    currentUser = { email, config };
-    sessionStorage.setItem('sl_user', JSON.stringify({name: config.name, email: email, biz: config.plan || ''}));
-    closeLogin();
-    window.location.href = '/dashboard.html';
-  } else if (email.includes("@") && pass.length >= 3) {
-    // Unknown client — show generic starter dashboard
-    const genericName = email.split("@")[0];
-    const name = genericName.charAt(0).toUpperCase() + genericName.slice(1);
-    const genericConfig = buildGenericConfig(name);
-    currentUser = { email, config: genericConfig };
-    sessionStorage.setItem('sl_user', JSON.stringify({name: genericConfig.name, email: email, biz: genericConfig.plan || ''}));
-    closeLogin();
-    window.location.href = '/dashboard.html';
-  } else {
-    showLoginError();
-  }
+  const name = email.split("@")[0];
+  const displayName = name.charAt(0).toUpperCase() + name.slice(1);
+  sessionStorage.setItem('sl_user', JSON.stringify({name: displayName, email: email, biz: ''}));
+  closeLogin();
+  window.location.href = '/dashboard.html';
 }
 
 function showLoginError() {
@@ -1184,103 +963,6 @@ function showLoginError() {
     el("loginPass").style.borderColor = "";
   }, 1800);
 }
-
-function buildGenericConfig(name) {
-  return {
-    name,
-    plan: "Starter",
-    stats: [
-      { label: "Tools Active",    value: "1",       cls: "" },
-      { label: "Deals Analyzed",  value: "—",       cls: "gold" },
-      { label: "Hours Saved / Mo",value: "—",       cls: "green" },
-      { label: "Plan",            value: "Starter", cls: "plan" }
-    ],
-    tools: [
-      {
-        icon: "🏠", name: "Flip Analyzer v3", status: "live",
-        desc: "6-agent deal analysis. Auto-comps, photo AI, public records, Excel output.",
-        url:  "https://streamlinedai.net/flip-analyzer/",
-        btn:  "Launch Tool →"
-      }
-    ],
-    activity: [
-      { color: "green", text: "Welcome to Streamline AI — your portal is ready.", time: "Just now" }
-    ],
-    footerMsg: "Questions? <a href='mailto:hello@streamlinedai.net'>Contact Amrin →</a>"
-  };
-}
-
-// ── Dashboard Render ────────────────────────────────────────────
-function showDashboard(config) {
-  el("landingView").style.display = "none";
-  el("dashView").style.display    = "block";
-  const ic = document.getElementById("industryCanvas"); if(ic) ic.style.display = "none";
-
-  // Greeting
-  const hour = new Date().getHours();
-  const greeting = hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
-  el("dashWelcome").innerHTML = `${greeting}, <span class="dash-name">${config.name}</span> <span class="plan-badge">${config.plan}</span>`;
-  el("dashDate").textContent = new Date().toLocaleDateString("en-US", {
-    weekday:"long", month:"long", day:"numeric", year:"numeric"
-  });
-
-  // Stats
-  const statsHtml = config.stats.map(s => `
-    <div class="glass dash-stat-box">
-      <div class="dsb-label">${s.label}</div>
-      <div class="dsb-value ${s.cls}">${s.value}</div>
-    </div>
-  `).join("");
-  el("dashStats").innerHTML = statsHtml;
-
-  // Tools
-  const toolsHtml = config.tools.map(t => {
-    const inactive = t.status === "soon" ? "inactive" : "";
-    const statusBadge = t.status === "live"
-      ? `<span class="dt-status dt-live">● Live</span>`
-      : `<span class="dt-status dt-soon">⏳ In Development</span>`;
-    const launchBtn = t.status === "live" && t.url
-      ? `<a class="tool-launch-btn" href="${t.url}" target="_blank" rel="noopener">${t.btn}</a>`
-      : t.status === "live" && !t.url
-      ? `<button class="tool-launch-btn" onclick="comingSoon('${t.name}')">${t.btn}</button>`
-      : "";
-    return `
-      <div class="glass dash-tool ${inactive}">
-        <div class="dt-icon">${t.icon}</div>
-        <div class="dt-name">${t.name}</div>
-        <div class="dt-desc">${t.desc}</div>
-        <div>${statusBadge}</div>
-        ${launchBtn}
-      </div>
-    `;
-  }).join("");
-  el("dashToolGrid").innerHTML = toolsHtml;
-
-  // Activity
-  const actHtml = config.activity.map(a => `
-    <div class="da-item">
-      <div class="da-dot da-${a.color}"></div>
-      <div class="da-text">${a.text}</div>
-      <div class="da-time">${a.time}</div>
-    </div>
-  `).join("");
-  el("dashActivity").innerHTML = actHtml;
-
-  // Footer note
-  el("dashFooterNote").innerHTML = config.footerMsg || "";
-
-  window.scrollTo(0, 0);
-}
-
-function showLanding() {
-  el("landingView").style.display = "";
-  el("dashView").style.display    = "none";
-  const ic = document.getElementById("industryCanvas"); if(ic) ic.style.display = "";
-  currentUser = null;
-  window.scrollTo(0, 0);
-}
-
-function doLogout() { showLanding(); }
 
 function showToast(msg) {
   var t = document.createElement('div');

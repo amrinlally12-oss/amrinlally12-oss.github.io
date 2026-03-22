@@ -290,6 +290,7 @@ nav{
 .da-text{font-size:12px;line-height:1.6;color:var(--dim);}
 .da-text strong{color:var(--white);font-weight:600;}
 .da-time{font-size:11px;color:var(--faint);flex-shrink:0;padding-top:2px;}
+.da-empty{font-size:13px;color:var(--faint);padding:8px 0;}
 
 /* Needs Attention */
 .needs-list{display:flex;flex-direction:column;}
@@ -434,6 +435,7 @@ nav{
   </a>
   <div class="nav-right">
     <a href="/blog.html" style="font-family:'Syne',sans-serif;font-size:13px;font-weight:600;color:var(--dim);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--white)'" onmouseout="this.style.color='var(--dim)'">Blog</a>
+    <a href="/admin.html" id="adminLink" style="display:none;font-family:'Syne',sans-serif;font-size:13px;font-weight:600;color:var(--red,#f07a5a);text-decoration:none;transition:opacity 0.2s;" onmouseover="this.style.opacity='0.75'" onmouseout="this.style.opacity='1'">Admin ↗</a>
     <div class="nav-user">
       <div class="nav-avatar" id="navAvatar">S</div>
       <span id="navName">Sarah</span>
@@ -476,15 +478,15 @@ nav{
   <div class="stats-row" id="statsRow">
     <div class="stat-card">
       <div class="sc-label">Tools active</div>
-      <div class="sc-val" id="statTools">3</div>
-      <div class="sc-sub">of 5 built</div>
+      <div class="sc-val" id="statTools">—</div>
+      <div class="sc-sub" id="statToolsSub"></div>
     </div>
 
     <div class="stat-card">
       <div class="sc-label">Hours saved this month</div>
       <div class="hours-wrap">
         <div class="sc-val">
-          <span class="hours-val" id="hoursVal" onclick="toggleTip(event)">~18 hrs</span>
+          <span class="hours-val" id="hoursVal" onclick="toggleTip(event)">—</span>
         </div>
         <div class="tip-box" id="tipBox">
           <div class="tip-title">How this is calculated</div>
@@ -495,19 +497,19 @@ nav{
           <div class="tip-total"><span>Total this month</span><span>~18 hrs</span></div>
         </div>
       </div>
-      <div class="sc-sub up">↑ 4 hrs vs last month</div>
+      <div class="sc-sub">estimated per month</div>
     </div>
 
     <div class="stat-card">
       <div class="sc-label">Actions this month</div>
-      <div class="sc-val" id="statActions">23</div>
+      <div class="sc-val" id="statActions">—</div>
       <div class="sc-sub">across all tools</div>
     </div>
 
     <div class="stat-card">
       <div class="sc-label">Last activity</div>
-      <div class="sc-val sm" id="statLast">2 hrs ago</div>
-      <div class="sc-sub" id="statLastDetail">Flip Analyzer</div>
+      <div class="sc-val sm" id="statLast">—</div>
+      <div class="sc-sub" id="statLastDetail"></div>
     </div>
   </div>
 
@@ -693,23 +695,171 @@ nav{
   <span id="toastMsg"></span>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script>
-// ── Session Check ───────────────────────────────────────────────
-(function init() {
-  const session = sessionStorage.getItem('sl_user');
-  if (session) {
-    try {
-      const data = JSON.parse(session);
-      if (data && data.email) {
-        showDashboard(data);
-        return;
-      }
-    } catch(e) { sessionStorage.removeItem('sl_user'); }
-  }
-  document.getElementById('gateView').classList.add('show');
-})();
+// ── Supabase Client ──────────────────────────────────────────────
+const _sb = supabase.createClient(
+  'https://swxbuphqvqtfuijuilah.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN3eGJ1cGhxdnF0ZnVpanVpbGFoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM5ODcxMDQsImV4cCI6MjA4OTU2MzEwNH0.nDPxNStgq_hCw2n2K9d_i7UEIdc5W5rnZRNpXZB8-3M'
+);
 
 function esc(str) { const d = document.createElement('div'); d.textContent = str; return d.innerHTML; }
+
+// ── Tool Meta & Constants ────────────────────────────────────────
+const TOOL_META = {
+  flip_analyzer:      { name: 'Flip Analyzer',         icon: '🏠', desc: 'ARV comps, reno budgets, deal grading, and Excel output. Powered by 6 AI agents.' },
+  reconciler:         { name: 'Transaction Reconciler', icon: '🧾', desc: 'Receipt OCR, bank CSV matching, and expense categorization. Powered by hybrid AI matching.' },
+  morning_briefing:   { name: 'Morning Briefing',      icon: '🌅', desc: 'Daily AI executive summary pulling from your calendar, Gmail, and Notion tasks.' },
+  nemt_billing:       { name: 'NEMT Billing',           icon: '📋', desc: 'Trip invoicing, Bambi sync, PDF generation, and automated sends to facilities.' },
+  invoice_tracker:    { name: 'Invoice Tracker',        icon: '🛒', desc: 'Harbor invoice tracking, margin optimization, and DSD price alerts.' },
+  expense_categorizer:{ name: 'Contractor Tracker',     icon: '🏗️', desc: 'Receipt extraction from Gmail, bank transaction matching, anomaly detection.' },
+  trip_matcher:       { name: 'Trip Matcher',           icon: '🚐', desc: 'Automated NEMT trip matching against Bambi manifests.' },
+};
+
+const ARROW_SVG = '<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H4M8 2v4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+function renderTools(tools) {
+  const grid = document.getElementById('toolsGrid');
+  grid.innerHTML = tools.map(t => {
+    const meta   = TOOL_META[t.tool_type] || { name: t.tool_type, icon: '⚙️', desc: '' };
+    const active = t.enabled;
+    const rawUrl = t.config?.url   || '';
+    const url    = rawUrl && /^https?:\/\//i.test(rawUrl) ? rawUrl : '';
+    const label  = t.config?.label || 'Launch →';
+    return `<div class="tool-card${active ? '' : ' inactive'}">
+      <div class="tc-icon">${meta.icon}</div>
+      <div class="tc-name">${esc(meta.name)}</div>
+      <div class="tc-desc">${esc(meta.desc)}</div>
+      <div class="tc-footer">
+        <span class="tc-status ${active ? 'tc-live' : 'tc-soon'}">${active ? '● Live' : '⏳ In development'}</span>
+        ${url ? `<a class="tc-launch" href="${esc(url)}" target="_blank">${esc(label)} ${ARROW_SVG}</a>` : ''}
+      </div>
+    </div>`;
+  }).join('') + `<div class="request-card" onclick="window.location.href='mailto:hello@streamlinedai.net?subject=New Tool Request'">
+      <div class="request-plus">+</div>
+      <div class="request-label">Request a custom tool</div>
+      <div class="request-sub">We build to your workflow</div>
+    </div>`;
+}
+
+// ── Helpers ──────────────────────────────────────────────────────
+function timeAgo(ts) {
+  if (!ts) return '—';
+  const diff = Date.now() - new Date(ts).getTime();
+  if (diff < 0) return 'Just now';
+  const m = Math.floor(diff / 60000);
+  if (m < 1) return 'Just now';
+  if (m < 60) return m + 'm ago';
+  const h = Math.floor(m / 60);
+  if (h < 24) return h + 'h ago';
+  const d = Math.floor(h / 24);
+  return d === 1 ? 'Yesterday' : d + ' days ago';
+}
+
+const JOB_COLORS = {
+  flip_analyzer: 'gold', reconciler: 'blue',
+  invoice_tracker: 'blue', trip_matcher: 'blue', expense_categorizer: 'green'
+};
+
+function renderActivity(jobs) {
+  const feed = document.getElementById('activityFeed');
+  if (!jobs?.length) {
+    feed.innerHTML = '<div class="da-empty">No recent activity yet.</div>';
+    return;
+  }
+  feed.innerHTML = jobs.map(j => {
+    const meta  = TOOL_META[j.tool_type] || { name: j.tool_type };
+    const color = JOB_COLORS[j.tool_type] || 'gold';
+    const status = j.status === 'failed' ? 'failed' : 'completed';
+    return `<div class="da-item">
+      <div class="da-dot-wrap"><div class="da-dot ${color}"></div></div>
+      <div class="da-body"><div class="da-text"><strong>${esc(meta.name)}</strong> — ${status}</div></div>
+      <div class="da-time">${timeAgo(j.created_at)}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderNeeds(flags) {
+  const card = document.querySelector('.needs-card');
+  if (!flags?.length) { card.style.display = 'none'; return; }
+  document.getElementById('needsList').innerHTML = flags.map(f => `
+    <div class="needs-item">
+      <span class="needs-pill pill-warn">Flagged</span>
+      <div>
+        <div class="needs-text"><strong>${esc(f.vendor || 'Transaction')}</strong>${f.amount ? ' · $' + Number(f.amount) : ''} — ${esc(f.flag_reason || 'Flagged for review')}</div>
+      </div>
+    </div>`).join('');
+}
+
+// ── Session Check ────────────────────────────────────────────────
+(async function init() {
+  const { data: { session } } = await _sb.auth.getSession();
+  if (!session) {
+    document.getElementById('gateView').classList.add('show');
+    return;
+  }
+
+  // Fetch user profile + client
+  const { data: profile, error: profileErr } = await _sb
+    .from('users')
+    .select('name, role, client_id, clients(name, plan)')
+    .eq('email', session.user.email)
+    .single();
+
+  if (profileErr || !profile) {
+    document.getElementById('gateView').classList.add('show');
+    return;
+  }
+
+  if (profile.client_id) {
+    // Parallel fetch of tools, recent jobs, and flagged transactions
+    const [{ data: tools, error: toolsErr }, { data: jobs, error: jobsErr }, { data: flags }] = await Promise.all([
+      _sb.from('client_tools').select('tool_type, enabled, config').eq('client_id', profile.client_id).order('created_at'),
+      _sb.from('jobs').select('created_at, tool_type, status').eq('client_id', profile.client_id).order('created_at', { ascending: false }).limit(20),
+      _sb.from('transactions').select('vendor, amount, flag_reason, date').eq('client_id', profile.client_id).eq('flagged', true).limit(5)
+    ]);
+
+    if (tools?.length) renderTools(tools);
+
+    // Stat: tools active
+    const totalCount  = tools ? tools.length : 0;
+    const activeCount = tools ? tools.filter(t => t.enabled).length : 0;
+    document.getElementById('statTools').textContent = activeCount;
+    document.getElementById('statToolsSub').textContent = 'of ' + totalCount + ' built';
+
+    // Stat: hours saved (active tools × ~9 hrs/month estimate)
+    const hrsEl = document.getElementById('hoursVal');
+    hrsEl.textContent = activeCount > 0 ? '~' + (activeCount * 9) + ' hrs' : '—';
+    document.getElementById('tipBox').innerHTML =
+      `<div class="tip-title">Estimated time saved</div>` +
+      `<div class="tip-row"><span>${activeCount} active tool${activeCount !== 1 ? 's' : ''} × ~9 hrs avg / month</span><span>~${activeCount * 9} hrs</span></div>`;
+
+    // Stat: actions this month
+    const monthStart = new Date(); monthStart.setDate(1); monthStart.setHours(0, 0, 0, 0);
+    const monthJobs = jobs ? jobs.filter(j => new Date(j.created_at) >= monthStart) : [];
+    document.getElementById('statActions').textContent = monthJobs.length || '—';
+
+    // Stat: last activity
+    if (jobs?.length) {
+      const last = jobs[0];
+      document.getElementById('statLast').textContent = timeAgo(last.created_at);
+      document.getElementById('statLastDetail').textContent = TOOL_META[last.tool_type]?.name || last.tool_type;
+    } else {
+      document.getElementById('statLast').textContent = '—';
+      document.getElementById('statLastDetail').textContent = 'No activity yet';
+    }
+
+    renderActivity(jobs);
+    renderNeeds(flags);
+  }
+
+  showDashboard({
+    email: session.user.email,
+    name:  profile?.name  || session.user.email.split('@')[0],
+    plan:  profile?.clients?.plan || 'Starter',
+    role:  profile?.role  || 'member',
+  });
+})();
 
 function showDashboard(data) {
   const name = data.name || data.email.split('@')[0];
@@ -725,6 +875,7 @@ function showDashboard(data) {
     weekday:'long', month:'long', day:'numeric', year:'numeric'
   });
 
+  if (data.role === 'admin') document.getElementById('adminLink').style.display = '';
   document.getElementById('dashPage').style.display = '';
 }
 
@@ -766,8 +917,8 @@ function showToast(msg, type) {
 }
 
 // ── Logout ───────────────────────────────────────────────────────
-function handleLogout() {
-  sessionStorage.removeItem('sl_user');
+async function handleLogout() {
+  await _sb.auth.signOut();
   showToast('Signing out…', 'gold');
   setTimeout(() => { window.location.href = '/'; }, 1200);
 }

@@ -13,6 +13,7 @@
 <meta name="theme-color" content="#04070f"/>
 <link rel="canonical" href="https://streamlinedai.net/blog"/>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Figtree:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -495,23 +496,24 @@ function closeMobileNav(){
 }
 
 // Session-aware nav CTA
-(function(){
-  var user = null;
-  try { user = JSON.parse(sessionStorage.getItem('sl_user')); } catch(e){}
+(async function(){
   var cta = document.getElementById('navCta');
-  if (user && user.name) {
-    cta.textContent = 'Dashboard →';
-    cta.href = '/dashboard.html';
-    cta.onclick = function(){ closeMobileNav(); };
-  } else {
-    cta.textContent = 'Client Login →';
-    cta.href = '/';
-    cta.onclick = function(e){
-      closeMobileNav();
-      // Navigate to front page which has the login modal
-      window.location.href = '/#login';
-    };
-  }
+  try {
+    var _sb = window.supabase.createClient(
+      'https://swxbuphqvqtfuijuilah.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN3eGJ1cGhxdnF0ZnVpanVpbGFoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM5ODcxMDQsImV4cCI6MjA4OTU2MzEwNH0.nDPxNStgq_hCw2n2K9d_i7UEIdc5W5rnZRNpXZB8-3M'
+    );
+    var session = (await _sb.auth.getSession()).data.session;
+    if (session) {
+      cta.textContent = 'Dashboard →';
+      cta.href = '/dashboard.html';
+      cta.onclick = function(){ closeMobileNav(); };
+      return;
+    }
+  } catch(e) {}
+  cta.textContent = 'Client Login →';
+  cta.href = '/';
+  cta.onclick = function(){ closeMobileNav(); window.location.href = '/#login'; };
 })();
 </script>
 </body>

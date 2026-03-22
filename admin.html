@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Admin — Streamline AI</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<meta name="robots" content="noindex,nofollow"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Figtree:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#04070f;--glass-bg:rgba(255,255,255,0.04);--glass-border:rgba(255,255,255,0.10);
+  --gold:#C9973A;--gold-l:#E8C97A;
+  --white:#ffffff;--dim:rgba(255,255,255,0.55);--faint:rgba(255,255,255,0.22);
+  --green:#8fda3a;--blue:#5ab4f0;--red:#f07a5a;
+  --red-bg:rgba(226,75,74,0.1);--red-b:rgba(226,75,74,0.3);
+  --r:14px;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Figtree',sans-serif;background:var(--bg);color:var(--white);min-height:100vh;}
+::selection{background:rgba(201,151,58,0.3);}
+::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.12);border-radius:4px;}
+nav{
+  position:fixed;top:0;left:0;right:0;height:60px;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 32px;
+  background:rgba(4,7,15,0.85);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--glass-border);
+}
+.nav-logo{
+  font-family:'Syne',sans-serif;font-size:17px;font-weight:800;
+  color:var(--white);text-decoration:none;display:flex;align-items:center;gap:4px;
+}
+.nav-logo span{color:var(--gold);}
+.admin-badge{
+  display:inline-flex;align-items:center;font-size:9px;font-weight:700;
+  letter-spacing:1.2px;text-transform:uppercase;padding:3px 8px;
+  border-radius:20px;margin-left:8px;
+  background:rgba(240,122,90,0.15);color:var(--red);
+  border:1px solid rgba(240,122,90,0.35);vertical-align:middle;
+}
+.nav-right{display:flex;align-items:center;gap:16px;}
+.nav-user{display:flex;align-items:center;gap:10px;}
+.nav-avatar{
+  width:32px;height:32px;border-radius:50%;
+  background:linear-gradient(135deg,var(--gold),var(--gold-l));
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;font-size:12px;font-weight:800;color:var(--bg);
+}
+.nav-name{font-size:13px;font-weight:600;}
+.nav-btn{
+  font-family:'Syne',sans-serif;font-size:12px;font-weight:600;
+  color:var(--faint);background:transparent;padding:7px 14px;
+  border-radius:8px;border:1px solid var(--glass-border);
+  cursor:pointer;transition:all 0.2s;text-decoration:none;
+}
+.nav-btn:hover{color:var(--white);border-color:rgba(255,255,255,0.2);}
+.gate{
+  display:none;min-height:100vh;align-items:center;justify-content:center;
+  flex-direction:column;gap:16px;text-align:center;padding:80px 24px;
+}
+.gate.show{display:flex;}
+.gate-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;}
+.gate-sub{font-size:14px;color:var(--dim);max-width:360px;}
+.gate-btn{
+  display:inline-block;margin-top:8px;
+  font-family:'Syne',sans-serif;font-size:13px;font-weight:700;
+  color:var(--bg);background:linear-gradient(135deg,var(--gold),var(--gold-l));
+  padding:11px 24px;border-radius:10px;text-decoration:none;
+}
+.admin-wrap{max-width:1100px;margin:0 auto;padding:88px 32px 64px;}
+@media(max-width:640px){.admin-wrap{padding:80px 16px 48px;}}
+.page-header{margin-bottom:28px;}
+.page-title{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;}
+.page-sub{font-size:13px;color:var(--faint);margin-top:4px;}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:36px;}
+@media(max-width:720px){.stats-row{grid-template-columns:1fr 1fr;}}
+.stat-card{
+  background:var(--glass-bg);border:1px solid var(--glass-border);
+  border-radius:var(--r);padding:18px 20px;
+}
+.sc-label{font-size:11px;color:var(--faint);font-weight:500;margin-bottom:8px;letter-spacing:0.3px;}
+.sc-val{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;}
+.sc-sub{font-size:11px;color:var(--faint);margin-top:4px;}
+.section-label{
+  font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--faint);margin-bottom:14px;display:flex;align-items:center;
+  justify-content:space-between;gap:12px;flex-wrap:wrap;
+}
+.client-list{display:flex;flex-direction:column;gap:10px;margin-bottom:40px;}
+.client-row{
+  background:var(--glass-bg);border:1px solid var(--glass-border);
+  border-radius:var(--r);overflow:hidden;transition:border-color 0.2s;
+}
+.client-row.expanded{border-color:rgba(201,151,58,0.3);}
+.client-summary{
+  display:grid;grid-template-columns:1fr auto auto auto auto;
+  align-items:center;gap:16px;padding:16px 20px;cursor:pointer;
+}
+@media(max-width:640px){.client-summary{grid-template-columns:1fr auto;}}
+.client-name{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;}
+.client-email{font-size:12px;color:var(--dim);margin-top:2px;}
+.plan-pill{
+  font-size:10px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;
+  padding:3px 10px;border-radius:20px;
+  background:rgba(201,151,58,0.12);color:var(--gold);
+  border:1px solid rgba(201,151,58,0.25);white-space:nowrap;
+}
+.client-meta{font-size:12px;color:var(--dim);white-space:nowrap;}
+.client-toggle{
+  font-family:'Syne',sans-serif;font-size:12px;font-weight:600;
+  color:var(--gold);background:transparent;border:none;
+  cursor:pointer;padding:6px 4px;transition:opacity 0.2s;
+}
+.client-toggle:hover{opacity:0.7;}
+@media(max-width:640px){.plan-pill,.client-meta{display:none;}}
+.client-detail{
+  display:none;border-top:1px solid var(--glass-border);
+  padding:20px 20px 24px;
+}
+.client-row.expanded .client-detail{display:block;}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+@media(max-width:720px){.detail-grid{grid-template-columns:1fr;}}
+.detail-section-title{
+  font-size:11px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;
+  color:var(--faint);margin-bottom:12px;
+}
+.tool-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 0;border-bottom:1px solid var(--glass-border);
+  gap:12px;
+}
+.tool-row:last-child{border-bottom:none;}
+.tool-info{flex:1;}
+.tool-name{font-size:13px;font-weight:600;}
+.tool-status{
+  font-size:10px;font-weight:700;letter-spacing:0.5px;
+  padding:2px 8px;border-radius:4px;margin-top:3px;display:inline-block;
+}
+.ts-live{background:rgba(143,218,58,0.12);color:var(--green);border:1px solid rgba(143,218,58,0.2);}
+.ts-off{background:rgba(255,255,255,0.04);color:var(--faint);border:1px solid var(--glass-border);}
+.toggle-wrap{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.toggle{
+  position:relative;width:36px;height:20px;cursor:pointer;
+}
+.toggle input{opacity:0;width:0;height:0;}
+.toggle-track{
+  position:absolute;inset:0;border-radius:10px;
+  background:rgba(255,255,255,0.12);
+  transition:background 0.25s;
+}
+.toggle input:checked + .toggle-track{background:var(--green);}
+.toggle-thumb{
+  position:absolute;top:3px;left:3px;width:14px;height:14px;
+  border-radius:50%;background:var(--white);
+  transition:transform 0.25s;
+}
+.toggle input:checked ~ .toggle-thumb{transform:translateX(16px);}
+.user-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 0;border-bottom:1px solid var(--glass-border);gap:12px;
+}
+.user-row:last-child{border-bottom:none;}
+.user-info{flex:1;}
+.user-name{font-size:13px;font-weight:600;}
+.user-email{font-size:11px;color:var(--dim);}
+.reset-btn{
+  font-family:'Syne',sans-serif;font-size:11px;font-weight:600;
+  color:var(--dim);background:var(--glass-bg);border:1px solid var(--glass-border);
+  padding:5px 12px;border-radius:7px;cursor:pointer;
+  transition:all 0.2s;white-space:nowrap;
+}
+.reset-btn:hover{color:var(--white);border-color:rgba(255,255,255,0.25);}
+.reset-btn:disabled{opacity:0.4;cursor:default;}
+.period-tabs{display:flex;gap:6px;}
+.tab-btn{
+  font-family:'Syne',sans-serif;font-size:11px;font-weight:700;
+  letter-spacing:0.5px;padding:5px 14px;border-radius:20px;
+  border:1px solid var(--glass-border);background:transparent;
+  color:var(--faint);cursor:pointer;transition:all 0.2s;
+}
+.tab-btn.active{
+  background:rgba(201,151,58,0.15);color:var(--gold);
+  border-color:rgba(201,151,58,0.35);
+}
+.analytics-table{
+  width:100%;border-collapse:collapse;font-size:13px;margin-bottom:40px;
+}
+.analytics-table th{
+  font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;
+  color:var(--faint);padding:8px 14px;text-align:left;
+  border-bottom:1px solid var(--glass-border);
+}
+.analytics-table td{
+  padding:12px 14px;border-bottom:1px solid rgba(255,255,255,0.05);
+  color:var(--dim);
+}
+.analytics-table tr:last-child td{border-bottom:none;}
+.analytics-table td:first-child{color:var(--white);font-weight:600;}
+.analytics-table td.num{
+  font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--white);
+}
+.analytics-table td.zero{color:var(--faint);}
+.empty-row td{text-align:center;color:var(--faint);padding:24px;}
+.toast{
+  position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(80px);
+  background:rgba(20,25,40,0.95);border:1px solid var(--glass-border);
+  padding:12px 22px;border-radius:12px;font-size:13px;font-weight:500;
+  display:flex;align-items:center;gap:10px;
+  transition:transform 0.3s,opacity 0.3s;opacity:0;
+  backdrop-filter:blur(12px);z-index:999;white-space:nowrap;
+}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+.toast-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">Streamline<span> AI</span><span class="admin-badge">Admin</span></a>
+  <div class="nav-right">
+    <div class="nav-user">
+      <div class="nav-avatar" id="navAvatar">A</div>
+      <span class="nav-name" id="navName">Admin</span>
+    </div>
+    <a href="/dashboard.html" class="nav-btn">My Dashboard</a>
+    <button class="nav-btn" onclick="handleLogout()">Sign out</button>
+  </div>
+</nav>
+
+<div class="gate" id="gateView">
+  <div class="gate-title">Access denied</div>
+  <div class="gate-sub">This page is restricted to Streamline AI administrators.</div>
+  <a href="/" class="gate-btn">Go home</a>
+</div>
+
+<div class="admin-wrap" id="adminPage" style="display:none;">
+
+  <div class="page-header">
+    <div class="page-title">Admin Console</div>
+    <div class="page-sub" id="adminDate"></div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="sc-label">Total clients</div>
+      <div class="sc-val" id="sTotalClients">&mdash;</div>
+    </div>
+    <div class="stat-card">
+      <div class="sc-label">Active tools</div>
+      <div class="sc-val" id="sActiveTools">&mdash;</div>
+      <div class="sc-sub" id="sActiveSub"></div>
+    </div>
+    <div class="stat-card">
+      <div class="sc-label">Jobs this month</div>
+      <div class="sc-val" id="sMonthJobs">&mdash;</div>
+      <div class="sc-sub" id="sMonthJobsSub"></div>
+    </div>
+    <div class="stat-card">
+      <div class="sc-label">Tokens this month</div>
+      <div class="sc-val" id="sMonthTokens">&mdash;</div>
+      <div class="sc-sub" id="sMonthTokensSub"></div>
+    </div>
+  </div>
+
+  <div class="section-label">Clients</div>
+  <div class="client-list" id="clientList"></div>
+
+  <div class="section-label">
+    Usage analytics
+    <div class="period-tabs">
+      <button class="tab-btn active" onclick="setPeriod('dtd',this)">Today</button>
+      <button class="tab-btn" onclick="setPeriod('wtd',this)">This week</button>
+      <button class="tab-btn" onclick="setPeriod('mtd',this)">This month</button>
+      <button class="tab-btn" onclick="setPeriod('ytd',this)">This year</button>
+    </div>
+  </div>
+  <table class="analytics-table" id="analyticsTable">
+    <thead>
+      <tr>
+        <th>Client</th>
+        <th>Tool</th>
+        <th>Jobs</th>
+        <th>Tokens</th>
+        <th>Avg tokens / job</th>
+        <th>Daily avg jobs</th>
+      </tr>
+    </thead>
+    <tbody id="analyticsBody"></tbody>
+  </table>
+
+</div>
+
+<div class="toast" id="toast">
+  <div class="toast-dot" id="toastDot"></div>
+  <span id="toastMsg"></span>
+</div>
+
+<script>
+const _sb = window.supabase.createClient(
+  'https://swxbuphqvqtfuijuilah.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN3eGJ1cGhxdnF0ZnVpanVpbGFoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM5ODcxMDQsImV4cCI6MjA4OTU2MzEwNH0.nDPxNStgq_hCw2n2K9d_i7UEIdc5W5rnZRNpXZB8-3M'
+);
+
+const TOOL_NAMES = {
+  flip_analyzer:       'Flip Analyzer',
+  reconciler:          'Transaction Reconciler',
+  invoice_tracker:     'Harbor Invoice Tracker',
+  trip_matcher:        'NEMT Billing Agent',
+  expense_categorizer: 'Expense Categorizer',
+};
+
+let _clients = [], _users = [], _tools = [], _jobs = [];
+let _period = 'mtd';
+
+function esc(s) { const d = document.createElement('div'); d.textContent = String(s||''); return d.innerHTML; }
+
+function periodStart(p) {
+  const now = new Date();
+  if (p === 'dtd') { const d = new Date(now); d.setHours(0,0,0,0); return d; }
+  if (p === 'wtd') {
+    const d = new Date(now); const day = d.getDay();
+    d.setDate(d.getDate() - (day === 0 ? 6 : day - 1)); d.setHours(0,0,0,0); return d;
+  }
+  if (p === 'mtd') { return new Date(now.getFullYear(), now.getMonth(), 1); }
+  if (p === 'ytd') { return new Date(now.getFullYear(), 0, 1); }
+  return new Date(0);
+}
+
+function daysSince(d) {
+  return Math.max(1, Math.ceil((Date.now() - d.getTime()) / 86400000));
+}
+
+(async function init() {
+  const { data: { session } } = await _sb.auth.getSession();
+  if (!session) { document.getElementById('gateView').classList.add('show'); return; }
+
+  const { data: profile, error: profileErr } = await _sb
+    .from('users').select('name, role').eq('email', session.user.email).single();
+
+  if (profileErr || !profile || profile.role !== 'admin') {
+    document.getElementById('gateView').classList.add('show'); return;
+  }
+
+  const [
+    { data: clients },
+    { data: users },
+    { data: tools },
+    { data: jobs },
+  ] = await Promise.all([
+    _sb.from('clients').select('id, name, owner_email, plan, created_at').order('created_at'),
+    _sb.from('users').select('id, email, name, role, client_id, created_at').order('created_at'),
+    _sb.from('client_tools').select('id, client_id, tool_type, enabled, config, created_at').order('created_at'),
+    _sb.from('jobs').select('id, client_id, tool_type, status, token_usage, created_at')
+       .order('created_at', { ascending: false }).limit(2000),
+  ]);
+
+  _clients = clients || [];
+  _users   = users   || [];
+  _tools   = tools   || [];
+  _jobs    = jobs    || [];
+
+  const initials = (profile.name || 'A').split(' ').map(p => p[0]).join('').slice(0,2).toUpperCase();
+  document.getElementById('navAvatar').textContent = initials;
+  document.getElementById('navName').textContent = (profile.name || 'Admin').split(' ')[0];
+  document.getElementById('adminDate').textContent = new Date().toLocaleDateString('en-US', {
+    weekday:'long', month:'long', day:'numeric', year:'numeric'
+  });
+
+  renderOverview();
+  renderClients();
+  renderAnalytics(_period);
+
+  document.getElementById('adminPage').style.display = '';
+})();
+
+function renderOverview() {
+  const ms = periodStart('mtd');
+  const monthJobs   = _jobs.filter(j => new Date(j.created_at) >= ms);
+  const totalTokens = monthJobs.reduce((a, j) => a + (j.token_usage || 0), 0);
+  const activeTools = _tools.filter(t => t.enabled).length;
+
+  document.getElementById('sTotalClients').textContent = _clients.length;
+  document.getElementById('sActiveTools').textContent  = activeTools;
+  document.getElementById('sActiveSub').textContent    = 'of ' + _tools.length + ' total';
+  document.getElementById('sMonthJobs').textContent    = monthJobs.length || '\u2014';
+  document.getElementById('sMonthJobsSub').textContent = monthJobs.length
+    ? (monthJobs.length / daysSince(ms)).toFixed(1) + ' / day avg' : '';
+  document.getElementById('sMonthTokens').textContent    = totalTokens > 0 ? totalTokens.toLocaleString() : '\u2014';
+  document.getElementById('sMonthTokensSub').textContent = totalTokens > 0
+    ? Math.round(totalTokens / daysSince(ms)).toLocaleString() + ' / day avg' : '';
+}
+
+function renderClients() {
+  const list = document.getElementById('clientList');
+  if (!_clients.length) {
+    list.innerHTML = '<div style="color:var(--faint);font-size:13px;padding:16px 0;">No clients yet.</div>';
+    return;
+  }
+  list.innerHTML = _clients.map(c => {
+    const clientUsers  = _users.filter(u => u.client_id === c.id);
+    const clientTools  = _tools.filter(t => t.client_id === c.id);
+    const activeCount  = clientTools.filter(t => t.enabled).length;
+    const userCount    = clientUsers.length;
+
+    return `
+<div class="client-row" id="cr-${c.id}">
+  <div class="client-summary" onclick="toggleClient('${c.id}')">
+    <div>
+      <div class="client-name">${esc(c.name)}</div>
+      <div class="client-email">${esc(c.owner_email || '')}</div>
+    </div>
+    <div class="plan-pill">${esc(c.plan || 'retainer')}</div>
+    <div class="client-meta">${activeCount}/${clientTools.length} tools active</div>
+    <div class="client-meta">${userCount} user${userCount !== 1 ? 's' : ''}</div>
+    <button class="client-toggle" data-cid="${c.id}" onclick="event.stopPropagation();toggleClient('${c.id}')">
+      &#x25BC; Manage
+    </button>
+  </div>
+  <div class="client-detail">
+    <div class="detail-grid">
+      <div>
+        <div class="detail-section-title">Tools</div>
+        ${clientTools.length ? clientTools.map(t => `
+          <div class="tool-row" id="tr-${t.id}">
+            <div class="tool-info">
+              <div class="tool-name">${esc(TOOL_NAMES[t.tool_type] || t.tool_type)}</div>
+              <div class="tool-status ${t.enabled ? 'ts-live' : 'ts-off'}" id="ts-${t.id}">
+                ${t.enabled ? '&#x25CF; Active' : '&#x25CB; Disabled'}
+              </div>
+            </div>
+            <div class="toggle-wrap">
+              <label class="toggle" title="${t.enabled ? 'Disable' : 'Enable'} tool">
+                <input type="checkbox" ${t.enabled ? 'checked' : ''}
+                  onchange="toggleTool('${t.id}', this)">
+                <div class="toggle-track"></div>
+                <div class="toggle-thumb"></div>
+              </label>
+            </div>
+          </div>`).join('') : '<div style="color:var(--faint);font-size:13px;padding:8px 0;">No tools assigned.</div>'}
+      </div>
+      <div>
+        <div class="detail-section-title">Users</div>
+        ${clientUsers.length ? clientUsers.map(u => `
+          <div class="user-row">
+            <div class="user-info">
+              <div class="user-name">${esc(u.name || '\u2014')}</div>
+              <div class="user-email">${esc(u.email)}</div>
+            </div>
+            <button class="reset-btn" data-email="${esc(u.email)}" onclick="sendReset(this.dataset.email, this)">
+              Send password reset
+            </button>
+          </div>`).join('') : '<div style="color:var(--faint);font-size:13px;padding:8px 0;">No users.</div>'}
+      </div>
+    </div>
+  </div>
+</div>`;
+  }).join('');
+}
+
+function toggleClient(cid) {
+  const row = document.getElementById('cr-' + cid);
+  if (!row) return;
+  row.classList.toggle('expanded');
+  const btn = row.querySelector('.client-toggle');
+  if (btn) btn.textContent = row.classList.contains('expanded') ? '\u25B2 Close' : '\u25BC Manage';
+}
+
+async function toggleTool(toolId, checkbox) {
+  checkbox.disabled = true;
+  const newEnabled = checkbox.checked;
+  const { error } = await _sb.from('client_tools').update({ enabled: newEnabled }).eq('id', toolId);
+  if (error) {
+    showToast('Failed to update tool.', 'red');
+    checkbox.checked = !newEnabled;
+    checkbox.disabled = false;
+    return;
+  }
+  const t = _tools.find(t => t.id === toolId);
+  if (t) t.enabled = newEnabled;
+
+  const statusEl = document.getElementById('ts-' + toolId);
+  if (statusEl) {
+    statusEl.className = 'tool-status ' + (newEnabled ? 'ts-live' : 'ts-off');
+    statusEl.textContent = newEnabled ? '\u25CF Active' : '\u25CB Disabled';
+  }
+  checkbox.disabled = false;
+  renderOverview();
+  showToast((newEnabled ? 'Tool enabled.' : 'Tool disabled.'), newEnabled ? 'green' : 'gold');
+}
+
+async function sendReset(email, btn) {
+  btn.disabled = true;
+  btn.textContent = 'Sending\u2026';
+  const { error } = await _sb.auth.resetPasswordForEmail(email, {
+    redirectTo: window.location.origin + '/dashboard.html'
+  });
+  if (error) {
+    showToast('Error sending reset email.', 'red');
+    btn.textContent = 'Send password reset';
+    btn.disabled = false;
+    return;
+  }
+  btn.textContent = 'Sent \u2713';
+  showToast('Reset email sent to ' + email, 'green');
+  setTimeout(() => { btn.textContent = 'Send password reset'; btn.disabled = false; }, 5000);
+}
+
+function setPeriod(p, el) {
+  _period = p;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  if (el) el.classList.add('active');
+  renderAnalytics(p);
+}
+
+function renderAnalytics(p) {
+  const start = periodStart(p);
+  const days  = daysSince(start);
+  const filtered = _jobs.filter(j => new Date(j.created_at) >= start);
+
+  const groups = {};
+  filtered.forEach(j => {
+    const key = j.client_id + '|' + j.tool_type;
+    if (!groups[key]) groups[key] = { client_id: j.client_id, tool_type: j.tool_type, count: 0, tokens: 0 };
+    groups[key].count++;
+    groups[key].tokens += (j.token_usage || 0);
+  });
+
+  const rows = Object.values(groups).sort((a,b) => b.count - a.count);
+  const tbody = document.getElementById('analyticsBody');
+
+  if (!rows.length) {
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="6">No jobs in this period.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = rows.map(r => {
+    const client    = _clients.find(c => c.id === r.client_id);
+    const clientName = client ? client.name : 'Unknown';
+    const toolName  = TOOL_NAMES[r.tool_type] || r.tool_type;
+    const avgTokens = r.tokens > 0 ? Math.round(r.tokens / r.count) : 0;
+    const dailyAvg  = (r.count / days).toFixed(2);
+    return `<tr>
+      <td>${esc(clientName)}</td>
+      <td>${esc(toolName)}</td>
+      <td class="num ${r.count === 0 ? 'zero' : ''}">${r.count}</td>
+      <td class="num ${r.tokens === 0 ? 'zero' : ''}">${r.tokens > 0 ? r.tokens.toLocaleString() : '\u2014'}</td>
+      <td class="num ${avgTokens === 0 ? 'zero' : ''}">${avgTokens > 0 ? avgTokens.toLocaleString() : '\u2014'}</td>
+      <td class="num">${dailyAvg}</td>
+    </tr>`;
+  }).join('');
+}
+
+async function handleLogout() {
+  await _sb.auth.signOut();
+  window.location.href = '/';
+}
+
+let _toastTimer;
+function showToast(msg, type) {
+  clearTimeout(_toastTimer);
+  const colors = { gold:'#C9973A', green:'#8fda3a', blue:'#5ab4f0', red:'#f07a5a' };
+  document.getElementById('toastDot').style.background = colors[type] || colors.gold;
+  document.getElementById('toastMsg').textContent = msg;
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  _toastTimer = setTimeout(() => t.classList.remove('show'), 3500);
+}
+</script>
+</body>
+</html>
