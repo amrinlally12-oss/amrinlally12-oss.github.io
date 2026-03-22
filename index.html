@@ -955,16 +955,19 @@ async function doLogin() {
   const pass  = el("loginPass").value;
   if (!email || !pass) { showLoginError(); return; }
   const btn = document.querySelector('.login-btn');
-  btn.textContent = 'Signing in…';
-  btn.disabled = true;
-  const { error } = await _sb.auth.signInWithPassword({ email, password: pass });
-  if (error) {
+  if (btn) { btn.textContent = 'Signing in…'; btn.disabled = true; }
+  try {
+    const { error } = await _sb.auth.signInWithPassword({ email, password: pass });
+    if (error) {
+      showLoginError();
+      if (btn) { btn.textContent = 'Sign In →'; btn.disabled = false; }
+      return;
+    }
+    window.location.href = '/dashboard.html';
+  } catch (e) {
     showLoginError();
-    btn.textContent = 'Sign In →';
-    btn.disabled = false;
-    return;
+    if (btn) { btn.textContent = 'Sign In →'; btn.disabled = false; }
   }
-  window.location.href = '/dashboard.html';
 }
 
 function showLoginError() {
