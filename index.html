@@ -13,6 +13,7 @@
 <link rel="canonical" href="https://streamlinedai.net"/>
 <meta name="theme-color" content="#04070f"/>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Figtree:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <style>
 /* ── RESET & VARS ─────────────────────────────────────────────── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
@@ -925,9 +926,18 @@ function closeMobileNav(){
 }
 
 // ── Auth ────────────────────────────────────────────────────────
+const _sb = supabase.createClient(
+  'https://swxbuphqvqtfuijuilah.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN3eGJ1cGhxdnF0ZnVpanVpbGFoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM5ODcxMDQsImV4cCI6MjA4OTU2MzEwNH0.nDPxNStgq_hCw2n2K9d_i7UEIdc5W5rnZRNpXZB8-3M'
+);
 
-function openLogin(e) {
+async function openLogin(e) {
   if (e) e.preventDefault();
+  // If already logged in, go straight to dashboard
+  try {
+    const { data: { session } } = await _sb.auth.getSession();
+    if (session) { window.location.href = '/dashboard.html'; return; }
+  } catch(e) {}
   el("loginModal").classList.add("show");
   el("loginError").classList.remove("show");
   setTimeout(() => el("loginEmail").focus(), 100);
@@ -940,19 +950,20 @@ function handleOverlayClick(e) {
   if (e.target === el("loginModal")) closeLogin();
 }
 
-function doLogin() {
-  const email = el("loginEmail").value.trim().toLowerCase();
+async function doLogin() {
+  const email = el("loginEmail").value.trim();
   const pass  = el("loginPass").value;
-
-  if (!email || !pass || !email.includes("@") || pass.length < 3) {
+  if (!email || !pass) { showLoginError(); return; }
+  const btn = document.querySelector('.login-btn');
+  btn.textContent = 'Signing in…';
+  btn.disabled = true;
+  const { error } = await _sb.auth.signInWithPassword({ email, password: pass });
+  if (error) {
     showLoginError();
+    btn.textContent = 'Sign In →';
+    btn.disabled = false;
     return;
   }
-
-  const name = email.split("@")[0];
-  const displayName = name.charAt(0).toUpperCase() + name.slice(1);
-  sessionStorage.setItem('sl_user', JSON.stringify({name: displayName, email: email, biz: ''}));
-  closeLogin();
   window.location.href = '/dashboard.html';
 }
 
@@ -978,8 +989,31 @@ function comingSoon(name) {
 }
 
 // ── Hash listener for #login ──
-if (location.hash === '#login') openLogin();
-window.addEventListener('hashchange', function() { if (location.hash === '#login') openLogin(); });
+(async function checkHash() {
+  if (location.hash === '#login') {
+    try {
+      const { data: { session } } = await _sb.auth.getSession();
+      if (session) { window.location.href = '/dashboard.html'; return; }
+    } catch(e) {}
+    openLogin();
+  }
+})();
+window.addEventListener('hashchange', async function() {
+  if (location.hash === '#login') openLogin();
+});
+
+// ── Session-aware nav CTA ──
+(async function updateNavCta() {
+  try {
+    const { data: { session } } = await _sb.auth.getSession();
+    const cta = document.querySelector('.nav-cta');
+    if (session && cta) {
+      cta.textContent = 'Dashboard →';
+      cta.href = '/dashboard.html';
+      cta.onclick = null;
+    }
+  } catch(e) {}
+})();
 
 </script>
 

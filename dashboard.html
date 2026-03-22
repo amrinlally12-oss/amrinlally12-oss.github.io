@@ -764,19 +764,46 @@ const JOB_COLORS = {
 function renderActivity(jobs) {
   const feed = document.getElementById('activityFeed');
   if (!jobs?.length) {
-    feed.innerHTML = '<div class="da-empty">No recent activity yet.</div>';
+    feed.innerHTML = '<div class="da-empty">No activity yet — run your first analysis to get started.</div>';
     return;
   }
-  feed.innerHTML = jobs.map(j => {
+  const TOOL_LABELS = {
+    flip_analyzer: 'Flip analysis complete',
+    reconciler: 'Transaction reconciliation complete',
+    morning_briefing: 'Morning briefing delivered',
+    nemt_billing: 'NEMT billing run complete',
+    invoice_tracker: 'Invoice analysis complete',
+    expense_categorizer: 'Expense categorization complete',
+  };
+  feed.innerHTML = jobs.slice(0, 8).map(j => {
     const meta  = TOOL_META[j.tool_type] || { name: j.tool_type };
     const color = JOB_COLORS[j.tool_type] || 'gold';
-    const status = j.status === 'failed' ? 'failed' : 'completed';
+    const label = j.status === 'failed'
+      ? `${esc(meta.name)} — failed`
+      : esc(TOOL_LABELS[j.tool_type] || `${meta.name} complete`);
     return `<div class="da-item">
       <div class="da-dot-wrap"><div class="da-dot ${color}"></div></div>
-      <div class="da-body"><div class="da-text"><strong>${esc(meta.name)}</strong> — ${status}</div></div>
+      <div class="da-body"><div class="da-text"><strong>${label}</strong></div></div>
       <div class="da-time">${timeAgo(j.created_at)}</div>
     </div>`;
   }).join('');
+}
+
+function updateOnboardingBanner(tools, jobs) {
+  const steps = document.querySelectorAll('.ob-step');
+  if (!steps.length) return;
+  const hasTools = tools?.some(t => t.enabled);
+  const hasJobs  = jobs?.length > 0;
+  steps[0]?.classList.add('done');
+  if (hasTools) steps[1]?.classList.add('done');
+  else steps[1]?.classList.add('active');
+  if (hasJobs) steps[2]?.classList.add('done');
+  else if (hasTools) steps[2]?.classList.add('active');
+  steps[3]?.classList.remove('done', 'active');
+  if (hasTools && hasJobs) {
+    const banner = document.getElementById('onboardBanner');
+    if (banner) setTimeout(() => { banner.style.display = 'none'; }, 3000);
+  }
 }
 
 function renderNeeds(flags) {
@@ -851,6 +878,7 @@ function renderNeeds(flags) {
 
     renderActivity(jobs);
     renderNeeds(flags);
+    updateOnboardingBanner(tools, jobs);
   }
 
   showDashboard({
