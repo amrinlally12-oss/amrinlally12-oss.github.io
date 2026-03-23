@@ -695,13 +695,20 @@ nav{
   <span id="toastMsg"></span>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.0/dist/umd/supabase.js" integrity="sha384-u+WoIPDuDWBj89phSMQ7BgPtSSgBaE3SzejvImZdaCBLVIqftswF/D1qV5j+KYpD" crossorigin="anonymous"></script>
 <script>
 // ── Supabase Client ──────────────────────────────────────────────
 const _sb = supabase.createClient(
   'https://swxbuphqvqtfuijuilah.supabase.co',
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN3eGJ1cGhxdnF0ZnVpanVpbGFoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM5ODcxMDQsImV4cCI6MjA4OTU2MzEwNH0.nDPxNStgq_hCw2n2K9d_i7UEIdc5W5rnZRNpXZB8-3M'
 );
+
+// ── Session Expiry Handler ─────────────────────────────────────
+_sb.auth.onAuthStateChange((event, session) => {
+  if (event === 'SIGNED_OUT' || (event === 'TOKEN_REFRESHED' && !session)) {
+    window.location.href = '/?session=expired';
+  }
+});
 
 function esc(str) { const d = document.createElement('div'); d.textContent = str; return d.innerHTML; }
 
