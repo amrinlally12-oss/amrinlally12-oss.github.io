@@ -809,6 +809,7 @@ function updateOnboardingBanner(tools, jobs) {
 
 function renderNeeds(flags) {
   const card = document.querySelector('.needs-card');
+  if (!card) return;
   if (!flags?.length) { card.style.display = 'none'; return; }
   document.getElementById('needsList').innerHTML = flags.map(f => `
     <div class="needs-item">
