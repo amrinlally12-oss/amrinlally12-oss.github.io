@@ -365,8 +365,9 @@ function daysSince(d) {
     document.getElementById('gateView').classList.add('show'); return;
   }
 
-  // Clean up expired flip requests
-  await _sb.from('flip_requests').delete().lt('expires_at', new Date().toISOString());
+  // Clean up expired flip requests (may fail silently if RLS blocks it)
+  try { await _sb.from('flip_requests').delete().lt('expires_at', new Date().toISOString()); }
+  catch(e) { console.warn('[Admin] Flip request cleanup failed:', e.message); }
 
   const [
     { data: clients },
@@ -607,7 +608,7 @@ function renderFlipRequests() {
       <td class="num">${arv}</td>
       <td style="color:var(--${gc});font-weight:700;">${esc(r.deal_grade || '\u2014')}</td>
       <td>${date}</td>
-      <td><button class="reset-btn" onclick="downloadFlipXLSX('${r.id}')">XLSX \u2193</button></td>
+      <td><button class="reset-btn" onclick="downloadFlipXLSX('${esc(r.id)}')">XLSX \u2193</button></td>
     </tr>`;
   }).join('');
 }
