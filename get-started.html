@@ -954,31 +954,39 @@ function submitForm() {
   formData.append('_subject', 'New Lead from Streamline AI Website');
   formData.append('_captcha', 'false');
 
+  // Show submitting state
+  var submitBtn = document.getElementById('btnNext');
+  if (submitBtn) { submitBtn.textContent = 'Submitting…'; submitBtn.disabled = true; }
+
   fetch('https://formsubmit.co/ajax/hello@streamlinedai.net', {
     method: 'POST',
     body: formData
-  }).catch(function(){});
+  }).then(function(r) { return r.json(); }).then(function(data) {
+    // Populate success screen
+    document.getElementById('successName').textContent = fn;
+    document.getElementById('sum-name').textContent = fn + ' ' + ln;
+    document.getElementById('sum-email').textContent = em;
+    document.getElementById('sum-phone').textContent = ph;
+    document.getElementById('sum-biz').textContent = bizNames.join(', ');
+    document.getElementById('sum-services').textContent = svcList;
 
-  // Populate success screen
-  document.getElementById('successName').textContent = fn;
-  document.getElementById('sum-name').textContent = fn + ' ' + ln;
-  document.getElementById('sum-email').textContent = em;
-  document.getElementById('sum-phone').textContent = ph;
-  document.getElementById('sum-biz').textContent = bizNames.join(', ');
-  document.getElementById('sum-services').textContent = svcList;
+    // Hide all steps & nav
+    document.querySelectorAll('.step-panel').forEach(function(p) { p.classList.remove('active'); });
+    document.getElementById('formNav').style.display = 'none';
+    document.getElementById('formFooter').style.display = 'none';
+    document.getElementById('successScreen').classList.add('active');
 
-  // Hide all steps & nav
-  document.querySelectorAll('.step-panel').forEach(function(p) { p.classList.remove('active'); });
-  document.getElementById('formNav').style.display = 'none';
-  document.getElementById('formFooter').style.display = 'none';
-  document.getElementById('successScreen').classList.add('active');
-
-  // Progress to 100%
-  document.getElementById('progressFill').style.width = '100%';
-  document.getElementById('progressPct').textContent = '100%';
-  document.querySelectorAll('.ps-item').forEach(function(el) {
-    el.classList.remove('active'); el.classList.add('done');
-    el.querySelector('.ps-check').textContent = '✓';
+    // Progress to 100%
+    document.getElementById('progressFill').style.width = '100%';
+    document.getElementById('progressPct').textContent = '100%';
+    document.querySelectorAll('.ps-item').forEach(function(el) {
+      el.classList.remove('active'); el.classList.add('done');
+      el.querySelector('.ps-check').textContent = '✓';
+    });
+  }).catch(function(err) {
+    console.error('[Form] Submission failed:', err);
+    if (submitBtn) { submitBtn.textContent = 'Continue'; submitBtn.disabled = false; }
+    showToast('Something went wrong — please try again or email hello@streamlinedai.net directly.', 'red');
   });
 }
 
@@ -995,5 +1003,33 @@ function showToast(msg, type) {
   toastTimer = setTimeout(function() { toast.classList.remove('show'); }, 3500);
 }
 </script>
+
+<style>
+footer{position:relative;z-index:2;border-top:1px solid rgba(255,255,255,0.10);padding:32px 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
+.footer-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:15px;}.footer-logo span{color:var(--gold);}
+.footer-links{display:flex;gap:20px;flex-wrap:wrap;}
+.footer-link{font-size:13px;color:rgba(255,255,255,0.30);text-decoration:none;transition:color 0.2s;}.footer-link:hover{color:var(--white);}
+.footer-copy{width:100%;padding-top:20px;border-top:1px solid rgba(255,255,255,0.10);font-size:11px;color:rgba(255,255,255,0.30);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+@media(max-width:600px){footer{padding:28px 18px;}}
+</style>
+
+<footer>
+  <div>
+    <div class="footer-logo">Streamline<span> AI</span></div>
+    <div style="font-size:12px;color:rgba(255,255,255,0.30);margin-top:4px;">AI that works for your business.</div>
+  </div>
+  <div class="footer-links">
+    <a href="/#services" class="footer-link">Services</a>
+    <a href="/#pricing" class="footer-link">Pricing</a>
+    <a href="/terms.html" class="footer-link">Terms</a>
+    <a href="/privacy.html" class="footer-link">Privacy</a>
+    <a href="/faq.html" class="footer-link">FAQ</a>
+    <a href="mailto:hello@streamlinedai.net" class="footer-link">Contact</a>
+  </div>
+  <div class="footer-copy">
+    <span>&copy; 2026 Streamline AI Consulting &middot; streamlinedai.net</span>
+    <span>Sacramento, CA &middot; <a href="mailto:hello@streamlinedai.net" style="color:rgba(255,255,255,0.30);text-decoration:none;">hello@streamlinedai.net</a></span>
+  </div>
+</footer>
 </body>
 </html>
